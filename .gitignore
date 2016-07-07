@@ -1,3 +1,5 @@
+# java ignore
+
 *.class
 
 # Mobile Tools for Java (J2ME)
@@ -10,3 +12,43 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# gradle ignore
+.gradle
+build/
+
+#ignore generated files
+generated
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Avoid common jars
+!common/libs/*.jar
+
+# IDEA artifacts and output dirs
+*.iml
+*.ipr
+*.iws
+.idea
+out
+test-output
+atlassian-ide-plugin.xml
+.gradletasknamecache
+*.doc
+
+common/src/main/generated
+
+.projectile
+
+
+#ignore update shell.
+update.sh
+!doc/script/update.sh
+
+
+#ignore the ppt temp file
+~*.pptx
