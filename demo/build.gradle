@@ -12,10 +12,11 @@ buildscript {
 }
 
 apply plugin: 'java'
-
+//support providedCompile
+apply plugin: 'war'
 
 // War file name
-war.baseName = 'webzic-demo'
+//war.baseName = 'webzic-demo'
 // Web directory, this overrides the default value "webapp"
 //project.webAppDirName = 'WebContent'
 
@@ -30,7 +31,8 @@ dependencies {
     //add the webzic framework.
     compile project(":library")
 
-    providedCompile 'org.apache.tomcat:tomcat-servlet-api:7.0.37'
+    providedCompile("javax.servlet:javax.servlet-api:+")
+
 
 
 }
