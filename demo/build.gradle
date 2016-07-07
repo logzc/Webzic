@@ -8,15 +8,11 @@ buildscript {
         jcenter()
     }
     dependencies {
-        //tomcat plugin:https://github.com/bmuschko/gradle-tomcat-plugin
-        classpath 'com.bmuschko:gradle-tomcat-plugin:2.0'
     }
 }
 
 apply plugin: 'java'
 
-//tomcat plugin
-apply plugin: 'com.bmuschko.tomcat'
 
 // War file name
 war.baseName = 'webzic-demo'
@@ -37,14 +33,5 @@ dependencies {
     providedCompile 'org.apache.tomcat:tomcat-servlet-api:7.0.37'
 
 
-    //tomcat plugin
-    def tomcatVersion = '7.0.59'
-    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
-            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
-            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
-
 }
 
-//tomcat plugin. context where tomcat is deployed, by defautl localhost:8080/
-tomcatRun.contextPath = '/'
-tomcatRunWar.contextPath = '/'
