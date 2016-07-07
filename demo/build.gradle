@@ -1,16 +1,50 @@
 group 'com.logzc'
 version '0.1'
 
+
+//in face gradle is a project，buildscript declares what this gradle file needs.
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        //tomcat plugin:https://github.com/bmuschko/gradle-tomcat-plugin
+        classpath 'com.bmuschko:gradle-tomcat-plugin:2.0'
+    }
+}
+
 apply plugin: 'java'
+
+//tomcat plugin
+apply plugin: 'com.bmuschko.tomcat'
+
+// War file name
+war.baseName = 'webzic-demo'
+// Web directory, this overrides the default value "webapp"
+//project.webAppDirName = 'WebContent'
 
 sourceCompatibility = 1.8
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-
-
+    //add the webzic framework.
     compile project(":library")
+
+    providedCompile 'org.apache.tomcat:tomcat-servlet-api:7.0.37'
+
+
+    //tomcat plugin
+    def tomcatVersion = '7.0.59'
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
+
 }
+
+//tomcat plugin. context where tomcat is deployed, by defautl localhost:8080/
+tomcatRun.contextPath = '/'
+tomcatRunWar.contextPath = '/'
