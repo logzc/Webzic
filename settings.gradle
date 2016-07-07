@@ -1,2 +1,4 @@
 rootProject.name = 'Webzic'
+include 'library'
+include 'demo'
 
