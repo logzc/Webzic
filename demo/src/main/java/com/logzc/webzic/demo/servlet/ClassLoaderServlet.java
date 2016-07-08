@@ -27,6 +27,16 @@ public class ClassLoaderServlet extends HttpServlet {
             loader = loader.getParent();
         }
         out.write(String.valueOf(loader));
+
+        out.write("<br/>-------------<br/>");
+
+        loader = Thread.currentThread().getContextClassLoader();
+        while(loader != null) {
+            out.write(loader.getClass().getName()+"<br/>");
+            loader = loader.getParent();
+        }
+        out.write(String.valueOf(loader));
+        out.write("<br/>-------------<br/>");
         out.flush();
         out.close();
     }
