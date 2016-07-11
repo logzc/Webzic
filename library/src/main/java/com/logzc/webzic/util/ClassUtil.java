@@ -15,5 +15,17 @@ public class ClassUtil {
         return Thread.currentThread().getContextClassLoader();
     }
 
+    public static Class<?> loadClass(String className,boolean isInitialized){
+
+        Class<?> clazz;
+        try{
+            clazz=Class.forName(className,isInitialized,getClassLoader());
+        }catch (ClassNotFoundException e) {
+            logger.debug("Cannot find "+className);
+            throw new RuntimeException();
+        }
+        return clazz;
+    }
+
 
 }
