@@ -1,6 +1,7 @@
 package com.logzc.webzic.util;
 
 import com.logzc.webzic.clazz.Foo;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,26 +78,31 @@ public class ClassUtil {
             }
         });
 
-        for (File file : files) {
-            String fileName = file.getName();
-            if (file.isFile()) {
-                String className = fileName.substring(0, fileName.lastIndexOf("."));
-                if (StringUtils.isNotEmpty(packageName)) {
-                    className = packageName + "." + className;
+        if(files!=null){
+            for (File file : files) {
+                String fileName = file.getName();
+                if (file.isFile()) {
+                    String className = fileName.substring(0, fileName.lastIndexOf("."));
+                    if (StringUtils.isNotEmpty(packageName)) {
+                        className = packageName + "." + className;
+                    }
+                    doAddClass(classSet, className);
+                } else {
+                    String subPackagePath = fileName;
+                    if (StringUtils.isNotEmpty(packagePath)) {
+                        subPackagePath = packagePath + "/" + subPackagePath;
+                    }
+                    String subPackageName = fileName;
+                    if (StringUtils.isNotEmpty(packageName)) {
+                        subPackageName = packageName + "." + subPackageName;
+                    }
+
+                    //recursive to add all classes.
+                    addClass(classSet, subPackagePath, subPackageName);
                 }
-                doAddClass(classSet, className);
-            } else {
-                String subPackagePath = fileName;
-                if (StringUtils.isNotEmpty(packagePath)) {
-                    subPackagePath = packagePath + "/" + subPackagePath;
-                }
-                String subPackageName = fileName;
-                if (StringUtils.isNotEmpty(packageName)) {
-                    subPackageName = packageName + "." + subPackageName;
-                }
-                addClass(classSet, subPackagePath, subPackageName);
             }
         }
+
 
     }
 
