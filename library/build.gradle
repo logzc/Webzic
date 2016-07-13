@@ -16,5 +16,16 @@ dependencies {
 
     //logging
     compile 'org.slf4j:slf4j-log4j12:+'
+    compile 'org.apache.logging.log4j:log4j:+'
+
+    //apache common utils.
+    compile 'org.apache.commons:commons-io:+'
+    compile 'commons-dbutils:commons-dbutils:+'
+    compile 'org.apache.commons:commons-dbcp2:+'
+    compile 'org.apache.commons:commons-collections4:+'
+    compile 'org.apache.commons:commons-lang3:+'
+
+
+
 
 }
