@@ -1,24 +1,25 @@
 package com.logzc.webzic.util;
 
-import com.logzc.webzic.clazz.Foo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.net.JarURLConnection;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * This is the class for loading classes.
  * Created by lishuang on 2016/7/7.
  */
-public class ClassUtil {
+public final class ClassUtil {
     private static final Logger logger = LoggerFactory.getLogger(ClassUtil.class);
 
     public static ClassLoader getClassLoader() {
@@ -30,7 +31,7 @@ public class ClassUtil {
         Class<?> clazz;
         try {
             clazz = Class.forName(className, isInitialized, getClassLoader());
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             logger.debug("Cannot find " + className);
             throw new RuntimeException();
         }
@@ -49,14 +50,33 @@ public class ClassUtil {
             Enumeration<URL> urls = getClassLoader().getResources(packageName.replace(".", "/"));
 
             while (urls.hasMoreElements()) {
+
                 URL url = urls.nextElement();
+                logger.debug("Current URL:" + url);
+
                 if (url != null) {
                     String protocol = url.getProtocol();
                     if (protocol.equals("file")) {
                         String packagePath = url.getPath().replaceAll("%20", " ");
-                        addClass(classSet,packagePath,packageName);
-
+                        addClass(classSet, packagePath, packageName);
                     } else if (protocol.equals("jar")) {
+                        logger.debug("Find a jar url." + url.getPath());
+
+                        JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
+                        if (jarURLConnection != null) {
+                            JarFile jarFile = jarURLConnection.getJarFile();
+                            if (jarFile != null) {
+                                Enumeration<JarEntry> jarEntries = jarFile.entries();
+                                while (jarEntries.hasMoreElements()) {
+                                    JarEntry jarEntry = jarEntries.nextElement();
+                                    String jarEntryName = jarEntry.getName();
+                                    if (jarEntryName.endsWith(".class")) {
+                                        String className = jarEntryName.substring(0, jarEntryName.lastIndexOf(".")).replaceAll("/", ".");
+                                        doAddClass(classSet, className);
+                                    }
+                                }
+                            }
+                        }
 
                     }
                 }
@@ -78,7 +98,7 @@ public class ClassUtil {
             }
         });
 
-        if(files!=null){
+        if (files != null) {
             for (File file : files) {
                 String fileName = file.getName();
                 if (file.isFile()) {
@@ -107,14 +127,31 @@ public class ClassUtil {
     }
 
     private static void doAddClass(Set<Class<?>> classSet, String className) {
-        logger.debug(className+" ---------- loading");
+        logger.debug(className + " ---------- loading");
         Class<?> cls = loadClass(className, false);
         classSet.add(cls);
+
     }
 
     public static void main(String[] args) throws Exception {
 
-        getClassSet("com.logzc");
+        //getClassSet("com.logzc");
+
+        /*
+        //find current classloader's package.
+        Package[] pa = Package.getPackages();
+        List<String> list=new ArrayList<>();
+        for (Package p : pa) {
+            list.add(p.getName());
+        }
+        Collections.sort(list);
+        for (String s : list) {
+            System.out.println(s);
+        }
+        */
+
+
+
 
     }
 

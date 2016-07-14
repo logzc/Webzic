@@ -26,6 +26,10 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:+'
 
 
+    //scanner
+    compile 'org.reflections:reflections:+'
+
+
 
 
 }
