@@ -24,22 +24,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
 
-        String pathString=System.getProperty("java.class.path");
-        String[] paths=pathString.split(";");
-        for (String p:paths){
-            //System.out.println(p);
-        }
-
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        Enumeration<URL> urls = cl.getResources("META-INF/MANIFEST.MF");
-        while (urls.hasMoreElements()){
-            URL url=urls.nextElement();
-            System.out.println(url);
-        }
-
-
         //scan urls that contain 'my.package', include inputs starting with 'my.package', use the default scanners
-        /*
+
         Reflections reflections = new Reflections("");
         //TypeAnnotationsScanner
         Set<Class<?>> singletons =
@@ -50,7 +36,7 @@ public class Main {
             System.err.println(clazz);
 
         }
-        */
+
 
 
         //ClassUtil.getClassSet("com.logzc");
