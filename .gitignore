@@ -52,3 +52,6 @@ update.sh
 
 #ignore the ppt temp file
 ~*.pptx
+
+#ignore gitbook static files
+_book
