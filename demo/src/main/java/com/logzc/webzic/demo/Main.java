@@ -11,10 +11,9 @@ import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Created by lishuang on 2016/7/7.
@@ -22,10 +21,25 @@ import java.util.Set;
 public class Main {
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception {
+
+
+        String pathString=System.getProperty("java.class.path");
+        String[] paths=pathString.split(";");
+        for (String p:paths){
+            //System.out.println(p);
+        }
+
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        Enumeration<URL> urls = cl.getResources("META-INF/MANIFEST.MF");
+        while (urls.hasMoreElements()){
+            URL url=urls.nextElement();
+            System.out.println(url);
+        }
 
 
         //scan urls that contain 'my.package', include inputs starting with 'my.package', use the default scanners
+        /*
         Reflections reflections = new Reflections("");
         //TypeAnnotationsScanner
         Set<Class<?>> singletons =
@@ -36,6 +50,7 @@ public class Main {
             System.err.println(clazz);
 
         }
+        */
 
 
         //ClassUtil.getClassSet("com.logzc");
