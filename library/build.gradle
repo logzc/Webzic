@@ -13,6 +13,8 @@ dependencies {
 
 
     testCompile "junit:junit:+"
+    compile fileTree(dir: 'libs', include: '*.jar')
+
 
     //logging
     compile 'org.slf4j:slf4j-log4j12:+'

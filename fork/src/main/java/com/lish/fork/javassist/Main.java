@@ -7,6 +7,8 @@ import javassist.bytecode.annotation.Annotation;
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
@@ -17,6 +19,9 @@ import java.net.URL;
  * Created by lishuang on 2016/7/15.
  */
 public class Main {
+
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
 
     public static void main(String[] args) throws Exception {
         //createAClass();
@@ -121,5 +126,6 @@ public class Main {
             System.out.println(annotation.getTypeName());
         }
 
+        logger.debug("Finish");
     }
 }
