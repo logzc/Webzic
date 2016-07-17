@@ -9,7 +9,7 @@ import java.io.InputStream;
  * File in my System.
  * Created by lishuang on 2016/7/17.
  */
-public class SystemFile implements ZicFile {
+public class SystemFile extends ZicFile {
 
     private final SystemDir root;
     private final File file;

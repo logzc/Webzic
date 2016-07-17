@@ -87,9 +87,6 @@ public class ClassPaths {
 
                 while (urls.hasMoreElements()) {
                     URL url = urls.nextElement();
-
-                    logger.debug("--detecting--" + url);
-
                     int index = url.toExternalForm().lastIndexOf(resourceName);
                     if (index != -1) {
                         result.add(new URL(url.toExternalForm().substring(0, index)));

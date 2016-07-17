@@ -5,6 +5,9 @@ import com.lish.fork.javassist.VisibleAn;
 import com.logzc.webzic.annotation.RequestMapping;
 import com.logzc.webzic.annotation.RestController;
 import com.logzc.webzic.demo.controller.UserController;
+import com.logzc.webzic.dynamic.ClassPaths;
+import com.logzc.webzic.dynamic.fs.ZicDir;
+import com.logzc.webzic.dynamic.fs.ZicFile;
 import com.logzc.webzic.util.ClassUtil;
 import com.logzc.webzic.util.PropertyUtil;
 import org.apache.commons.lang3.ClassUtils;
@@ -49,7 +52,33 @@ public class Main {
         }
 
 
+        //testJarProtocol();
 
+        //Collection<URL> urls= ClassPaths.forPackage("com.lish");
+        Collection<URL> urls=ClassPaths.forJavaClassPath();
+        //Collection<URL> urls=ClassPaths.forClassLoader();
 
+//        for (URL url:urls){
+//            if(url.getPath().contains("practice-1.0-SNAPSHOT.jar")){
+//                System.out.println(url);
+//
+//                ZicDir zicDir=ZicDir.fromURL(url);
+//
+//                Collection<ZicFile> zicFiles=zicDir.getFiles();
+//
+//                for (ZicFile file:zicFiles){
+//                    System.out.println(file.getRelativePath());
+//                }
+//            }
+//
+//        }
+
+        System.out.println("-----------------------");
+
+//        Collection<URL> urls1=ClassPaths.forJavaClassPath();
+//
+//        for (URL url:urls1){
+//            System.out.println(url);
+//        }
     }
 }

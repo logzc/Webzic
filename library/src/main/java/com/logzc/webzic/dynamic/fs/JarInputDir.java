@@ -15,10 +15,9 @@ import java.util.jar.JarInputStream;
  * This is the implement of jar for ZicDir.
  * Created by lishuang on 2016/7/17.
  */
-public class JarInputDir implements ZicDir {
+public class JarInputDir extends ZicDir {
     private static final Logger logger = LoggerFactory.getLogger(JarInputDir.class);
     private final URL url;
-    JarInputStream jarInputStream;
 
     public JarInputDir(URL url) {
         Objects.requireNonNull(url);
@@ -69,24 +68,6 @@ public class JarInputDir implements ZicDir {
         return Collections.emptyList();
     }
 
-    @Override
-    public void close() {
-        try {
-            if (jarInputStream != null) {
-                jarInputStream.close();
-            }
-        } catch (IOException e) {
-            logger.debug("Could not close jarInputStream.", e);
-        }
 
-    }
 
-    public static void main(String[] args) throws Exception{
-        URL url=new URL("jar:file:/D:/Group/Logzc/Webzic/library/libs/practice-1.0-SNAPSHOT.jar!/");
-
-        JarInputDir jarInputDir=new JarInputDir(url);
-        jarInputDir.getFiles().forEach(zicFile -> {
-            System.out.println(zicFile.getRelativePath());
-        });
-    }
 }

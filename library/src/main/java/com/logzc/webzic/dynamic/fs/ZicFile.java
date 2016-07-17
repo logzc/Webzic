@@ -7,7 +7,7 @@ import java.io.InputStream;
  * File in this ZicFs. Forget the name.
  * Created by lishuang on 2016/7/17.
  */
-public interface ZicFile {
-    String getName();
-    String getRelativePath();
+public abstract class ZicFile {
+    public abstract String getName();
+    public abstract String getRelativePath();
 }

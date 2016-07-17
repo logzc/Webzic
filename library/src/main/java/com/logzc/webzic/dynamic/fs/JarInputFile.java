@@ -1,15 +1,12 @@
 package com.logzc.webzic.dynamic.fs;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.jar.JarEntry;
-import java.util.zip.ZipEntry;
 
 /**
  * jar file.
  * Created by lishuang on 2016/7/17.
  */
-public class JarInputFile implements ZicFile {
+public class JarInputFile extends ZicFile {
     private final JarEntry entry;
     private final JarInputDir jarInputDir;
 
