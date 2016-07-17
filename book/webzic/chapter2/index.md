@@ -32,3 +32,11 @@ public class Main {
     File directory=...
     
     Files.walk(directory.toPath()).filter(path -> Files.isRegularFile(path)).map(Path::toFile).collect(Collectors.toList());
+    
+    
+## jar实用的操作方法
+
+   [JAVA操作jar文件的实用工具类](http://javasam.iteye.com/blog/1486803)
+    
+    
+    

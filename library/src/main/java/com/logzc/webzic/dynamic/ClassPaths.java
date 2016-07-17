@@ -215,17 +215,13 @@ public class ClassPaths {
     public static void main(String[] args) throws Exception{
 
 
-        String a=null;
-        Objects.requireNonNull(a);
-        System.out.println("hi");
-
-//        Collection<URL> urls= ClassPaths.forClassLoader();
-//        int i=0;
-//        for (URL url:urls){
-//            i++;
-//            System.out.print(i+" ");
-//            System.out.println(url);
-//        }
+        Collection<URL> urls= ClassPaths.forClassLoader();
+        int i=0;
+        for (URL url:urls){
+            i++;
+            System.out.print(i+" ");
+            System.out.println(url.getPath());
+        }
 //
 //        Collection<URL> urls1= ClassPaths.forJavaClassPath();
 //        i=0;
