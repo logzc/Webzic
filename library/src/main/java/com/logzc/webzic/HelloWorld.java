@@ -1,5 +1,6 @@
 package com.logzc.webzic;
 
+import com.logzc.webzic.clazz.Foo;
 import com.logzc.webzic.dynamic.ClassPaths;
 
 import java.net.URL;
@@ -12,11 +13,18 @@ import java.util.Enumeration;
 public class HelloWorld {
     public static void main(String[] args) throws Exception{
 
-        Collection<URL> urls=ClassPaths.forPackage("com");
+        URL url=ClassPaths.forClass(Foo.class);
+        System.out.println(url);
 
-        for (URL url:urls){
-            System.out.println(url);
-        }
+        System.out.println(Foo.class.getName());
+
+//        Collection<URL> urls=ClassPaths.forPackage("com");
+//
+//        for (URL url:urls){
+//            System.out.println(url);
+//        }
+
+
 //        Enumeration<URL> urls = ClassPaths.contextClassLoader().getResources("com");
 //
 //        while (urls.hasMoreElements()) {
@@ -27,5 +35,7 @@ public class HelloWorld {
 //
 //
 //        }
+
+
     }
 }

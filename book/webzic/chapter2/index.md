@@ -25,3 +25,10 @@ public class Main {
 
 
 ```
+
+
+## 在java8中遍历一个目录下的所有文件
+
+    File directory=...
+    
+    Files.walk(directory.toPath()).filter(path -> Files.isRegularFile(path)).map(Path::toFile).collect(Collectors.toList());

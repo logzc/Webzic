@@ -1,11 +1,17 @@
 package com.logzc.webzic.dynamic;
 
 
+import org.reflections.vfs.Vfs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -113,6 +119,79 @@ public class ClassPaths {
     }
 
 
+
+
+    /**
+     * Get the URL which contains the clazz.
+     * @param clazz Class<?>
+     * @param classLoaders may be null.
+     * @return the url contains the clazz.
+     */
+    public static URL forClass(Class<?> clazz,ClassLoader... classLoaders){
+        ClassLoader[] loaders=classLoaders(classLoaders);
+        String resourceName=clazz.getName().replace(".","/")+".class";
+        for (ClassLoader classLoader:loaders){
+            URL url=classLoader.getResource(resourceName);
+            if(url!=null){
+                String normalizedUrl=url.toExternalForm().substring(0,url.toExternalForm().lastIndexOf(clazz.getPackage().getName().replace(".","/")));
+                try {
+                    return new URL(normalizedUrl);
+                } catch (MalformedURLException e) {
+                    logger.debug("Cannot get the URL",e);
+                }
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Get the URLs from classloaders.
+     */
+    public static Collection<URL> forClassLoader(ClassLoader... classLoaders){
+        Collection<URL> result=new ArrayList<URL>();
+
+        ClassLoader[] loaders=classLoaders(classLoaders);
+        for(ClassLoader classLoader:loaders){
+            while (classLoader!=null){
+                if(classLoader instanceof URLClassLoader){
+                    URL[] urls=((URLClassLoader)classLoader).getURLs();
+                    if(urls!=null){
+                        result.addAll(Arrays.asList(urls));
+                    }
+                }
+                classLoader=classLoader.getParent();
+            }
+        }
+
+        return distinctUrls(result);
+    }
+
+
+    /**
+     * Get the urls based on the java.class.path system property.
+     */
+    public static Collection<URL> forJavaClassPath(){
+        Collection<URL> urls=new ArrayList<>();
+        String javaClassPath=System.getProperty("java.class.path");
+        if(javaClassPath!=null){
+            String[] pathStrings=javaClassPath.split(File.pathSeparator);
+            for (String path:pathStrings){
+                try {
+                    urls.add(new File(path).toURI().toURL());
+                } catch (MalformedURLException e) {
+
+                    logger.debug("Cannot get the URL",e);
+                }
+            }
+        }
+
+        return distinctUrls(urls);
+    }
+
+    /**
+     * Make the urls in the collection distinct.
+     */
     private static Collection<URL> distinctUrls(Collection<URL> urls) {
         Map<String, URL> distinct = new HashMap<>(urls.size());
         for (URL url:urls){
@@ -124,7 +203,7 @@ public class ClassPaths {
     private static String resourceName(String name){
         if(name!=null){
             String resourceName=name.replace(".","/");
-            resourceName=resourceName.replace("\\","/");
+            resourceName=resourceName.replace("/","/");
             if (resourceName.startsWith("/")){
                 resourceName=resourceName.substring(1);
             }
@@ -134,9 +213,43 @@ public class ClassPaths {
     }
 
     public static void main(String[] args) throws Exception{
-        ClassLoader classLoader=ClassPaths.contextClassLoader();
 
-        String name=ClassPaths.resourceName("/com.logzc.webzic");
-        System.out.println(name);
+
+        String a=null;
+        Objects.requireNonNull(a);
+        System.out.println("hi");
+
+//        Collection<URL> urls= ClassPaths.forClassLoader();
+//        int i=0;
+//        for (URL url:urls){
+//            i++;
+//            System.out.print(i+" ");
+//            System.out.println(url);
+//        }
+//
+//        Collection<URL> urls1= ClassPaths.forJavaClassPath();
+//        i=0;
+//        for (URL url:urls1){
+//            i++;
+//            System.out.print(i+" ");
+//            System.out.println(url);
+//        }
+
+//
+//        Files.walk(Paths.get("D:/Group/Logzc/Webzic/library/libs/practice-1.0-SNAPSHOT.jar!/")).forEach(filePath -> {
+//            if (Files.isRegularFile(filePath)) {
+//                System.out.println(filePath);
+//            }
+//        });
+
+//        URL url=new URL("file:/D:/Group/Logzc/Webzic/library/libs/practice-1.0-SNAPSHOT.jar");
+//
+//        Vfs.Dir dir=Vfs.fromURL(url);
+//
+//        for (Vfs.File file : dir.getFiles()) {
+//            System.out.println(file.getRelativePath());
+//        }
+
+
     }
 }

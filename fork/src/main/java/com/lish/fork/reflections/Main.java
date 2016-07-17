@@ -18,7 +18,7 @@ public class Main {
         //scan urls that contain 'my.package', include inputs starting with 'my.package', use the default scanners
 
 
-        Reflections reflections = new Reflections("com.lish");
+        Reflections reflections = new Reflections();
         //TypeAnnotationsScanner
         Set<Class<?>> singletons =
                 reflections.getTypesAnnotatedWith(InvisibleAn.class);
