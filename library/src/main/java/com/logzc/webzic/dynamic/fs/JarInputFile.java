@@ -1,18 +1,25 @@
 package com.logzc.webzic.dynamic.fs;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * jar file.
  * Created by lishuang on 2016/7/17.
  */
 public class JarInputFile extends ZicFile {
-    private final JarEntry entry;
     private final JarInputDir jarInputDir;
+    private final JarFile jarFile;
+    private final JarEntry entry;
 
-    public JarInputFile(JarEntry entry, JarInputDir jarInputDir) {
-        this.entry = entry;
+
+    public JarInputFile(JarInputDir jarInputDir, JarFile jarFile, JarEntry entry) {
         this.jarInputDir = jarInputDir;
+        this.jarFile = jarFile;
+        this.entry = entry;
+
     }
 
     @Override
@@ -26,9 +33,24 @@ public class JarInputFile extends ZicFile {
         return entry.getName();
     }
 
+    @Override
+    public InputStream openInputStream() throws IOException {
+
+        InputStream fis = jarFile.getInputStream(entry);
+
+        //TODO:when to close the InputStream. It's a problem.
+        
+        return fis;
+
+    }
+
 
     @Override
     public String toString() {
+
         return jarInputDir.getPath() + "!" + java.io.File.separatorChar + entry.toString();
+
+
     }
+
 }

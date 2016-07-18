@@ -1,5 +1,8 @@
 package com.logzc.webzic.demo.servlet;
 
+import com.lish.fork.javassist.InvisibleAn;
+import com.lish.fork.javassist.VisibleAn;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,9 +16,13 @@ import java.util.Date;
 /**
  * Created by lishuang on 2016/7/7.
  */
+@VisibleAn
 @WebServlet("/hello")
 public class HelloServlet extends HttpServlet {
 
+    static {
+        System.out.println("You have loaded me.");
+    }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

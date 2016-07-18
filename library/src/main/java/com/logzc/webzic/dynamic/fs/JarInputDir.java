@@ -53,7 +53,7 @@ public class JarInputDir extends ZicDir {
                         JarEntry jarEntry = jarEntries.nextElement();
 
                         if (!jarEntry.isDirectory()){
-                            jarInputFiles.add(new JarInputFile(jarEntry,JarInputDir.this));
+                            jarInputFiles.add(new JarInputFile(JarInputDir.this,jarFile,jarEntry));
                         }
                     }
                     return jarInputFiles;

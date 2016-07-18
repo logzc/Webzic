@@ -209,40 +209,5 @@ public class ClassPaths {
         return null;
     }
 
-    public static void main(String[] args) throws Exception{
 
-
-        Collection<URL> urls= ClassPaths.forClassLoader();
-        int i=0;
-        for (URL url:urls){
-            i++;
-            System.out.print(i+" ");
-            System.out.println(url.getPath());
-        }
-//
-//        Collection<URL> urls1= ClassPaths.forJavaClassPath();
-//        i=0;
-//        for (URL url:urls1){
-//            i++;
-//            System.out.print(i+" ");
-//            System.out.println(url);
-//        }
-
-//
-//        Files.walk(Paths.get("D:/Group/Logzc/Webzic/library/libs/practice-1.0-SNAPSHOT.jar!/")).forEach(filePath -> {
-//            if (Files.isRegularFile(filePath)) {
-//                System.out.println(filePath);
-//            }
-//        });
-
-//        URL url=new URL("file:/D:/Group/Logzc/Webzic/library/libs/practice-1.0-SNAPSHOT.jar");
-//
-//        Vfs.Dir dir=Vfs.fromURL(url);
-//
-//        for (Vfs.File file : dir.getFiles()) {
-//            System.out.println(file.getRelativePath());
-//        }
-
-
-    }
 }

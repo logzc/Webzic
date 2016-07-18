@@ -34,6 +34,7 @@ public class SystemFile extends ZicFile {
         throw new RuntimeException("SystemFile's root and file not match.");
     }
 
+    @Override
     public InputStream openInputStream() throws IOException {
 
         return new FileInputStream(file);

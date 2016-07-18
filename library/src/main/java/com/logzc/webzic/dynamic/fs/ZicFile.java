@@ -10,4 +10,6 @@ import java.io.InputStream;
 public abstract class ZicFile {
     public abstract String getName();
     public abstract String getRelativePath();
+
+    public abstract InputStream openInputStream() throws IOException;
 }

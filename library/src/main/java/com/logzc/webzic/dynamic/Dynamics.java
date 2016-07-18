@@ -23,24 +23,23 @@ public class Dynamics {
      */
     public static void scan(Scanner... scanners) {
 
-        if(scanners!=null && scanners.length>0){
+        if (scanners != null && scanners.length > 0) {
 
-            Collection<URL> urls=ClassPaths.forJavaClassPath();
+            Collection<URL> urls = ClassPaths.forJavaClassPath();
 
-            for (URL url:urls){
-                logger.debug("scan...");
-                logger.debug(url.toString());
+            for (URL url : urls) {
+                //logger.debug("scan...");
+                //logger.debug(url.toString());
 
-                ZicDir zicDir=ZicDir.fromURL(url);
+                ZicDir zicDir = ZicDir.fromURL(url);
 
-                Collection<ZicFile> zicFiles=zicDir.getFiles();
+                Collection<ZicFile> zicFiles = zicDir.getFiles();
 
-                for (ZicFile file:zicFiles){
+                for (ZicFile file : zicFiles) {
 
+                    for (Scanner scanner : scanners) {
 
-                    //TODO:need to write the adapter.
-                    for (Scanner scanner:scanners){
-
+                        scanner.accept(file);
 
 
                     }

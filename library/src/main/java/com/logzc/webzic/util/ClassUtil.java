@@ -1,8 +1,5 @@
 package com.logzc.webzic.util;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +8,9 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -103,17 +102,17 @@ public final class ClassUtil {
                 String fileName = file.getName();
                 if (file.isFile()) {
                     String className = fileName.substring(0, fileName.lastIndexOf("."));
-                    if (StringUtils.isNotEmpty(packageName)) {
+                    if (StringUtil.isNotEmpty(packageName)) {
                         className = packageName + "." + className;
                     }
                     doAddClass(classSet, className);
                 } else {
                     String subPackagePath = fileName;
-                    if (StringUtils.isNotEmpty(packagePath)) {
+                    if (StringUtil.isNotEmpty(packagePath)) {
                         subPackagePath = packagePath + "/" + subPackagePath;
                     }
                     String subPackageName = fileName;
-                    if (StringUtils.isNotEmpty(packageName)) {
+                    if (StringUtil.isNotEmpty(packageName)) {
                         subPackageName = packageName + "." + subPackageName;
                     }
 
@@ -132,27 +131,4 @@ public final class ClassUtil {
         classSet.add(cls);
 
     }
-
-    public static void main(String[] args) throws Exception {
-
-        //getClassSet("com.logzc");
-
-        /*
-        //find current classloader's package.
-        Package[] pa = Package.getPackages();
-        List<String> list=new ArrayList<>();
-        for (Package p : pa) {
-            list.add(p.getName());
-        }
-        Collections.sort(list);
-        for (String s : list) {
-            System.out.println(s);
-        }
-        */
-
-
-
-
-    }
-
 }

@@ -18,15 +18,4 @@ public class FileUtil {
         return FileUtils.listFiles(directory, extensions, recursive);
     }
 
-
-    public static void main(String[] args) throws Exception {
-
-        System.out.println("HelloWorld");
-
-        File dir=new File("D:\\Study\\Java\\ebook");
-
-
-        System.out.println(listFiles(dir,new String[]{"java"},false));
-
-    }
 }
