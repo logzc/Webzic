@@ -26,8 +26,7 @@ gradle-app.setting
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
 
-# Avoid common jars
-!common/libs/*.jar
+
 
 # IDEA artifacts and output dirs
 *.iml
@@ -55,3 +54,10 @@ update.sh
 
 #ignore gitbook static files
 _book
+
+
+# Avoid lib jars
+!book/libs/*.jar
+!demo/libs/*.jar
+!fork/libs/*.jar
+!library/libs/*.jar
