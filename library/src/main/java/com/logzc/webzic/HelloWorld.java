@@ -16,38 +16,7 @@ import java.util.Enumeration;
  */
 public class HelloWorld {
 
-
-    public static void testJarProtocol() throws Exception{
-        URL url=new URL("jar:file:/D:/Group/Logzc/Webzic/library/libs/practice-1.0-SNAPSHOT.jar!/");
-
-        JarInputDir jarInputDir=new JarInputDir(url);
-        jarInputDir.getFiles().forEach(zicFile -> {
-            System.out.println(zicFile.getRelativePath());
-        });
-    }
-
     public static void main(String[] args) throws Exception{
-
-        //testJarProtocol();
-
-        Collection<URL> urls=ClassPaths.forPackage("com.logzc");
-        //Collection<URL> urls=ClassPaths.forJavaClassPath();
-        //Collection<URL> urls=ClassPaths.forClassLoader();
-
-        for (URL url:urls){
-            System.out.println(url);
-            System.out.println(url.getProtocol());
-
-            ZicDir zicDir=ZicDir.fromURL(url);
-
-            Collection<ZicFile> zicFiles=zicDir.getFiles();
-
-            for (ZicFile file:zicFiles){
-                System.out.println(file.getRelativePath());
-            }
-
-
-        }
 
         System.out.println("-----------------------");
 

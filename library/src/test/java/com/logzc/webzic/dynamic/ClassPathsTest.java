@@ -1,5 +1,8 @@
 package com.logzc.webzic.dynamic;
 
+import com.logzc.webzic.dynamic.fs.JarInputDir;
+import com.logzc.webzic.dynamic.fs.ZicDir;
+import com.logzc.webzic.dynamic.fs.ZicFile;
 import org.junit.Test;
 
 import java.net.URL;
@@ -36,6 +39,41 @@ public class ClassPathsTest {
             System.out.println(url);
         }
 
+    }
+
+    @Test
+    public void testForPackage(){
+        //testJarProtocol();
+
+        Collection<URL> urls=ClassPaths.forPackage("com");
+        //Collection<URL> urls=ClassPaths.forJavaClassPath();
+        //Collection<URL> urls=ClassPaths.forClassLoader();
+
+        for (URL url:urls){
+            System.out.println(url);
+            System.out.println(url.getProtocol());
+
+            ZicDir zicDir=ZicDir.fromURL(url);
+
+            Collection<ZicFile> zicFiles=zicDir.getFiles();
+
+            for (ZicFile file:zicFiles){
+                System.out.println(file.getRelativePath());
+            }
+
+
+        }
+    }
+
+
+    @Test
+    public void testJarProtocol() throws Exception{
+        URL url=new URL("jar:file:/C:/lish/Group/Logzc/Webzic/demo/libs/fork-1.0.jar!/");
+
+        JarInputDir jarInputDir=new JarInputDir(url);
+        jarInputDir.getFiles().forEach(zicFile -> {
+            System.out.println(zicFile.getRelativePath());
+        });
     }
 
 }

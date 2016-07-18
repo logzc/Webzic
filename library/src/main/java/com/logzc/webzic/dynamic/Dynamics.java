@@ -29,7 +29,7 @@ public class Dynamics {
 
             for (URL url : urls) {
                 //logger.debug("scan...");
-                //logger.debug(url.toString());
+                logger.debug("scaning..."+url.toString());
 
                 ZicDir zicDir = ZicDir.fromURL(url);
 

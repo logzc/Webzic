@@ -1,6 +1,5 @@
-package com.logzc.webzic.dynamic.util;
+package com.logzc.webzic.util;
 
-import com.logzc.webzic.util.FileUtil;
 import org.junit.Test;
 
 import java.io.File;
