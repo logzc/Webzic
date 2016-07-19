@@ -34,6 +34,9 @@ public class WebzicServlet extends HttpServlet {
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
+
         // 设置响应内容类型
         response.setContentType("text/html");
 

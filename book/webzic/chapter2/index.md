@@ -39,4 +39,14 @@ public class Main {
    [JAVA操作jar文件的实用工具类](http://javasam.iteye.com/blog/1486803)
     
     
+## ServletRequest中获取有用信息
+
+    // Example: http://myhost:8080/people?lastname=Fox&age=30
     
+    String uri = request.getScheme() + "://" +   // "http" + "://
+                 request.getServerName() +       // "myhost"
+                 ":" +                           // ":"
+                 request.getServerPort() +       // "8080"
+                 request.getRequestURI() +       // "/people"
+                 "?" +                           // "?"
+                 request.getQueryString();       // "lastname=Fox&age=30"

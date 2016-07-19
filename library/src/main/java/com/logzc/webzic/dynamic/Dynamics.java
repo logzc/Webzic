@@ -25,7 +25,14 @@ public class Dynamics {
 
         if (scanners != null && scanners.length > 0) {
 
-            Collection<URL> urls = ClassPaths.forJavaClassPath();
+
+
+            Collection<URL> urls=ClassPaths.forClassLoader();
+
+            //These three urls have different results.
+            //Collection<URL> urls = ClassPaths.forJavaClassPath();
+            //Collection<URL> urls=ClassPaths.forPackage("");
+
 
             for (URL url : urls) {
                 //logger.debug("scan...");
