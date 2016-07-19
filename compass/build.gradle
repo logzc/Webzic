@@ -35,6 +35,5 @@ dependencies {
     compile project(":library")
 
 
-
 }
 

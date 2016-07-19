@@ -3,4 +3,5 @@ include 'library'
 include 'demo'
 include 'book'
 include 'fork'
+include 'compass'
 

@@ -1,7 +1,11 @@
 group 'com.logzc'
 version '0.1'
 
+
+
 apply plugin: 'java'
+//support providedCompile
+apply plugin: 'war'
 
 sourceCompatibility = 1.8
 
@@ -14,6 +18,13 @@ dependencies {
 
     testCompile "junit:junit:+"
     compile fileTree(dir: 'libs', include: '*.jar')
+
+
+
+    providedCompile("javax.servlet:javax.servlet-api:+")
+
+    //在写Main函数的时候有时候需要临时用到
+    //compile("javax.servlet:javax.servlet-api:+")
 
 
     //logging
