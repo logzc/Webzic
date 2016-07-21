@@ -10,9 +10,11 @@ public class Pools {
     private static ControllerPool controllerPool=new ControllerPool();
 
 
-    public static void init(){
 
+    public static void init(){
         Dynamics.scan(controllerPool.getScanner());
+
+        controllerPool.postInit();
 
     }
 

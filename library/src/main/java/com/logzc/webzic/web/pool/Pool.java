@@ -6,7 +6,7 @@ import com.logzc.webzic.dynamic.scanner.Scanner;
  * Created by lishuang on 2016/7/19.
  */
 public abstract class Pool {
-    public abstract void init();
+    public abstract void postInit();
     protected Scanner scanner;
     public abstract Scanner getScanner();
 }
