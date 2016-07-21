@@ -42,6 +42,10 @@ dependencies {
     //scanner
     compile 'org.reflections:reflections:+'
 
+    //lombok，后面准备去掉
+    compile 'org.projectlombok:lombok:+'
+
+
 
 
 

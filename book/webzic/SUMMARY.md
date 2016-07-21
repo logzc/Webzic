@@ -13,3 +13,11 @@
 * [第四章 DB]()
 
 * [第四章 Exception]()
+
+
+
+## 写作顺序
+
+* 1.如何读取到classpath中所有标注@Annotation的class。
+
+* 2.对于一个Request，如何寻找到相应的Method来处理。

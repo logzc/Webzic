@@ -1,4 +1,4 @@
-package com.logzc.webzic.pool;
+package com.logzc.webzic.web.pool;
 
 import com.logzc.webzic.dynamic.scanner.Scanner;
 

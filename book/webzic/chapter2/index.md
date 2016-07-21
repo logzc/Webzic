@@ -50,3 +50,8 @@ public class Main {
                  request.getRequestURI() +       // "/people"
                  "?" +                           // "?"
                  request.getQueryString();       // "lastname=Fox&age=30"
+                 
+                 
+                 
+## Spring RequestMapping 的工作原理
+

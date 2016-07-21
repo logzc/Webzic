@@ -1,6 +1,6 @@
 package com.logzc.webzic;
 
-import com.logzc.webzic.pool.Pools;
+import com.logzc.webzic.web.pool.Pools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +18,9 @@ import java.io.PrintWriter;
  * Created by lishuang on 2016/7/19.
  */
 @WebServlet(urlPatterns = "/*", loadOnStartup = 0)
-public class WebzicServlet extends HttpServlet {
+public class DispatcherServlet extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebzicServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
@@ -36,9 +36,10 @@ public class WebzicServlet extends HttpServlet {
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
-
         // 设置响应内容类型
         response.setContentType("text/html");
+
+        logger.debug(request.getMethod());
 
         // 实际的逻辑是在这里
         PrintWriter out = response.getWriter();

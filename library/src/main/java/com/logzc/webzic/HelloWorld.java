@@ -5,6 +5,7 @@ import com.logzc.webzic.dynamic.ClassPaths;
 import com.logzc.webzic.dynamic.fs.JarInputDir;
 import com.logzc.webzic.dynamic.fs.ZicDir;
 import com.logzc.webzic.dynamic.fs.ZicFile;
+import com.logzc.webzic.web.annotation.RequestMethod;
 
 import java.io.File;
 import java.net.URL;
@@ -25,6 +26,9 @@ public class HelloWorld {
 //        for (URL url:urls1){
 //            System.out.println(url);
 //        }
+
+        System.out.println(RequestMethod.valueOf("GET"));
+
 
 
 
