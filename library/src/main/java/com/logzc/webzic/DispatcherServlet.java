@@ -22,11 +22,12 @@ public class DispatcherServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 
+
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
         logger.debug("----------init(ServletConfig servletConfig)------------");
 
-        //init all the annotation pools.
+        //init all the annotation beans.
         BeanFactoryManager.init();
 
     }

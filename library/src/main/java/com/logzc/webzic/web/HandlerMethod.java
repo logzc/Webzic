@@ -59,8 +59,12 @@ public class HandlerMethod {
         String requestPath = request.getRequestURI();
 
         if (urls.contains(requestPath)) {
-            if (requestMethods.contains(RequestMethod.valueOf(request.getMethod().toUpperCase()))) {
+            if(requestMethods.isEmpty()){
                 return true;
+            }else{
+                if (requestMethods.contains(RequestMethod.valueOf(request.getMethod().toUpperCase()))) {
+                    return true;
+                }
             }
         }
         return false;
