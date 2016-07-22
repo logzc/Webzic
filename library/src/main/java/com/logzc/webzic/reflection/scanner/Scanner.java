@@ -1,6 +1,6 @@
-package com.logzc.webzic.dynamic.scanner;
+package com.logzc.webzic.reflection.scanner;
 
-import com.logzc.webzic.dynamic.fs.ZicFile;
+import com.logzc.webzic.reflection.fs.ZicFile;
 
 import java.util.List;
 

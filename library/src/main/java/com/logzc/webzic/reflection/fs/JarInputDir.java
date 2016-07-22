@@ -1,4 +1,4 @@
-package com.logzc.webzic.dynamic.fs;
+package com.logzc.webzic.reflection.fs;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
 
 /**
  * This is the implement of jar for ZicDir.

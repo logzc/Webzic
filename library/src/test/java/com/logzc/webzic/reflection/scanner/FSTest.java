@@ -1,7 +1,7 @@
-package com.logzc.webzic.dynamic.scanner;
+package com.logzc.webzic.reflection.scanner;
 
-import com.logzc.webzic.dynamic.fs.ZicDir;
-import com.logzc.webzic.dynamic.fs.ZicFile;
+import com.logzc.webzic.reflection.fs.ZicDir;
+import com.logzc.webzic.reflection.fs.ZicFile;
 import org.junit.Test;
 
 import java.net.URL;

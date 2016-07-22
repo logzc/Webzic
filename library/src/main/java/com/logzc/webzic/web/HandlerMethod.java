@@ -1,11 +1,14 @@
 package com.logzc.webzic.web;
 
 import com.logzc.webzic.util.Assert;
+import com.logzc.webzic.web.annotation.RequestMethod;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * A handler method.
@@ -33,13 +36,33 @@ public class HandlerMethod {
 //    private final HandlerMethod resolvedFromHandlerMethod;
 
 
-    public HandlerMethod(Object bean,Method method){
+    private Set<String> urls;
+
+    private Set<RequestMethod> requestMethods;
+
+
+    public HandlerMethod(Object bean, Method method, Set<String> urls, Set<RequestMethod> requestMethods) {
         Assert.notNull(bean);
         Assert.notNull(method);
 
-        this.bean=bean;
-        this.beanType=bean.getClass();
-        this.method=method;
+        this.bean = bean;
+        this.beanType = bean.getClass();
+        this.method = method;
+        this.urls = urls;
+        this.requestMethods = requestMethods;
 
+    }
+
+    public boolean match(HttpServletRequest request) {
+        Assert.notNull(request);
+
+        String requestPath = request.getRequestURI();
+
+        if (urls.contains(requestPath)) {
+            if (requestMethods.contains(RequestMethod.valueOf(request.getMethod().toUpperCase()))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

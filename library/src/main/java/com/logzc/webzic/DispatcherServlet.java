@@ -1,6 +1,6 @@
 package com.logzc.webzic;
 
-import com.logzc.webzic.web.pool.Pools;
+import com.logzc.webzic.web.pool.BeanFactoryManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ public class DispatcherServlet extends HttpServlet {
         logger.debug("----------init(ServletConfig servletConfig)------------");
 
         //init all the annotation pools.
-        Pools.init();
+        BeanFactoryManager.init();
 
     }
 

@@ -1,8 +1,8 @@
-package com.logzc.webzic.dynamic;
+package com.logzc.webzic.reflection;
 
-import com.logzc.webzic.dynamic.fs.ZicDir;
-import com.logzc.webzic.dynamic.fs.ZicFile;
-import com.logzc.webzic.dynamic.scanner.Scanner;
+import com.logzc.webzic.reflection.fs.ZicDir;
+import com.logzc.webzic.reflection.fs.ZicFile;
+import com.logzc.webzic.reflection.scanner.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,10 +13,10 @@ import java.util.Collection;
  * This the entrance of dynamic reflection.
  * Created by lishuang on 2016/7/18.
  */
-public class Dynamics {
+public class Reflections {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(Dynamics.class);
+    private static final Logger logger = LoggerFactory.getLogger(Reflections.class);
 
     /**
      * Scan one time to fill the results into scan's list.

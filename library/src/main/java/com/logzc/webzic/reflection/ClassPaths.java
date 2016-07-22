@@ -1,7 +1,6 @@
-package com.logzc.webzic.dynamic;
+package com.logzc.webzic.reflection;
 
 
-import org.reflections.vfs.Vfs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,8 +9,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 /**

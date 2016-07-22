@@ -1,8 +1,8 @@
-package com.logzc.webzic.dynamic;
+package com.logzc.webzic.reflection;
 
-import com.logzc.webzic.dynamic.fs.JarInputDir;
-import com.logzc.webzic.dynamic.fs.ZicDir;
-import com.logzc.webzic.dynamic.fs.ZicFile;
+import com.logzc.webzic.reflection.fs.JarInputDir;
+import com.logzc.webzic.reflection.fs.ZicDir;
+import com.logzc.webzic.reflection.fs.ZicFile;
 import org.junit.Test;
 
 import java.net.URL;

@@ -1,27 +1,10 @@
 package com.logzc.webzic.demo;
 
-import com.lish.fork.javassist.InvisibleAn;
 import com.lish.fork.javassist.VisibleAn;
-import com.logzc.webzic.annotation.RequestMapping;
-import com.logzc.webzic.annotation.RestController;
-import com.logzc.webzic.demo.controller.UserController;
-import com.logzc.webzic.dynamic.ClassPaths;
-import com.logzc.webzic.dynamic.Dynamics;
-import com.logzc.webzic.dynamic.fs.ZicDir;
-import com.logzc.webzic.dynamic.fs.ZicFile;
-import com.logzc.webzic.dynamic.scanner.TypeAnnotationScanner;
-import com.logzc.webzic.util.ClassUtil;
-import com.logzc.webzic.util.PropertyUtil;
-import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.SystemUtils;
-import org.reflections.Reflections;
-import org.reflections.util.ClasspathHelper;
+import com.logzc.webzic.reflection.Reflections;
+import com.logzc.webzic.reflection.scanner.TypeAnnotationScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
 
 /**
  * Created by lishuang on 2016/7/7.
@@ -33,7 +16,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         TypeAnnotationScanner scanner=new TypeAnnotationScanner(VisibleAn.class);
-        Dynamics.scan(scanner);
+        Reflections.scan(scanner);
 
 
         //scan urls that contain 'my.package', include inputs starting with 'my.package', use the default scanners
