@@ -1,7 +1,5 @@
 package com.logzc.webzic.web.pool;
 
-import com.logzc.webzic.web.annotation.RequestMethod;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**

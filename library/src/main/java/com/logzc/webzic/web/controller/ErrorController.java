@@ -2,6 +2,7 @@ package com.logzc.webzic.web.controller;
 
 import com.logzc.webzic.annotation.RequestMapping;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -12,8 +13,12 @@ import java.util.Map;
 public class ErrorController {
 
     @RequestMapping(path = "/error")
-    public Map<String, ?> error() {
+    public Map<String, ?> error(String message) {
 
-        return null;
+        Map<String, String> map = new HashMap<>();
+        map.put("type", "ERROR");
+        map.put("message", message);
+
+        return map;
     }
 }

@@ -1,6 +1,6 @@
 package com.logzc.webzic;
 
-import com.logzc.webzic.web.annotation.RequestMethod;
+import com.logzc.webzic.web.core.RequestMethod;
 
 /**
  * Created by lishuang on 2016/7/7.

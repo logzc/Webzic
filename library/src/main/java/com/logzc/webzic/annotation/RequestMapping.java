@@ -1,6 +1,6 @@
 package com.logzc.webzic.annotation;
 
-import com.logzc.webzic.web.annotation.RequestMethod;
+import com.logzc.webzic.web.core.RequestMethod;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

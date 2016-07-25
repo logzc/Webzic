@@ -1,4 +1,4 @@
-package com.logzc.webzic.web.annotation;
+package com.logzc.webzic.web.core;
 
 /**
  * Created by lishuang on 2016/7/12.

@@ -5,8 +5,8 @@ import com.logzc.webzic.annotation.RestController;
 import com.logzc.webzic.exception.ZicException;
 import com.logzc.webzic.reflection.scanner.Scanner;
 import com.logzc.webzic.reflection.scanner.TypeAnnotationScanner;
-import com.logzc.webzic.web.HandlerMethod;
-import com.logzc.webzic.web.annotation.RequestMethod;
+import com.logzc.webzic.web.core.HandlerMethod;
+import com.logzc.webzic.web.core.RequestMethod;
 import com.logzc.webzic.web.controller.ErrorController;
 import com.logzc.webzic.web.controller.ExceptionController;
 import org.slf4j.Logger;
@@ -190,6 +190,7 @@ public class ControllerBeanFactory extends BeanFactory {
         String path = request.getRequestURI();
 
         HandlerMethod handlerMethod = handlerMethodMap.get(path);
+
 
         //TODO: pass parameters into the controller.
         if (handlerMethod == null) {

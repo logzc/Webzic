@@ -4,7 +4,7 @@ import com.logzc.webzic.annotation.Autowired;
 import com.logzc.webzic.annotation.RequestMapping;
 import com.logzc.webzic.annotation.RestController;
 import com.logzc.webzic.compass.service.UserService;
-import com.logzc.webzic.web.annotation.RequestMethod;
+import com.logzc.webzic.web.core.RequestMethod;
 
 import java.util.Map;
 

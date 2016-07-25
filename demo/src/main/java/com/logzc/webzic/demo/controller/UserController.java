@@ -2,7 +2,7 @@ package com.logzc.webzic.demo.controller;
 
 import com.logzc.webzic.annotation.Autowired;
 import com.logzc.webzic.annotation.RequestMapping;
-import com.logzc.webzic.web.annotation.RequestMethod;
+import com.logzc.webzic.web.core.RequestMethod;
 import com.logzc.webzic.annotation.RestController;
 import com.logzc.webzic.demo.service.UserService;
 

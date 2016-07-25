@@ -1,14 +1,12 @@
-package com.logzc.webzic.web;
+package com.logzc.webzic.web.core;
 
 import com.logzc.webzic.util.Assert;
-import com.logzc.webzic.web.annotation.RequestMethod;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Set;
 
@@ -33,7 +31,7 @@ public class HandlerMethod {
 
 //    private final Method bridgedMethod;
 
-//    private final MethodParameter[] parameters;
+    private final MethodParameter[] parameters;
 
 //    private final HandlerMethod resolvedFromHandlerMethod;
 
@@ -53,7 +51,12 @@ public class HandlerMethod {
         this.urls = urls;
         this.requestMethods = requestMethods;
 
+
+        parameters = null;
+
+
     }
+
 
     @Override
     public String toString() {
@@ -85,17 +88,24 @@ public class HandlerMethod {
 
 
         try {
-            // 设置响应内容类型
-            response.setContentType("text/html");
+            Object result = this.method.invoke(this.bean, "method not found");
 
-            logger.debug(request.getMethod());
 
-            // 实际的逻辑是在这里
-            PrintWriter out = response.getWriter();
-            out.println("<h1>Hello Handler Method.</h1>");
         } catch (Exception e) {
-            logger.debug("Exceptions:" + e.getMessage());
+            logger.debug(e.getMessage());
         }
+
+//        try {
+//            response.setContentType("text/html");
+//
+//            logger.debug(request.getMethod());
+//
+//
+//            PrintWriter out = response.getWriter();
+//            out.println("<h1>Hello Handler Method.</h1>");
+//        } catch (Exception e) {
+//            logger.debug("Exceptions:" + e.getMessage());
+//        }
 
 
     }
