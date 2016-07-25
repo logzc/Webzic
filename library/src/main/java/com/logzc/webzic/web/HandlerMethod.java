@@ -53,15 +53,22 @@ public class HandlerMethod {
 
     }
 
+    @Override
+    public String toString() {
+
+        return "path=" + urls + ",methods=" + requestMethods + ",class=" + beanType.getName() + ",method=" + method.getName();
+
+    }
+
     public boolean match(HttpServletRequest request) {
         Assert.notNull(request);
 
         String requestPath = request.getRequestURI();
 
         if (urls.contains(requestPath)) {
-            if(requestMethods.isEmpty()){
+            if (requestMethods.isEmpty()) {
                 return true;
-            }else{
+            } else {
                 if (requestMethods.contains(RequestMethod.valueOf(request.getMethod().toUpperCase()))) {
                     return true;
                 }

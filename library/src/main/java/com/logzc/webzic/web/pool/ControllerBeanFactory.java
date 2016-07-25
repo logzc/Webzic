@@ -7,6 +7,10 @@ import com.logzc.webzic.reflection.scanner.Scanner;
 import com.logzc.webzic.reflection.scanner.TypeAnnotationScanner;
 import com.logzc.webzic.web.HandlerMethod;
 import com.logzc.webzic.web.annotation.RequestMethod;
+import com.logzc.webzic.web.controller.ErrorController;
+import com.logzc.webzic.web.controller.ExceptionController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -18,6 +22,7 @@ import java.util.*;
  */
 public class ControllerBeanFactory extends BeanFactory {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private List<Class<?>> classes = new ArrayList<>();
     private Map<Class<?>, Object> beanMap = new HashMap<>();
@@ -31,80 +36,112 @@ public class ControllerBeanFactory extends BeanFactory {
     @Override
     public void postInit() {
 
+
         //find all the methods with @RequestMapping annotation.
         List<String> classNames = scanner.getClassNames();
 
-        for (String className : classNames) {
-            try {
+
+        try {
+
+            //create the indexes of the canned controller.
+            for (String className : classNames) {
                 Class<?> controllerClass = this.getClassLoader().loadClass(className);
                 classes.add(controllerClass);
                 beanMap.put(controllerClass, controllerClass.newInstance());
-
-                RequestMapping controllerRequestMapping = controllerClass.getAnnotation(RequestMapping.class);
-                //this is the base path.
-                List<String> controllerRequestPaths = new ArrayList<>();
-                //this is the base methods.
-                List<RequestMethod> controllerRequestMethods = new ArrayList<>();
-                if (controllerRequestMapping != null) {
-                    String[] paths = controllerRequestMapping.path();
-                    Collections.addAll(controllerRequestPaths, paths);
-                    RequestMethod[] requestMethods = controllerRequestMapping.method();
-                    Collections.addAll(controllerRequestMethods, requestMethods);
-                }
-
-
-                Method[] methods = controllerClass.getMethods();
-
-                for (Method method : methods) {
-
-                    if (method.isAnnotationPresent(RequestMapping.class)) {
-
-
-                        Set<String> methodRequestPaths = new HashSet<>();
-                        Set<RequestMethod> methodRequestMethods = new HashSet<>();
-
-
-                        RequestMapping methodRequestMapping = method.getAnnotation(RequestMapping.class);
-
-                        Collections.addAll(methodRequestPaths, methodRequestMapping.path());
-                        Collections.addAll(methodRequestMethods, methodRequestMapping.method());
-
-
-                        Set<String> finalPaths = new HashSet<>();
-                        Set<RequestMethod> finalRequestMethods = new HashSet<>();
-
-                        //combine the paths.
-                        for (String path2 : methodRequestPaths) {
-
-                            for (String path1 : controllerRequestPaths) {
-
-                                finalPaths.add(path1 + path2);
-
-                            }
-                        }
-
-                        //combine the request methods.
-                        finalRequestMethods.addAll(controllerRequestMethods);
-                        finalRequestMethods.addAll(methodRequestMethods);
-
-                        HandlerMethod handlerMethod = new HandlerMethod(getBean(controllerClass), method, finalPaths, finalRequestMethods);
-                        handlerMethodList.add(handlerMethod);
-
-                        for (String path : finalPaths) {
-                            handlerMethodMap.put(path, handlerMethod);
-                        }
-
-                        
-                    }
-                }
-
-
-            } catch (Exception e) {
-                throw new ZicException(e.getMessage());
+                initController(controllerClass);
             }
+
+            //query error handler override
+            HandlerMethod errorHandlerMethod = handlerMethodMap.get("/webzic/error");
+            if (errorHandlerMethod == null) {
+
+                Class<?> controllerClass = ErrorController.class;
+                classes.add(controllerClass);
+                beanMap.put(controllerClass, controllerClass.newInstance());
+                initController(controllerClass);
+
+            }
+
+            //query exception handler override.
+            HandlerMethod exceptionHandlerMethod=handlerMethodMap.get("/webzic/exception");
+            if(exceptionHandlerMethod==null){
+                Class<?> controllerClass = ExceptionController.class;
+                classes.add(controllerClass);
+                beanMap.put(controllerClass, controllerClass.newInstance());
+                initController(controllerClass);
+            }
+
+
+        } catch (Exception e) {
+            throw new ZicException(e.getMessage());
         }
 
 
+    }
+
+
+    /**
+     * Read the annotations of the controller class and create the map index.
+     */
+    public void initController(Class<?> controllerClass) {
+
+        RequestMapping controllerRequestMapping = controllerClass.getAnnotation(RequestMapping.class);
+        //this is the base path.
+        List<String> controllerRequestPaths = new ArrayList<>();
+        //this is the base methods.
+        List<RequestMethod> controllerRequestMethods = new ArrayList<>();
+        if (controllerRequestMapping != null) {
+            String[] paths = controllerRequestMapping.path();
+            Collections.addAll(controllerRequestPaths, paths);
+            RequestMethod[] requestMethods = controllerRequestMapping.method();
+            Collections.addAll(controllerRequestMethods, requestMethods);
+        }
+
+
+        Method[] methods = controllerClass.getMethods();
+
+        for (Method method : methods) {
+
+            if (method.isAnnotationPresent(RequestMapping.class)) {
+
+
+                Set<String> methodRequestPaths = new HashSet<>();
+                Set<RequestMethod> methodRequestMethods = new HashSet<>();
+
+
+                RequestMapping methodRequestMapping = method.getAnnotation(RequestMapping.class);
+
+                Collections.addAll(methodRequestPaths, methodRequestMapping.path());
+                Collections.addAll(methodRequestMethods, methodRequestMapping.method());
+
+
+                Set<String> finalPaths = new HashSet<>();
+                Set<RequestMethod> finalRequestMethods = new HashSet<>();
+
+                //combine the paths.
+                for (String path2 : methodRequestPaths) {
+
+                    for (String path1 : controllerRequestPaths) {
+
+                        finalPaths.add(path1 + path2);
+
+                    }
+                }
+
+                //combine the request methods.
+                finalRequestMethods.addAll(controllerRequestMethods);
+                finalRequestMethods.addAll(methodRequestMethods);
+
+                HandlerMethod handlerMethod = new HandlerMethod(getBean(controllerClass), method, finalPaths, finalRequestMethods);
+                handlerMethodList.add(handlerMethod);
+
+                for (String path : finalPaths) {
+                    handlerMethodMap.put(path, handlerMethod);
+                    logger.debug("Mapped " + handlerMethod);
+                }
+
+            }
+        }
     }
 
 
@@ -136,7 +173,8 @@ public class ControllerBeanFactory extends BeanFactory {
     }
 
     //get the HandlerMethod by HttpServletRequest.
-    public HandlerMethod getHandlerMethod(HttpServletRequest request){
+    public HandlerMethod getHandlerMethod(HttpServletRequest request) {
+
 
 
         //TODO:
