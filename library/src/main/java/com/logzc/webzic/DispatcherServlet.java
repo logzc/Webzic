@@ -37,6 +37,12 @@ public class DispatcherServlet extends HttpServlet {
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
+        //BeanFactoryManager.getControllerBeanFactory().
+
+
+
+
+
         // 设置响应内容类型
         response.setContentType("text/html");
 

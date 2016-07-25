@@ -7,15 +7,19 @@ import com.logzc.webzic.reflection.Reflections;
  */
 public class BeanFactoryManager {
 
-    private static ControllerBeanFactory controllerBeanFactory =new ControllerBeanFactory();
+
+    private static ControllerBeanFactory controllerBeanFactory = new ControllerBeanFactory();
 
 
-
-    public static void init(){
+    public static void init() {
         Reflections.scan(controllerBeanFactory.getScanner());
 
         controllerBeanFactory.postInit();
 
+    }
+
+    public static ControllerBeanFactory getControllerBeanFactory() {
+        return controllerBeanFactory;
     }
 
 

@@ -8,6 +8,7 @@ import com.logzc.webzic.reflection.scanner.TypeAnnotationScanner;
 import com.logzc.webzic.web.HandlerMethod;
 import com.logzc.webzic.web.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -132,5 +133,14 @@ public class ControllerBeanFactory extends BeanFactory {
         } catch (ClassNotFoundException e) {
             return null;
         }
+    }
+
+    //get the HandlerMethod by HttpServletRequest.
+    public HandlerMethod getHandlerMethod(HttpServletRequest request){
+
+
+        //TODO:
+        return null;
+
     }
 }
