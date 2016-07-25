@@ -14,7 +14,7 @@ import java.util.Map;
 public class SiteController {
 
     @RequestMapping(path = "/add", method = RequestMethod.POST)
-    public Map<String, ?> add() {
+    public Map<String, ?> add(String siteId) {
 
         return null;
     }

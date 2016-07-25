@@ -63,8 +63,8 @@ public class ControllerBeanFactory extends BeanFactory {
             }
 
             //query exception handler override.
-            HandlerMethod exceptionHandlerMethod=handlerMethodMap.get("/webzic/exception");
-            if(exceptionHandlerMethod==null){
+            HandlerMethod exceptionHandlerMethod = handlerMethodMap.get("/webzic/exception");
+            if (exceptionHandlerMethod == null) {
                 Class<?> controllerClass = ExceptionController.class;
                 classes.add(controllerClass);
                 beanMap.put(controllerClass, controllerClass.newInstance());
@@ -134,10 +134,10 @@ public class ControllerBeanFactory extends BeanFactory {
 
                 HandlerMethod handlerMethod = new HandlerMethod(getBean(controllerClass), method, finalPaths, finalRequestMethods);
                 handlerMethodList.add(handlerMethod);
+                logger.debug("Mapped " + handlerMethod);
 
                 for (String path : finalPaths) {
                     handlerMethodMap.put(path, handlerMethod);
-                    logger.debug("Mapped " + handlerMethod);
                 }
 
             }
@@ -172,13 +172,39 @@ public class ControllerBeanFactory extends BeanFactory {
         }
     }
 
+
+    public HandlerMethod getErrorHandlerMethod() {
+
+        return handlerMethodMap.get("/webzic/error");
+    }
+
+    public HandlerMethod getExceptionHandlerMethod() {
+        return handlerMethodMap.get("/webzic/exception");
+    }
+
+
     //get the HandlerMethod by HttpServletRequest.
     public HandlerMethod getHandlerMethod(HttpServletRequest request) {
 
 
+        String path = request.getRequestURI();
 
-        //TODO:
-        return null;
+        HandlerMethod handlerMethod = handlerMethodMap.get(path);
+
+        //TODO: pass parameters into the controller.
+        if (handlerMethod == null) {
+            return getErrorHandlerMethod();
+        }
+
+        //check the request methods
+        boolean b = handlerMethod.matchRequestMethod(request);
+        if (b) {
+            return handlerMethod;
+        } else {
+
+            return getErrorHandlerMethod();
+        }
+
 
     }
 }

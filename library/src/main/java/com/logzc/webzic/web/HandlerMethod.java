@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Set;
 
@@ -56,11 +58,11 @@ public class HandlerMethod {
     @Override
     public String toString() {
 
-        return "path=" + urls + ",methods=" + requestMethods + ",class=" + beanType.getName() + ",method=" + method.getName();
+        return "path=" + urls + ",methods=" + requestMethods + ",class=" + beanType.getName() + ",method=" + method.toGenericString();
 
     }
 
-    public boolean match(HttpServletRequest request) {
+    public boolean matchRequestMethod(HttpServletRequest request) {
         Assert.notNull(request);
 
         String requestPath = request.getRequestURI();
@@ -75,5 +77,26 @@ public class HandlerMethod {
             }
         }
         return false;
+    }
+
+
+    //handle the request.
+    public void handle(HttpServletRequest request, HttpServletResponse response) {
+
+
+        try {
+            // 设置响应内容类型
+            response.setContentType("text/html");
+
+            logger.debug(request.getMethod());
+
+            // 实际的逻辑是在这里
+            PrintWriter out = response.getWriter();
+            out.println("<h1>Hello Handler Method.</h1>");
+        } catch (Exception e) {
+            logger.debug("Exceptions:" + e.getMessage());
+        }
+
+
     }
 }

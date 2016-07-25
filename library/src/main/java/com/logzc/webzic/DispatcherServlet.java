@@ -1,5 +1,6 @@
 package com.logzc.webzic;
 
+import com.logzc.webzic.web.HandlerMethod;
 import com.logzc.webzic.web.pool.BeanFactoryManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,23 +35,20 @@ public class DispatcherServlet extends HttpServlet {
 
 
     @Override
-    public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void service(HttpServletRequest request, HttpServletResponse response){
 
 
-        //BeanFactoryManager.getControllerBeanFactory().
+        HandlerMethod handlerMethod = BeanFactoryManager.getControllerBeanFactory().getHandlerMethod(request);
+
+
+        handlerMethod.handle(request,response);
 
 
 
 
 
-        // 设置响应内容类型
-        response.setContentType("text/html");
 
-        logger.debug(request.getMethod());
 
-        // 实际的逻辑是在这里
-        PrintWriter out = response.getWriter();
-        out.println("<h1>Hello Webzic</h1>");
     }
 
     @Override
