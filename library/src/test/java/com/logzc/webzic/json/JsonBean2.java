@@ -1,10 +1,8 @@
 package com.logzc.webzic.json;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +10,12 @@ import java.util.Map;
  * Created by lishuang on 2016/7/26.
  */
 @Data
-public class JsonBean1{
+public class JsonBean2 {
+
+
     String name;
+
+    @JsonIgnore
     int age;
     boolean ok;
     List<String> info;
