@@ -45,6 +45,12 @@ dependencies {
     //lombok，后面准备去掉
     compile 'org.projectlombok:lombok:+'
 
+    //json
+    compile 'com.fasterxml.jackson.core:jackson-core:+'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:+'
+    compile 'com.fasterxml.jackson.core:jackson-databind:+'
+
+
 
 
 
