@@ -7,12 +7,9 @@ package com.logzc.webzic.factory;
 public class WidgetBeanFactory extends AbstractBeanFactory {
 
     @Override
-    public Object getBean(Class<?> clazz) {
+    public <T> T getBean(Class<T> clazz) {
+
         return null;
     }
 
-    @Override
-    public Object getBean(String className) {
-        return null;
-    }
 }

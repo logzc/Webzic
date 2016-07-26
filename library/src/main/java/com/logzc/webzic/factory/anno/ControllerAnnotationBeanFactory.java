@@ -5,10 +5,10 @@ import com.logzc.webzic.annotation.RestController;
 import com.logzc.webzic.exception.ZicException;
 import com.logzc.webzic.reflection.scanner.Scanner;
 import com.logzc.webzic.reflection.scanner.TypeAnnotationScanner;
-import com.logzc.webzic.web.core.HandlerMethod;
-import com.logzc.webzic.web.core.RequestMethod;
 import com.logzc.webzic.web.controller.ErrorController;
 import com.logzc.webzic.web.controller.ExceptionController;
+import com.logzc.webzic.web.core.HandlerMethod;
+import com.logzc.webzic.web.core.RequestMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,22 +154,13 @@ public class ControllerAnnotationBeanFactory extends AbstractAnnotationBeanFacto
         return scanner;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object getBean(Class<?> clazz) {
+    public <T> T getBean(Class<T> clazz) {
 
-        return beanMap.get(clazz);
+        return (T) beanMap.get(clazz);
     }
 
-    @Override
-    public Object getBean(String className) {
-
-        try {
-            Class<?> clazz = getClassLoader().loadClass(className);
-            return getBean(clazz);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-    }
 
 
     public HandlerMethod getErrorHandlerMethod() {

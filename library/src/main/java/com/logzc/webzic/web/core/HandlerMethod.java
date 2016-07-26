@@ -91,6 +91,8 @@ public class HandlerMethod {
             Object result = this.method.invoke(this.bean, "method not found");
 
 
+            System.out.println(result);
+
         } catch (Exception e) {
             logger.debug(e.getMessage());
         }

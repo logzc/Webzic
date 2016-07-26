@@ -3,11 +3,15 @@ package com.logzc.webzic.reflection;
 import com.logzc.webzic.reflection.fs.ZicDir;
 import com.logzc.webzic.reflection.fs.ZicFile;
 import com.logzc.webzic.reflection.scanner.Scanner;
+import com.logzc.webzic.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This the entrance of dynamic reflection.
@@ -18,42 +22,49 @@ public class Reflections {
 
     private static final Logger logger = LoggerFactory.getLogger(Reflections.class);
 
+
+    public static void scan(List<Scanner> scanners){
+
+        Assert.notEmpty(scanners);
+
+        Scanner[] array = new Scanner[scanners.size()];
+        scanners.toArray(array);
+
+        scan(array);
+    }
+
     /**
      * Scan one time to fill the results into scan's list.
      */
     public static void scan(Scanner... scanners) {
 
-        if (scanners != null && scanners.length > 0) {
+        Assert.notEmpty(scanners);
 
+        Collection<URL> urls=ClassPaths.forClassLoader();
 
+        //These three urls have different results.
+        //Collection<URL> urls = ClassPaths.forJavaClassPath();
+        //Collection<URL> urls=ClassPaths.forPackage("");
 
-            Collection<URL> urls=ClassPaths.forClassLoader();
+        for (URL url : urls) {
+            //logger.debug("scan...");
+            logger.debug("scaning..."+url.toString());
 
-            //These three urls have different results.
-            //Collection<URL> urls = ClassPaths.forJavaClassPath();
-            //Collection<URL> urls=ClassPaths.forPackage("");
+            ZicDir zicDir = ZicDir.fromURL(url);
 
+            Collection<ZicFile> zicFiles = zicDir.getFiles();
 
-            for (URL url : urls) {
-                //logger.debug("scan...");
-                logger.debug("scaning..."+url.toString());
+            for (ZicFile file : zicFiles) {
 
-                ZicDir zicDir = ZicDir.fromURL(url);
+                for (Scanner scanner : scanners) {
 
-                Collection<ZicFile> zicFiles = zicDir.getFiles();
+                    scanner.accept(file);
 
-                for (ZicFile file : zicFiles) {
-
-                    for (Scanner scanner : scanners) {
-
-                        scanner.accept(file);
-
-
-                    }
 
                 }
 
             }
+
         }
 
     }

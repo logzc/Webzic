@@ -1,40 +1,89 @@
 package com.logzc.webzic.factory;
 
+import com.logzc.webzic.factory.anno.AnnotationBeanFactory;
 import com.logzc.webzic.factory.anno.ControllerAnnotationBeanFactory;
 import com.logzc.webzic.reflection.Reflections;
+import com.logzc.webzic.reflection.scanner.Scanner;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
+ * Factory bean manager.
  * Created by lishuang on 2016/7/19.
  */
-public class AppContext implements BeanFactory{
+@SuppressWarnings("unchecked")
+public class AppContext {
 
 
-    
+    static List<AnnotationBeanFactory> annotationBeanFactoryList = new ArrayList<>();
+    static Map<Class<? extends AnnotationBeanFactory>, AnnotationBeanFactory> annotationBeanFactoryMap = new HashMap<>();
 
-    //Beans with annotation @Controller.
-    private static ControllerAnnotationBeanFactory controllerBeanFactory = new ControllerAnnotationBeanFactory();
 
-    //Beans needed by the webzic framework.
-    private static WidgetBeanFactory widgetBeanFactory = new WidgetBeanFactory();
+    static List<BeanFactory> beanFactoryList = new ArrayList<>();
+    static Map<Class<? extends BeanFactory>, BeanFactory> beanFactoryMap = new HashMap<>();
+
+    static {
+
+
+        //register all the bean factories here.
+
+        annotationBeanFactoryList.add(new ControllerAnnotationBeanFactory());
+
+        beanFactoryList.add(new WidgetBeanFactory());
+
+
+        //create map index.
+        annotationBeanFactoryList.forEach(annotationBeanFactory -> {
+            annotationBeanFactoryMap.put(annotationBeanFactory.getClass(),annotationBeanFactory);
+        });
+
+        beanFactoryList.forEach(beanFactory -> {
+            beanFactoryMap.put(beanFactory.getClass(),beanFactory);
+        });
+
+
+
+    }
 
 
     public static void init() {
 
+        List<Scanner> scannerList = annotationBeanFactoryList.stream().map(AnnotationBeanFactory::getScanner).collect(Collectors.toList());
 
-        Reflections.scan(controllerBeanFactory.getScanner());
-        controllerBeanFactory.postInit();
+        Reflections.scan(scannerList);
+
+        annotationBeanFactoryList.forEach(AnnotationBeanFactory::postInit);
+
 
     }
 
-    public static ControllerAnnotationBeanFactory getControllerBeanFactory() {
-        return controllerBeanFactory;
+
+    public static ControllerAnnotationBeanFactory getControllerAnnotationBeanFactory() {
+
+        return getAnnotationBeanFactory(ControllerAnnotationBeanFactory.class);
     }
 
-    public Object getBean(Class<?> clazz){
+    public static <T extends BeanFactory> T getBeanFactory(Class<T> clazz) {
+
+        return (T) beanFactoryMap.get(clazz);
+
+    }
+
+    public static <T extends AnnotationBeanFactory> T getAnnotationBeanFactory(Class<T> clazz) {
+
+        return (T) annotationBeanFactoryMap.get(clazz);
+
+    }
+
+
+    public static <T> T getBean(Class<T> clazz) {
+
         return null;
     }
-    public Object getBean(String className){
-        return null;
-    }
+
 
 }
