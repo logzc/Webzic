@@ -1,4 +1,4 @@
-package com.logzc.webzic.web.pool;
+package com.logzc.webzic.factory.anno;
 
 import com.logzc.webzic.annotation.RequestMapping;
 import com.logzc.webzic.annotation.RestController;
@@ -20,12 +20,11 @@ import java.util.*;
  * This is a pool containers all the @Controller.
  * Created by lishuang on 2016/7/19.
  */
-public class ControllerBeanFactory extends BeanFactory {
+public class ControllerAnnotationBeanFactory extends AbstractAnnotationBeanFactory {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private List<Class<?>> classes = new ArrayList<>();
-    private Map<Class<?>, Object> beanMap = new HashMap<>();
+
     private List<HandlerMethod> handlerMethodList = new ArrayList<>();
     private Map<String, HandlerMethod> handlerMethodMap = new HashMap<>();
 
@@ -204,6 +203,7 @@ public class ControllerBeanFactory extends BeanFactory {
         } else {
 
             return getErrorHandlerMethod();
+
         }
 
 

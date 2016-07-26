@@ -20,7 +20,7 @@ public class HandlerMethod {
     @Getter
     private final Object bean;
 
-//    private final BeanFactory beanFactory;
+//    private final AnnotationBeanFactory beanFactory;
 
     @Getter
     private final Class<?> beanType;
