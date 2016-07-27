@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Factory bean manager.
  * Created by lishuang on 2016/7/19.
  */
-@SuppressWarnings("unchecked")
+
 public class AppContext {
 
 
@@ -38,13 +38,12 @@ public class AppContext {
 
         //create map index.
         annotationBeanFactoryList.forEach(annotationBeanFactory -> {
-            annotationBeanFactoryMap.put(annotationBeanFactory.getClass(),annotationBeanFactory);
+            annotationBeanFactoryMap.put(annotationBeanFactory.getClass(), annotationBeanFactory);
         });
 
         beanFactoryList.forEach(beanFactory -> {
-            beanFactoryMap.put(beanFactory.getClass(),beanFactory);
+            beanFactoryMap.put(beanFactory.getClass(), beanFactory);
         });
-
 
 
     }
@@ -52,8 +51,13 @@ public class AppContext {
 
     public static void init() {
 
+        //init normal beanFactories.
+        beanFactoryList.forEach(BeanFactory::init);
+
+
         List<Scanner> scannerList = annotationBeanFactoryList.stream().map(AnnotationBeanFactory::getScanner).collect(Collectors.toList());
 
+        //Guarantee scan once.
         Reflections.scan(scannerList);
 
         annotationBeanFactoryList.forEach(AnnotationBeanFactory::postInit);
@@ -67,12 +71,14 @@ public class AppContext {
         return getAnnotationBeanFactory(ControllerAnnotationBeanFactory.class);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends BeanFactory> T getBeanFactory(Class<T> clazz) {
 
         return (T) beanFactoryMap.get(clazz);
 
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends AnnotationBeanFactory> T getAnnotationBeanFactory(Class<T> clazz) {
 
         return (T) annotationBeanFactoryMap.get(clazz);
@@ -81,6 +87,21 @@ public class AppContext {
 
 
     public static <T> T getBean(Class<T> clazz) {
+
+        for (BeanFactory beanFactory : beanFactoryList) {
+            T obj = beanFactory.getBean(clazz);
+            if (obj != null) {
+                return obj;
+            }
+        }
+
+        for (AnnotationBeanFactory beanFactory : annotationBeanFactoryList) {
+            T obj = beanFactory.getBean(clazz);
+            if (obj != null) {
+                return obj;
+            }
+        }
+
 
         return null;
     }

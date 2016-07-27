@@ -6,6 +6,8 @@ package com.logzc.webzic.factory;
 public interface BeanFactory {
 
 
+    void init();
+
     <T> T getBean(Class<T> clazz);
 
 

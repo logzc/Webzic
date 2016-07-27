@@ -6,6 +6,7 @@ import com.logzc.webzic.annotation.RestController;
 import com.logzc.webzic.compass.service.UserService;
 import com.logzc.webzic.web.core.RequestMethod;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,7 +22,10 @@ public class UserController {
     @RequestMapping(path = "/page", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<String, ?> page() {
 
-        return null;
+        Map<String,String> user=new HashMap<>();
+        user.put("name","lishuang");
+        user.put("age","18");
+        return user;
     }
 
     @RequestMapping(path = "/add", method = RequestMethod.POST)

@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by lishuang on 2016/7/19.
  */
-public abstract class AbstractBeanFactory implements BeanFactory{
+public abstract class AbstractBeanFactory implements BeanFactory {
 
 
     //contains all the classes.
@@ -19,9 +19,12 @@ public abstract class AbstractBeanFactory implements BeanFactory{
     protected Map<Class<?>, Object> beanMap = new HashMap<>();
 
     //set a default classloader.
-    public ClassLoader getClassLoader(){
+    public ClassLoader getClassLoader() {
         return ClassUtil.getClassLoader();
     }
+
+
+
 
 
 }

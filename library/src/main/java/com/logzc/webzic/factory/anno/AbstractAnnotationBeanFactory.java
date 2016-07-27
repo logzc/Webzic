@@ -10,4 +10,9 @@ public abstract class AbstractAnnotationBeanFactory extends AbstractBeanFactory 
 
     protected Scanner scanner;
 
+    @Override
+    public void init(){
+        //do nothing here.
+    }
+
 }

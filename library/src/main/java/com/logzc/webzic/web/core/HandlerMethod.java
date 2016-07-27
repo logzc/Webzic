@@ -1,12 +1,14 @@
 package com.logzc.webzic.web.core;
 
 import com.logzc.webzic.util.Assert;
+import com.logzc.webzic.util.JsonUtil;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Set;
 
@@ -88,26 +90,20 @@ public class HandlerMethod {
 
 
         try {
-            Object result = this.method.invoke(this.bean, "method not found");
 
+            Object result = this.method.invoke(this.bean);
 
-            System.out.println(result);
+            //check the type of result.
+            String jsonResult = JsonUtil.toJson(result);
+
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println(jsonResult);
 
         } catch (Exception e) {
+            logger.debug("Webzic Exception intercept.");
             logger.debug(e.getMessage());
         }
-
-//        try {
-//            response.setContentType("text/html");
-//
-//            logger.debug(request.getMethod());
-//
-//
-//            PrintWriter out = response.getWriter();
-//            out.println("<h1>Hello Handler Method.</h1>");
-//        } catch (Exception e) {
-//            logger.debug("Exceptions:" + e.getMessage());
-//        }
 
 
     }
