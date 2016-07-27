@@ -18,4 +18,9 @@ public class MethodTestBean0 {
     public <S> void add(S a, S b) {
         System.out.println(a + "," + b);
     }
+
+    public Integer minus(Integer a, Integer b) {
+
+        return a - b;
+    }
 }

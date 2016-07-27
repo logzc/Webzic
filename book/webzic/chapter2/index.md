@@ -55,3 +55,8 @@ public class Main {
                  
 ## Spring RequestMapping 的工作原理
 
+
+## 查看java的字节码
+
+    "C:\Program Files\Java\jdk1.8.0_05\bin\javap" -c -v C:\lish\Group\Logzc\Webzic\library\build\classes\test\com\logzc\webzic\reflection\method\MethodTestBean0.class
+

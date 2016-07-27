@@ -43,7 +43,7 @@ public class SiteController {
         return null;
     }
 
-    public Map<String, ?> ooh() {
+    public Map<String, ?> ooh(int age) {
         return null;
     }
 

@@ -55,14 +55,19 @@ public class HandlerMethod {
         this.requestMethods = requestMethods;
 
 
-        parameters = null;
+        //init the Method parameters.
+        Class<?>[] parameterTypes = this.method.getParameterTypes();
+        int parameterTypesLength = parameterTypes.length;
+        parameters = new MethodParameter[parameterTypesLength];
+
+        for (int i = 0; i < parameterTypesLength; i++) {
+
+            MethodParameter methodParameter = new MethodParameter(this.method, i);
+            parameters[i] = methodParameter;
+
+        }
 
 
-    }
-
-    public void initParameters() {
-
-        
     }
 
 
