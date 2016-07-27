@@ -44,6 +44,7 @@ public class HandlerMethod {
 
 
     public HandlerMethod(Object bean, Method method, Set<String> urls, Set<RequestMethod> requestMethods) {
+
         Assert.notNull(bean);
         Assert.notNull(method);
 
@@ -57,6 +58,11 @@ public class HandlerMethod {
         parameters = null;
 
 
+    }
+
+    public void initParameters() {
+
+        
     }
 
 
