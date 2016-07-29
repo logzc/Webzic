@@ -3,6 +3,7 @@ package com.logzc.webzic.util;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -30,5 +31,15 @@ public class CollectionUtil {
 
     public static boolean sizeIsEmpty(final Object object) {
         return CollectionUtils.sizeIsEmpty(object);
+    }
+
+
+    //clone a map.
+    public static <K, V> Map<K, V> copy(Map<K, V> map) {
+        Map<K, V> newMap = new HashMap<>();
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            newMap.put(entry.getKey(), entry.getValue());
+        }
+        return newMap;
     }
 }

@@ -4,7 +4,7 @@ package com.logzc.webzic.reflection.method;
  * Created by lishuang on 2016/7/27.
  */
 
-import jdk.internal.org.objectweb.asm.*;
+import org.objectweb.asm.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +42,7 @@ public class ParameterNameUtils {
         InputStream is = clazz.getResourceAsStream(className);
         try {
             ClassReader classReader = new ClassReader(is);
+
             classReader.accept(new ClassVisitor(Opcodes.ASM4) {
                 @Override
                 public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {

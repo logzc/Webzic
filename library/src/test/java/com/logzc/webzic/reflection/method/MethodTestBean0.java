@@ -7,6 +7,15 @@ import com.logzc.webzic.annotation.RequestParam;
  */
 public class MethodTestBean0 {
 
+
+    public MethodTestBean0(String name) {
+
+    }
+
+    private MethodTestBean0() {
+
+    }
+
     public void hello(String name, int a) {
         System.out.println("Hello, " + name);
     }
@@ -23,4 +32,22 @@ public class MethodTestBean0 {
 
         return a - b;
     }
+
+    private String myPrivate(Boolean adult) {
+        System.out.println("this is my private");
+        return null;
+    }
+    private String myPrivate(int adult) {
+        System.out.println("this is my private");
+        return null;
+    }
+
+    public static void staticMethod(){
+
+    }
+    private static void staticMethod1(){
+
+    }
+
+
 }

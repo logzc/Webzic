@@ -51,6 +51,12 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:+'
 
 
+    //asm
+    //compile 'asm:asm:3.3.1'
+    compile 'org.ow2.asm:asm:+'
+
+    //xbean. 依赖asm
+    compile 'org.apache.xbean:xbean-reflect:+'
 
 
 
