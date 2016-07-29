@@ -16,7 +16,7 @@ import static org.objectweb.asm.Opcodes.ASM5;
  * study the spirit org.apache.xbean.recipe.AsmParameterNameLoader
  * Created by lishuang on 2016/7/29.
  */
-public class AsmParameterNameLoader implements ParameterNameLoader {
+public class AsmParameterNameFinder implements ParameterNameFinder {
 
     //only cache a class's info.
     private Map<Constructor, List<String>> constructorCache = new HashMap<>();

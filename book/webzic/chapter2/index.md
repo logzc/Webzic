@@ -60,3 +60,10 @@ public class Main {
 
     "C:\Program Files\Java\jdk1.8.0_05\bin\javap" -c -v C:\lish\Group\Logzc\Webzic\library\build\classes\test\com\logzc\webzic\reflection\method\MethodTestBean0.class
 
+## 获取构造函数或者方法中参数的名字
+
+    著名的xbean中有一个比较好用的类 org.apache.xbean.recipe.AsmParameterNameLoader，它是利用ASM来获取到的。 
+    对应的gradle包引用如下：
+    compile 'org.apache.xbean:xbean-reflect:+'
+    
+[java如何获取方法参数名](http://blog.csdn.net/mhmyqn/article/details/47294485) 这篇文章中也是同样用的ASM来实现。

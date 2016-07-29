@@ -56,7 +56,7 @@ dependencies {
     compile 'org.ow2.asm:asm:+'
 
     //xbean. 依赖asm
-    compile 'org.apache.xbean:xbean-reflect:+'
+    //compile 'org.apache.xbean:xbean-reflect:+'
 
 
 

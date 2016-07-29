@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by lishuang on 2016/7/29.
  */
-public interface ParameterNameLoader {
+public interface ParameterNameFinder {
     List<String> get(Method method);
 
     List<String>  get(Constructor constructor);
