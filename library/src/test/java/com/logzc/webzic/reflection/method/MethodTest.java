@@ -130,14 +130,44 @@ public class MethodTest {
             for (String str:xbeanParams1){
                 System.out.println(str);
             }
-
-
-
             System.out.println("-----------");
 
-
-
         }
+    }
+
+    @Test
+    public void testMyAsmParameterDiscovery(){
+        Class<MethodTestBean0> testBean0Class = MethodTestBean0.class;
+        Method[] methods = testBean0Class.getDeclaredMethods();
+        com.logzc.webzic.reflection.parameter.ParameterNameLoader parameterNameLoader1=new com.logzc.webzic.reflection.parameter.AsmParameterNameLoader();
+
+        for (Method method:methods){
+
+            System.out.println(method.toString());
+
+            List<String> xbeanParams1 = parameterNameLoader1.get(method);
+            for (String str:xbeanParams1){
+                System.out.println(str);
+            }
+
+            System.out.println("-----------------");
+        }
+        
+        Constructor[] constructors = testBean0Class.getDeclaredConstructors();
+        com.logzc.webzic.reflection.parameter.ParameterNameLoader parameterNameLoader2=new com.logzc.webzic.reflection.parameter.AsmParameterNameLoader();
+        for (Constructor constructor:constructors){
+
+            System.out.println(constructor.toString());
+
+            System.out.print("");
+            List<String> xbeanParams1 = parameterNameLoader2.get(constructor);
+            for (String str:xbeanParams1){
+                System.out.println(str);
+            }
+
+            System.out.println("-----------------");
+        }
+
 
 
     }

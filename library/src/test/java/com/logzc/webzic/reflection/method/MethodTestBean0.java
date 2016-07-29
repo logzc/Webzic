@@ -8,7 +8,7 @@ import com.logzc.webzic.annotation.RequestParam;
 public class MethodTestBean0 {
 
 
-    public MethodTestBean0(String name) {
+    public MethodTestBean0(String myName) {
 
     }
 
@@ -32,6 +32,11 @@ public class MethodTestBean0 {
 
         return a - b;
     }
+    public Integer realminus(Integer num1, Integer num2) {
+
+        return num1 -num2;
+    }
+
 
     private String myPrivate(Boolean adult) {
         System.out.println("this is my private");

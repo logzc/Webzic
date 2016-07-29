@@ -1,7 +1,6 @@
 package com.logzc.webzic.reflection.parameter;
 
 import com.logzc.webzic.util.AsmUtil;
-import com.logzc.webzic.util.CollectionUtil;
 import lombok.Getter;
 import org.objectweb.asm.*;
 
@@ -19,6 +18,7 @@ import static org.objectweb.asm.Opcodes.ASM5;
  */
 public class AsmParameterNameLoader implements ParameterNameLoader {
 
+    //only cache a class's info.
     private Map<Constructor, List<String>> constructorCache = new HashMap<>();
     private Map<Method, List<String>> methodCache = new HashMap<>();
 
@@ -33,7 +33,7 @@ public class AsmParameterNameLoader implements ParameterNameLoader {
         }
 
         //no cache. Fill cache.
-        getAllMethodParameters(method.getDeclaringClass(), method.getName());
+        findAllMethodParameters(method.getDeclaringClass());
 
         return methodCache.get(method);
 
@@ -48,28 +48,25 @@ public class AsmParameterNameLoader implements ParameterNameLoader {
         }
 
         //no cache. Fill cache.
-        getAllConstructorParameters(constructor.getDeclaringClass());
+        findAllConstructorParameters(constructor.getDeclaringClass());
 
         return constructorCache.get(constructor);
 
     }
 
-    public Map<Constructor, List<String>> getAllConstructorParameters(Class clazz) {
+    public void findAllConstructorParameters(Class clazz) {
 
         Constructor[] constructors = clazz.getDeclaredConstructors();
 
         if (constructors.length == 0) {
-            return Collections.emptyMap();
+            constructorCache.clear();
         }
 
-        if (constructorCache.size() > 0) {
-            return CollectionUtil.copy(constructorCache);
-        }
 
         //load parameter names using ASM.
         try {
             ClassReader reader = AsmUtil.createClassReader(clazz);
-            ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(clazz);
+            ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(constructors);
 
             reader.accept(parameterNameClassVisitor, 0);
 
@@ -77,41 +74,31 @@ public class AsmParameterNameLoader implements ParameterNameLoader {
 
         } catch (IOException e) {
             e.printStackTrace();
-
-            return Collections.emptyMap();
+            constructorCache.clear();
         }
-
-
-        return CollectionUtil.copy(constructorCache);
-
     }
 
-    public Map<Method, List<String>> getAllMethodParameters(Class clazz, String methodName) {
+    public void findAllMethodParameters(Class clazz) {
 
         Method[] methods = clazz.getDeclaredMethods();
 
         if (methods.length == 0) {
-            return Collections.emptyMap();
-        }
-
-        if (methodCache.size() > 0) {
-            return CollectionUtil.copy(methodCache);
+            methodCache.clear();
         }
 
         //load parameter names using ASM.
         try {
             ClassReader reader = AsmUtil.createClassReader(clazz);
-            ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(clazz, methodName);
+            ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(methods);
 
             reader.accept(parameterNameClassVisitor, 0);
 
             methodCache = parameterNameClassVisitor.getMethodParameters();
-            return CollectionUtil.copy(methodCache);
+
 
         } catch (IOException e) {
             e.printStackTrace();
 
-            return Collections.emptyMap();
         }
 
 
@@ -120,6 +107,7 @@ public class AsmParameterNameLoader implements ParameterNameLoader {
 
     private static class ParameterNameClassVisitor extends ClassVisitor {
 
+
         @Getter
         private final Map<Constructor, List<String>> constructorParameters = new HashMap<>();
         @Getter
@@ -127,55 +115,56 @@ public class AsmParameterNameLoader implements ParameterNameLoader {
 
         private final Map<String, Exception> exceptions = new HashMap<>();
 
-        private final String methodName;
-        private final Map<String, Method> methodMap = new HashMap<>();
 
-        private final Map<String, Constructor> constructorMap = new HashMap<>();
+        private Map<String, Method> methodMap;
+        private Map<String, Constructor> constructorMap;
+
+        //special key.
+        public String getKey(String name, String desc) {
+            return name + desc;
+        }
 
         //method way
-        public ParameterNameClassVisitor(Class clazz, String methodName) {
+        public ParameterNameClassVisitor(Method[] methods) {
             super(ASM5);
-            this.methodName = methodName;
 
-            Method[] methods = clazz.getDeclaredMethods();
-
+            methodMap = new HashMap<>();
             for (Method method : methods) {
-                if (method.getName().equals(methodName)) {
-                    methodMap.put(Type.getMethodDescriptor(method), method);
-                }
+                String key = getKey(method.getName(), Type.getMethodDescriptor(method));
+                methodMap.put(key, method);
             }
         }
 
         //constructor way.
-        public ParameterNameClassVisitor(Class clazz) {
+        public ParameterNameClassVisitor(Constructor[] constructors) {
             super(ASM5);
-            this.methodName = "<init>";
 
-            Constructor[] constructors = clazz.getDeclaredConstructors();
-
+            constructorMap = new HashMap<>();
             for (Constructor constructor : constructors) {
                 Class<?>[] parameterTypes = constructor.getParameterTypes();
                 Type[] types = new Type[parameterTypes.length];
                 for (int j = 0; j < types.length; j++) {
                     types[j] = Type.getType(parameterTypes[j]);
                 }
-                constructorMap.put(Type.getMethodDescriptor(Type.VOID_TYPE, types), constructor);
+
+                //we cannot get the name by constructor.getName().
+                String key = getKey("<init>", Type.getMethodDescriptor(Type.VOID_TYPE, types));
+                constructorMap.put(key, constructor);
             }
+
         }
 
         @Override
         public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-            if (!name.equals(this.methodName)) {
-                return null;
-            }
 
             final List<String> parameterNames;
             final boolean isStaticMethod;
+            String key = getKey(name, desc);
 
             //constructor
-            if (methodName.equals("<init>")) {
+            if (constructorMap != null) {
 
-                Constructor constructor = constructorMap.get(desc);
+                Constructor constructor = constructorMap.get(key);
 
                 if (constructor == null) {
                     return null;
@@ -192,7 +181,7 @@ public class AsmParameterNameLoader implements ParameterNameLoader {
 
             //method
             else {
-                Method method = methodMap.get(desc);
+                Method method = methodMap.get(key);
                 if (method == null) {
                     return null;
                 }
