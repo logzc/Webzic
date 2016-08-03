@@ -1,10 +1,14 @@
 package com.logzc.webzic.web.core;
 
+import com.logzc.webzic.factory.AppContext;
+import com.logzc.webzic.factory.WidgetBeanFactory;
+import com.logzc.webzic.reflection.parameter.AnnotationParameterNameFinder;
+import com.logzc.webzic.reflection.parameter.AsmParameterNameFinder;
+
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * This is the parameter's info of a method. Mainly get from the method's annotation.
@@ -14,7 +18,6 @@ import java.lang.reflect.Type;
 public class MethodParameter {
 
     private final Method method;
-    private final Constructor<?> constructor;
 
     //when index < 0 means Return type.
     private final int parameterIndex;
@@ -28,29 +31,14 @@ public class MethodParameter {
     private Class<?> parameterType;
     private Type genericParameterType;
     private Annotation[] annotations;
-    //private ParameterNameDiscoverer parameterNameDiscoverer;
     private String parameterName;
 
 
     public MethodParameter(Method method, int parameterIndex) {
         this.method = method;
-        this.constructor = null;
         this.parameterIndex = parameterIndex;
     }
 
-    public MethodParameter(Constructor<?> constructor, int parameterIndex) {
-        this.method = null;
-        this.constructor = constructor;
-        this.parameterIndex = parameterIndex;
-    }
-
-    public Member getMember() {
-        if (this.method != null) {
-            return this.method;
-        } else {
-            return this.constructor;
-        }
-    }
 
     public Class<?> getParameterType() {
 
@@ -61,16 +49,35 @@ public class MethodParameter {
 
             } else {
 
-                if (this.method != null) {
-                    this.parameterType = this.method.getParameterTypes()[this.parameterIndex];
-                }
-                
-                if (this.constructor != null) {
-                    this.parameterType = this.constructor.getParameterTypes()[this.parameterIndex];
-                }
+                this.parameterType = this.method.getParameterTypes()[this.parameterIndex];
+
             }
         }
         return this.parameterType;
+
+    }
+
+    public String getParameterName() {
+
+        WidgetBeanFactory widgetBeanFactory = AppContext.getBeanFactory(WidgetBeanFactory.class);
+
+
+        //get the parameter name from two finders.
+        AnnotationParameterNameFinder annotationParameterNameFinder = widgetBeanFactory.getBean(AnnotationParameterNameFinder.class);
+        AsmParameterNameFinder asmParameterNameFinder = widgetBeanFactory.getBean(AsmParameterNameFinder.class);
+
+
+        List<String> annoParameterNames = annotationParameterNameFinder.get(this.method);
+        String annoParameterName = annoParameterNames.get(parameterIndex);
+
+
+        if(annoParameterName!=null && !annoParameterName.equals("")){
+            return annoParameterName;
+        }else{
+
+            List<String> parameterNames = asmParameterNameFinder.get(this.method);
+            return parameterNames.get(parameterIndex);
+        }
 
     }
 }

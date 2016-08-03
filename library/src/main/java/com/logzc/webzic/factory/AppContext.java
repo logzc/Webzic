@@ -30,20 +30,20 @@ public class AppContext {
 
 
         //register all the bean factories here.
+        beanFactoryList.add(new WidgetBeanFactory());
+        beanFactoryList.forEach(beanFactory -> {
+            beanFactoryMap.put(beanFactory.getClass(), beanFactory);
+        });
+
 
         annotationBeanFactoryList.add(new ControllerAnnotationBeanFactory());
-
-        beanFactoryList.add(new WidgetBeanFactory());
-
-
         //create map index.
         annotationBeanFactoryList.forEach(annotationBeanFactory -> {
             annotationBeanFactoryMap.put(annotationBeanFactory.getClass(), annotationBeanFactory);
         });
 
-        beanFactoryList.forEach(beanFactory -> {
-            beanFactoryMap.put(beanFactory.getClass(), beanFactory);
-        });
+
+
 
 
     }

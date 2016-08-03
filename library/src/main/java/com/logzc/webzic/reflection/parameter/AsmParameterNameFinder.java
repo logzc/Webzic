@@ -57,9 +57,9 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
     public void findAllConstructorParameters(Class clazz) {
 
         Constructor[] constructors = clazz.getDeclaredConstructors();
-
+        //constructorCache.clear();
         if (constructors.length == 0) {
-            constructorCache.clear();
+            return;
         }
 
 
@@ -82,9 +82,11 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
 
         Method[] methods = clazz.getDeclaredMethods();
 
+        //methodCache.clear();
         if (methods.length == 0) {
-            methodCache.clear();
+            return;
         }
+
 
         //load parameter names using ASM.
         try {

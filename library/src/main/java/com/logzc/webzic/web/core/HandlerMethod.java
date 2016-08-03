@@ -99,9 +99,9 @@ public class HandlerMethod {
     //handle the request.
     public void handle(HttpServletRequest request, HttpServletResponse response) {
 
-
-
         try {
+
+            
 
             Object result = this.method.invoke(this.bean);
 

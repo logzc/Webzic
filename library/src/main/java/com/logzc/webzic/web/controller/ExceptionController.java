@@ -8,11 +8,11 @@ import java.util.Map;
  * default exception controller.  WITHOUT @RestController Annotation.
  * Created by lishuang on 2016/7/25.
  */
-@RequestMapping(path = "/webzic")
+@RequestMapping(path = WebzicPath.WEBZIC)
 public class ExceptionController {
 
-    @RequestMapping(path = "/exception")
-    public Map<String,?> exception(){
+    @RequestMapping(path = WebzicPath.EXCEPTION)
+    public Map<String, ?> exception() {
 
         return null;
     }

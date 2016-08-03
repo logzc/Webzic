@@ -5,8 +5,10 @@ import com.logzc.webzic.annotation.RestController;
 import com.logzc.webzic.exception.ZicException;
 import com.logzc.webzic.reflection.scanner.Scanner;
 import com.logzc.webzic.reflection.scanner.TypeAnnotationScanner;
+import com.logzc.webzic.web.controller.AccessController;
 import com.logzc.webzic.web.controller.ErrorController;
 import com.logzc.webzic.web.controller.ExceptionController;
+import com.logzc.webzic.web.controller.WebzicPath;
 import com.logzc.webzic.web.core.HandlerMethod;
 import com.logzc.webzic.web.core.RequestMethod;
 import org.slf4j.Logger;
@@ -51,7 +53,7 @@ public class ControllerAnnotationBeanFactory extends AbstractAnnotationBeanFacto
             }
 
             //query error handler override
-            HandlerMethod errorHandlerMethod = handlerMethodMap.get("/webzic/error");
+            HandlerMethod errorHandlerMethod = handlerMethodMap.get(WebzicPath.WEBZIC_ERROR);
             if (errorHandlerMethod == null) {
 
                 Class<?> controllerClass = ErrorController.class;
@@ -62,12 +64,22 @@ public class ControllerAnnotationBeanFactory extends AbstractAnnotationBeanFacto
             }
 
             //query exception handler override.
-            HandlerMethod exceptionHandlerMethod = handlerMethodMap.get("/webzic/exception");
+            HandlerMethod exceptionHandlerMethod = handlerMethodMap.get(WebzicPath.WEBZIC_EXCEPTION);
             if (exceptionHandlerMethod == null) {
                 Class<?> controllerClass = ExceptionController.class;
                 classes.add(controllerClass);
                 beanMap.put(controllerClass, controllerClass.newInstance());
                 initController(controllerClass);
+            }
+
+            //query access handler override.
+            HandlerMethod methodNotAllowedHandlerMethod = handlerMethodMap.get(WebzicPath.WEBZIC_METHOD_NOT_ALLOWED);
+            if (methodNotAllowedHandlerMethod == null) {
+                Class<?> controllerClass = AccessController.class;
+                classes.add(controllerClass);
+                beanMap.put(controllerClass, controllerClass.newInstance());
+                initController(controllerClass);
+
             }
 
 
@@ -162,14 +174,17 @@ public class ControllerAnnotationBeanFactory extends AbstractAnnotationBeanFacto
     }
 
 
-
     public HandlerMethod getErrorHandlerMethod() {
 
-        return handlerMethodMap.get("/webzic/error");
+        return handlerMethodMap.get(WebzicPath.WEBZIC_ERROR);
     }
 
     public HandlerMethod getExceptionHandlerMethod() {
-        return handlerMethodMap.get("/webzic/exception");
+        return handlerMethodMap.get(WebzicPath.WEBZIC_EXCEPTION);
+    }
+
+    public HandlerMethod getMethodNotAllowedHandlerMethod() {
+        return handlerMethodMap.get(WebzicPath.WEBZIC_METHOD_NOT_ALLOWED);
     }
 
 
@@ -187,13 +202,15 @@ public class ControllerAnnotationBeanFactory extends AbstractAnnotationBeanFacto
             return getErrorHandlerMethod();
         }
 
+
         //check the request methods
         boolean b = handlerMethod.matchRequestMethod(request);
         if (b) {
             return handlerMethod;
         } else {
 
-            return getErrorHandlerMethod();
+            //Method not allowed.
+            return getMethodNotAllowedHandlerMethod();
 
         }
 
