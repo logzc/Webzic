@@ -6,7 +6,7 @@ package com.logzc.webzic.web.controller;
 public class WebzicPath {
 
 
-    public static final String WEBZIC = "/error";
+    public static final String WEBZIC = "/webzic";
     public static final String WEBZIC_ERROR = "/webzic/error";
     public static final String ERROR = "/error";
     public static final String WEBZIC_EXCEPTION = "/webzic/exception";

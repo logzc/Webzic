@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -103,14 +105,25 @@ public class HandlerMethod {
 
 
             Object[] args=new Object[parameters.length];
+            List<String> errors=new ArrayList<>();
             for (MethodParameter methodParameter : parameters) {
 
                 String parameterName=methodParameter.getParameterName();
 
+                //if no such parameter, return null.
                 String value=request.getParameter(parameterName);
 
-                //check required.
-                
+
+                //validation.
+                if(methodParameter.isRequired()){
+                    if(value==null){
+                        errors.add(parameterName+" is required.");
+                    }
+                }
+
+                //cast type.
+
+
 
 
             }
