@@ -195,6 +195,8 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
                 methodParameters.put(method, parameterNames);
                 isStaticMethod = Modifier.isStatic(method.getModifiers());
 
+                System.out.println(method);
+
             }
 
             return new MethodVisitor(ASM5) {
@@ -205,7 +207,8 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
                         parameterNames.set(index, name1);
                     }
                     // for non-static the 0th arg is "this" so we need to offset by -1
-                    else if (index > 0) {
+                    // rather weird, sometimes index overflow. Another param named map may appear.
+                    else if (index > 0 && index < parameterNames.size()) {
                         parameterNames.set(index - 1, name1);
                     }
                 }

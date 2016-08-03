@@ -13,7 +13,7 @@ import java.util.Map;
 public class ErrorController {
 
     @RequestMapping(path = WebzicPath.ERROR)
-    public Map<String, ?> error(String message) {
+    public Map<String, ?> error1(String message,int code) {
 
         Map<String, String> map = new HashMap<>();
         map.put("type", "ERROR");

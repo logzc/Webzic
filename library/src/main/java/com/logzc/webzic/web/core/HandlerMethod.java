@@ -101,7 +101,20 @@ public class HandlerMethod {
 
         try {
 
-            
+
+            Object[] args=new Object[parameters.length];
+            for (MethodParameter methodParameter : parameters) {
+
+                String parameterName=methodParameter.getParameterName();
+
+                String value=request.getParameter(parameterName);
+
+                //check required.
+                
+
+
+            }
+
 
             Object result = this.method.invoke(this.bean);
 

@@ -38,8 +38,9 @@ public class SiteController {
     }
 
     @RequestMapping(path = "/detail")
-    public Map<String, ?> detail() {
+    public Map<String, ?> detail(long id) {
 
+        System.out.println(id);
         return null;
     }
 

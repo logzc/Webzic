@@ -15,7 +15,7 @@ public class AccessController {
 
     //http code: 403.
     @RequestMapping(path = WebzicPath.METHOD_NOT_ALLOWED)
-    public Map<String, ?> methodNotAllowed() {
+    public Map<String, ?> methodNotAllowed(String message) {
 
         Map<String, String> map = new HashMap<>();
         map.put("type", "ERROR");

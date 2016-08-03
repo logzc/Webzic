@@ -37,10 +37,14 @@ public class DispatcherServlet extends HttpServlet {
     public void service(HttpServletRequest request, HttpServletResponse response){
 
 
+        String val=request.getParameter("info");
+
         HandlerMethod handlerMethod = AppContext.getControllerAnnotationBeanFactory().getHandlerMethod(request);
 
 
         handlerMethod.handle(request,response);
+
+
 
 
 

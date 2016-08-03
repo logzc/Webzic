@@ -84,6 +84,8 @@ public class ControllerAnnotationBeanFactory extends AbstractAnnotationBeanFacto
 
 
         } catch (Exception e) {
+
+            e.printStackTrace();
             throw new ZicException(e.getMessage());
         }
 
