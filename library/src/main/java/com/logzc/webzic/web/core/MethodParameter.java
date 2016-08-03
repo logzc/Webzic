@@ -1,9 +1,10 @@
 package com.logzc.webzic.web.core;
 
+import com.logzc.webzic.annotation.RequestParam;
 import com.logzc.webzic.factory.AppContext;
 import com.logzc.webzic.factory.WidgetBeanFactory;
-import com.logzc.webzic.reflection.parameter.AnnotationParameterNameFinder;
 import com.logzc.webzic.reflection.parameter.AsmParameterNameFinder;
+import lombok.Getter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -31,12 +32,19 @@ public class MethodParameter {
     private Class<?> parameterType;
     private Type genericParameterType;
     private Annotation[] annotations;
+    @Getter
     private String parameterName;
+    //whether this parameter is required.
+    @Getter
+    private boolean required;
 
 
     public MethodParameter(Method method, int parameterIndex) {
         this.method = method;
         this.parameterIndex = parameterIndex;
+
+        initParameterInfo();
+
     }
 
 
@@ -57,27 +65,29 @@ public class MethodParameter {
 
     }
 
-    public String getParameterName() {
+
+    //mainly get parameter name and parameter's require.1
+    public void initParameterInfo() {
 
         WidgetBeanFactory widgetBeanFactory = AppContext.getBeanFactory(WidgetBeanFactory.class);
-
-
         //get the parameter name from two finders.
-        AnnotationParameterNameFinder annotationParameterNameFinder = widgetBeanFactory.getBean(AnnotationParameterNameFinder.class);
+        RequestParameterFinder requestParameterFinder = widgetBeanFactory.getBean(RequestParameterFinder.class);
         AsmParameterNameFinder asmParameterNameFinder = widgetBeanFactory.getBean(AsmParameterNameFinder.class);
 
+        List<RequestParam> requestParams = requestParameterFinder.get(this.method);
+        RequestParam requestParam = requestParams.get(parameterIndex);
 
-        List<String> annoParameterNames = annotationParameterNameFinder.get(this.method);
-        String annoParameterName = annoParameterNames.get(parameterIndex);
 
+        if (requestParam != null) {
 
-        if(annoParameterName!=null && !annoParameterName.equals("")){
-            return annoParameterName;
-        }else{
-
+            parameterName = requestParam.name();
+            required = requestParam.required();
+        } else {
             List<String> parameterNames = asmParameterNameFinder.get(this.method);
-            return parameterNames.get(parameterIndex);
+            parameterName = parameterNames.get(parameterIndex);
+            required = true;
         }
-
     }
+
+
 }

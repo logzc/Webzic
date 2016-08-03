@@ -1,8 +1,7 @@
-package com.logzc.webzic.reflection.parameter;
+package com.logzc.webzic.web.core;
 
 import com.logzc.webzic.annotation.RequestParam;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -11,18 +10,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Load parameter name from @RequestParam
- * if parameter has no @RequestParam, return "";
+ * Load parameter from @RequestParam
+ * if parameter has no @RequestParam, return null;
  * Created by lishuang on 2016/7/29.
  */
-public class AnnotationParameterNameFinder implements ParameterNameFinder {
+public class RequestParameterFinder {
 
     //only cache a class's info.
-    private Map<Method, List<String>> methodCache = new HashMap<>();
+    private Map<Method, List<RequestParam>> methodCache = new HashMap<>();
 
 
-    @Override
-    public List<String> get(Method method) {
+    public List<RequestParam> get(Method method) {
 
 
         //check cache.
@@ -36,14 +34,6 @@ public class AnnotationParameterNameFinder implements ParameterNameFinder {
         return methodCache.get(method);
 
 
-    }
-
-    //no constructor should appear here.
-    @Override
-    public List<String> get(Constructor constructor) {
-
-
-        return null;
     }
 
     public void findAllMethodParameters(Class clazz) {
@@ -62,21 +52,21 @@ public class AnnotationParameterNameFinder implements ParameterNameFinder {
 
             Parameter[] parameters = method.getParameters();
 
-            List<String> parameterNames = new ArrayList<>(parameters.length);
+            List<RequestParam> requestParams = new ArrayList<>(parameters.length);
 
             for (Parameter parameter : parameters) {
 
                 if (parameter.isAnnotationPresent(RequestParam.class)) {
 
                     RequestParam requestParam = parameter.getAnnotation(RequestParam.class);
-                    parameterNames.add(requestParam.name());
+                    requestParams.add(requestParam);
 
                 } else {
-                    parameterNames.add("");
+                    requestParams.add(null);
                 }
             }
 
-            methodCache.put(method, parameterNames);
+            methodCache.put(method, requestParams);
 
 
         }

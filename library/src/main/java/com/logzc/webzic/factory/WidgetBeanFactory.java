@@ -1,7 +1,7 @@
 package com.logzc.webzic.factory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.logzc.webzic.reflection.parameter.AnnotationParameterNameFinder;
+import com.logzc.webzic.web.core.RequestParameterFinder;
 import com.logzc.webzic.reflection.parameter.AsmParameterNameFinder;
 
 /**
@@ -22,8 +22,8 @@ public class WidgetBeanFactory extends AbstractBeanFactory {
         beanMap.put(AsmParameterNameFinder.class, new AsmParameterNameFinder());
         classes.add(AsmParameterNameFinder.class);
 
-        beanMap.put(AnnotationParameterNameFinder.class, new AnnotationParameterNameFinder());
-        classes.add(AnnotationParameterNameFinder.class);
+        beanMap.put(RequestParameterFinder.class, new RequestParameterFinder());
+        classes.add(RequestParameterFinder.class);
 
     }
 
