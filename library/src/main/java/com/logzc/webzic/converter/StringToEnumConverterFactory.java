@@ -1,14 +1,42 @@
 package com.logzc.webzic.converter;
 
+import com.logzc.webzic.util.Assert;
+
 /**
  * Created by lishuang on 2016/8/4.
  */
 public class StringToEnumConverterFactory implements ConverterFactory<String, Enum> {
+
     @Override
     public <T extends Enum> Converter<String, T> getConverter(Class<T> targetClass) {
 
-        Class<?> enumType = targetClass;
-        
-        return null;
+        Assert.notNull(targetClass,"target class cannot be null");
+
+        if (!targetClass.isEnum()) {
+            throw new IllegalArgumentException("The target type " + targetClass.getName() + " does not refer to an enum");
+        }
+
+        return new StringToEnum<T>(targetClass);
+    }
+
+    private class StringToEnum<T extends Enum> implements Converter<String, T> {
+
+        private final Class<T> enumType;
+
+        public StringToEnum(Class<T> enumType) {
+            this.enumType = enumType;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public T convert(String source) {
+
+            if (source.length() == 0) {
+                return null;
+            }
+
+
+            return (T) Enum.valueOf(this.enumType, source.trim());
+        }
     }
 }

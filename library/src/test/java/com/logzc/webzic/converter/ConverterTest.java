@@ -41,14 +41,19 @@ public class ConverterTest {
 
     @Test
     public void testEnum(){
-        Class<?> enum1Class=Enum1.class;
+        Class<Enum1> enum1Class=Enum1.class;
+        Class<?> supper=enum1Class.getSuperclass();
+
+        StringToEnumConverterFactory factory=new StringToEnumConverterFactory();
+        Converter<String,Enum1> stringEnumConverter=factory.getConverter(enum1Class);
 
 
-        while (enum1Class!=null&&!enum1Class.isEnum()){
+        Enum1 apple=stringEnumConverter.convert("apple");
 
-            System.out.println(enum1Class);
-            enum1Class=enum1Class.getSuperclass();
-        }
+        System.out.println(apple);
+
+
+
 
 
     }
