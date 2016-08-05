@@ -1,9 +1,19 @@
 package com.logzc.webzic.converter;
 
+import java.util.Set;
+
 /**
  * Created by lishuang on 2016/8/4.
  */
 public class DefaultConverterRegistry implements ConverterRegistry {
+
+
+
+
+
+
+
+
     @Override
     public void addConverter(Converter<?, ?> converter) {
 
@@ -18,4 +28,11 @@ public class DefaultConverterRegistry implements ConverterRegistry {
     public void addConverterFactory(ConverterFactory<?, ?> converterFactory) {
 
     }
+
+    @Override
+    public Converter<?, ?> getConverter(Class<?> sourceType, Class<?> targetType) {
+        return null;
+    }
+
+
 }

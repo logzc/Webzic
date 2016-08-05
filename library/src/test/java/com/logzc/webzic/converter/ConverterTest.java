@@ -53,8 +53,14 @@ public class ConverterTest {
         System.out.println(apple);
 
 
+    }
 
+    @Test
+    public void testHashCode(){
+        ConvertiblePair convertiblePair1=new ConvertiblePair(String.class,Integer.class);
+        ConvertiblePair convertiblePair2=new ConvertiblePair(String.class,Double.class);
 
-
+        System.out.println(convertiblePair1.hashCode());
+        System.out.println(convertiblePair2.hashCode());
     }
 }

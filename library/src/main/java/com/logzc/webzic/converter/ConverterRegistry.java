@@ -10,4 +10,6 @@ public interface ConverterRegistry {
     void addConverter(Class<?> sourceType, Class<?> targetType, Converter<?, ?> converter);
 
     void addConverterFactory(ConverterFactory<?, ?> converterFactory);
+
+    Converter<?,?> getConverter(Class<?> sourceType,Class<?> targetType);
 }
