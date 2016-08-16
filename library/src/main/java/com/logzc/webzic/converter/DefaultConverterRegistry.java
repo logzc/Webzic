@@ -7,13 +7,6 @@ import java.util.Set;
  */
 public class DefaultConverterRegistry implements ConverterRegistry {
 
-
-
-
-
-
-
-
     @Override
     public void addConverter(Converter<?, ?> converter) {
 
