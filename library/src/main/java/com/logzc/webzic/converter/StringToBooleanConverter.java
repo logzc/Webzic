@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * convert "true","on","yes","1" => true.
  * Created by lishuang on 2016/8/4.
  */
 public class StringToBooleanConverter implements Converter<String, Boolean> {

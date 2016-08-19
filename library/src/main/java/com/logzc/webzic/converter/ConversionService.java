@@ -1,12 +1,9 @@
 package com.logzc.webzic.converter;
 
-import java.util.Set;
-
 /**
- * Created by lishuang on 2016/8/4.
+ * Created by lishuang on 2016/8/19.
  */
-public class DefaultConverterRegistry implements ConverterRegistry {
-
+public class ConversionService implements ConverterRegistry,Conversion {
     @Override
     public void addConverter(Converter<?, ?> converter) {
 
@@ -27,5 +24,13 @@ public class DefaultConverterRegistry implements ConverterRegistry {
         return null;
     }
 
+    @Override
+    public boolean canConvert(Class<?> sourceType, Class<?> targetType) {
+        return false;
+    }
 
+    @Override
+    public <T> T convert(Object source, Class<T> targetType) {
+        return null;
+    }
 }

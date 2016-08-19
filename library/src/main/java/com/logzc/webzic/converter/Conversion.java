@@ -1,0 +1,12 @@
+package com.logzc.webzic.converter;
+
+/**
+ * Created by lishuang on 2016/8/19.
+ */
+public interface Conversion {
+
+    boolean canConvert(Class<?> sourceType, Class<?> targetType);
+
+
+    <T> T convert(Object source, Class<T> targetType);
+}
