@@ -59,6 +59,12 @@ dependencies {
     //compile 'org.apache.xbean:xbean-reflect:+'
 
 
+    //study the orm.
+    compile 'com.j256.ormlite:ormlite-core:5.0'
+    compile 'com.j256.ormlite:ormlite-jdbc:5.0'
+    //jdbc for mysql
+    compile 'mysql:mysql-connector-java:5.1.39'
+
 
 
 }
