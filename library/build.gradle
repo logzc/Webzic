@@ -60,10 +60,10 @@ dependencies {
 
 
     //study the orm.
-    compile 'com.j256.ormlite:ormlite-core:5.0'
-    compile 'com.j256.ormlite:ormlite-jdbc:5.0'
+    //compile 'com.j256.ormlite:ormlite-core:+'
+    //compile 'com.j256.ormlite:ormlite-jdbc:+'
     //jdbc for mysql
-    compile 'mysql:mysql-connector-java:5.1.39'
+    compile 'mysql:mysql-connector-java:+'
 
 
 

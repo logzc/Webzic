@@ -67,3 +67,10 @@ public class Main {
     compile 'org.apache.xbean:xbean-reflect:+'
     
 [java如何获取方法参数名](http://blog.csdn.net/mhmyqn/article/details/47294485) 这篇文章中也是同样用的ASM来实现。
+
+
+## JDBC中mysql的连接
+
+    jdbc:mysql://localhost:3306/demo?user=root&password=lishmoshou511&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    
+    useUnicode和characterEncoding是和编码相关的，useSSL是和连接安全性相关的，serverTimezone则是指定时间的时区。
