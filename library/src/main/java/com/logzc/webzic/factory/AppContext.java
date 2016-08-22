@@ -23,7 +23,8 @@ public class AppContext {
     static Map<Class<? extends AnnotationBeanFactory>, AnnotationBeanFactory> annotationBeanFactoryMap = new HashMap<>();
 
 
-    static List<BeanFactory> beanFactoryList = new ArrayList<>();
+    //for test purpose use the public.
+    public static List<BeanFactory> beanFactoryList = new ArrayList<>();
     static Map<Class<? extends BeanFactory>, BeanFactory> beanFactoryMap = new HashMap<>();
 
     static {

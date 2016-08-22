@@ -48,7 +48,6 @@ public class ResolvableType {
         } else {
             this.resolved = sourceClass;
         }
-
     }
 
     public static ResolvableType forType(Type type){
