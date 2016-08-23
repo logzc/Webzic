@@ -6,7 +6,7 @@ import java.sql.SQLException;
 /**
  * Created by lishuang on 2016/8/22.
  */
-public interface Dao<T,ID extends Serializable> {
+public interface Dao<T,ID> {
 
     /**
      * Save or update.
@@ -23,4 +23,5 @@ public interface Dao<T,ID extends Serializable> {
      */
     int delete(T entity) throws SQLException;
 
+    T findOne(ID jim);
 }

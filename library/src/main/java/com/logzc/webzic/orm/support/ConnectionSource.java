@@ -1,5 +1,7 @@
 package com.logzc.webzic.orm.support;
 
+import com.logzc.webzic.orm.db.DbType;
+
 import java.io.Closeable;
 
 /**
@@ -8,4 +10,5 @@ import java.io.Closeable;
 public interface ConnectionSource extends Closeable {
 
 
+    DbType getDbType();
 }

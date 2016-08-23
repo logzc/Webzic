@@ -1,5 +1,7 @@
 package com.logzc.webzic.orm;
 
+import com.logzc.webzic.orm.dao.Dao;
+import com.logzc.webzic.orm.dao.DaoManager;
 import com.logzc.webzic.orm.jdbc.JdbcConnectionSource;
 import com.logzc.webzic.orm.support.ConnectionSource;
 import org.junit.Test;
@@ -20,6 +22,10 @@ public class OrmTest {
 
         ConnectionSource connectionSource=new JdbcConnectionSource(url);
 
+        Dao<Account,String> accountDao = DaoManager.createDao(connectionSource,Account.class);
+
+
+        Account account0=accountDao.findOne("jim");
 
 
     }

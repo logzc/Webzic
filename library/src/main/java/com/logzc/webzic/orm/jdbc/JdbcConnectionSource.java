@@ -18,19 +18,22 @@ public class JdbcConnectionSource implements ConnectionSource {
     public JdbcConnectionSource(String url) throws SQLException{
         this.url=url;
 
+
+        //initialize.
         this.dbType= DbTypeUtils.forUrl(url);
         this.dbType.setDriver(DriverManager.getDriver(url));
 
     }
 
-    public void initialize() throws SQLException{
 
-
-
-    }
 
     @Override
     public void close() throws IOException {
 
+    }
+
+    @Override
+    public DbType getDbType() {
+        return dbType;
     }
 }

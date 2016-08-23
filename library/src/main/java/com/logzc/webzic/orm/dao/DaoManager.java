@@ -1,8 +1,11 @@
 package com.logzc.webzic.orm.dao;
 
+import com.logzc.webzic.orm.db.DbType;
 import com.logzc.webzic.orm.support.ConnectionSource;
+import com.logzc.webzic.orm.table.Table;
 
 import javax.xml.transform.Source;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -18,7 +21,7 @@ public class DaoManager {
 
 
     @SuppressWarnings("unchecked")
-    public synchronized static <D extends Dao<T,?>,T> D createDao(ConnectionSource connectionSource, Class<T> clazz){
+    public synchronized static <D extends Dao<T,?>,T> D createDao(ConnectionSource connectionSource, Class<T> clazz) throws SQLException {
         if(connectionSource==null){
             throw new IllegalArgumentException("ConnectionSource cannot be null.");
         }
@@ -27,12 +30,23 @@ public class DaoManager {
         Dao<?, ?> dao = pairMap.get(pair);
 
         if(dao!=null){
-            D castDao= (D) dao;
+            return (D) dao;
         }
 
 
-        //TODO: here.
-        return null;
+        Table table=clazz.getAnnotation(Table.class);
+        if(table!=null){
+
+            DbType dbType=connectionSource.getDbType();
+            dao=BaseDao.createDao(connectionSource,clazz);
+
+        }else{
+            throw new SQLException("@Table must exist.");
+
+        }
+        pairMap.put(new SourceClassPair(connectionSource,clazz),dao);
+
+        return (D) dao;
 
     }
 
