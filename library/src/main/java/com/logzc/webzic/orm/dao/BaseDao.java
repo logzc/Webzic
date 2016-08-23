@@ -1,5 +1,6 @@
 package com.logzc.webzic.orm.dao;
 
+import com.logzc.webzic.orm.db.DbConnection;
 import com.logzc.webzic.orm.db.DbType;
 import com.logzc.webzic.orm.field.ColumnType;
 import com.logzc.webzic.orm.stmt.StatementExecutor;
@@ -56,7 +57,15 @@ public class BaseDao<T,ID> implements Dao<T,ID> {
     }
 
     @Override
-    public T findOne(ID jim) {
+    public T findOne(ID id) throws SQLException {
+
+        DbConnection dbConnection=connectionSource.getDbConnection();
+
+
+
+
+
+
 
 
         return null;

@@ -23,5 +23,5 @@ public interface Dao<T,ID> {
      */
     int delete(T entity) throws SQLException;
 
-    T findOne(ID jim);
+    T findOne(ID id) throws SQLException;
 }

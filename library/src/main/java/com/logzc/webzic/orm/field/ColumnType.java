@@ -3,6 +3,7 @@ package com.logzc.webzic.orm.field;
 import com.logzc.webzic.orm.support.ConnectionSource;
 
 import java.lang.reflect.Field;
+import java.sql.Types;
 
 /**
  * Created by lishuang on 2016/8/23.
@@ -33,6 +34,14 @@ public class ColumnType {
             return null;
         }
 
+
+    }
+
+
+    //TODO:Finish the sql type.
+    public int getSqlType() {
+
+        return Types.VARCHAR;
 
     }
 }
