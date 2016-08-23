@@ -25,7 +25,7 @@ public class OrmTest {
         Dao<Account,String> accountDao = DaoManager.createDao(connectionSource,Account.class);
 
 
-        Account account0=accountDao.findOne("jim");
+        Account account0=accountDao.findOne("im");
 
 
     }

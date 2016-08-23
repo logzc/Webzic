@@ -53,6 +53,7 @@ public class BaseDao<T,ID> implements Dao<T,ID> {
     public int delete(T entity) throws SQLException {
 
 
+
         return 0;
     }
 
@@ -62,6 +63,8 @@ public class BaseDao<T,ID> implements Dao<T,ID> {
         DbConnection dbConnection=connectionSource.getDbConnection();
 
 
+        //TODO: here to do many things.
+        //dbConnection.queryOne()
 
 
 

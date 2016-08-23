@@ -15,16 +15,17 @@ public class TableInfo<T, ID> {
 
 
     private final BaseDao<T, ID> baseDao;
-    private final Class<T> dataClass;
+    private final Class<T> tableClass;
     private final String tableName;
     protected ColumnType[] columnTypes;
+    private ColumnType idColumnType;
 
-    public TableInfo(ConnectionSource connectionSource, BaseDao<T, ID> baseDao, Class<T> dataClass) {
+    public TableInfo(ConnectionSource connectionSource, BaseDao<T, ID> baseDao, Class<T> tableClass) {
 
         this.baseDao = baseDao;
-        this.dataClass = dataClass;
-        this.tableName = extractTableName(dataClass);
-        this.columnTypes = extractColumnTypes(connectionSource, dataClass, tableName);
+        this.tableClass = tableClass;
+        this.tableName = extractTableName(tableClass);
+        this.columnTypes = extractColumnTypes(connectionSource, tableClass, tableName);
 
 
 
@@ -39,7 +40,7 @@ public class TableInfo<T, ID> {
 
             for (Field field : classWalk.getDeclaredFields()) {
 
-                ColumnType columnType = ColumnType.createColumnType(connectionSource, tableName, field, dataClass);
+                ColumnType columnType = ColumnType.create(connectionSource, tableName, field, dataClass);
 
                 if (columnType != null) {
                     columnTypes.add(columnType);
@@ -75,4 +76,19 @@ public class TableInfo<T, ID> {
 
     }
 
+    public Class<T> getTableClass() {
+        return tableClass;
+    }
+
+    public ColumnType getIdColumnType() {
+        return idColumnType;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public ColumnType[] getColumnTypes() {
+        return columnTypes;
+    }
 }

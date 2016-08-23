@@ -15,6 +15,7 @@ public class ColumnType {
     private final String tableName;
     private final Field field;
     private final Class<?> containClass;
+    private String name;
 
     public ColumnType(ConnectionSource connectionSource, String tableName, Field field, Class<?> containClass) {
         this.connectionSource = connectionSource;
@@ -23,9 +24,21 @@ public class ColumnType {
         this.field = field;
         this.containClass = containClass;
 
+
+        //get name from @Column.
+        Column column = field.getAnnotation(Column.class);
+        if (column == null) {
+            throw new IllegalArgumentException("@Column is must.");
+        }
+        if (column.name().length() > 0) {
+            this.name = column.name();
+        } else {
+            this.name = this.field.getName();
+        }
+
     }
 
-    public static ColumnType createColumnType(ConnectionSource connectionSource, String tableName, Field field, Class<?> dataClass) {
+    public static ColumnType create(ConnectionSource connectionSource, String tableName, Field field, Class<?> dataClass) {
 
 
         if (field.isAnnotationPresent(Column.class)) {
@@ -43,5 +56,9 @@ public class ColumnType {
 
         return Types.VARCHAR;
 
+    }
+
+    public String getName() {
+        return name;
     }
 }
