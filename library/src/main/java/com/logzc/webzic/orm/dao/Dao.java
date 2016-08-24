@@ -14,8 +14,9 @@ public interface Dao<T,ID> {
      * @param entity to be saved.
      * @return Number of rows updated in database. Here must be 1.
      */
-    int save(T entity) throws SQLException;
+    //int save(T entity) throws SQLException;
 
+    int insert(T entity) throws SQLException;
 
     /**
      * Delete an item.
@@ -23,6 +24,12 @@ public interface Dao<T,ID> {
      * @return rows affected. Here must be 1.
      */
     int delete(T entity) throws SQLException;
+    int deleteById(ID id) throws SQLException;
+
+
+    int update(T entity) throws SQLException;
+
+
 
     T findOne(ID id) throws SQLException;
 

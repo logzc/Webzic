@@ -22,7 +22,7 @@ public class DeleteStatement<T,ID> extends BaseStatement<T,ID> {
      * DELETE FROM account WHERE id = ?
      *
      */
-    public static <T,ID> DeleteStatement<T,ID> build(DbType dbType,TableInfo<T,ID> tableInfo) throws SQLException{
+    public static <T,ID> DeleteStatement<T,ID> build(TableInfo<T,ID> tableInfo) throws SQLException{
         ColumnType idColumnType=tableInfo.getIdColumnType();
 
         if(idColumnType==null){

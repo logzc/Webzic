@@ -20,7 +20,7 @@ public class InsertStatement<T, ID> extends BaseStatement<T, ID> {
     /**
      * INSERT INTO `accounts` (`name` ,`password` ) VALUES (?,?);
      */
-    public static <T, ID> InsertStatement<T, ID> build(DbType dbType, TableInfo<T, ID> tableInfo) throws SQLException {
+    public static <T, ID> InsertStatement<T, ID> build(TableInfo<T, ID> tableInfo) throws SQLException {
 
         ColumnType[] columnTypes = tableInfo.getColumnTypes();
 

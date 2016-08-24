@@ -88,6 +88,19 @@ public class TableInfo<T, ID> {
 
     }
 
+
+    public Object[] getColumnValues(T entity) throws SQLException{
+        int length=this.columnTypes.length;
+        Object[] objects=new Object[length];
+        for (int i = 0; i <length ; i++) {
+            ColumnType columnType=this.columnTypes[i];
+
+
+            objects[i]=columnType.getValue(entity);
+        }
+        return objects;
+    }
+
     public Class<T> getTableClass() {
         return tableClass;
     }

@@ -88,14 +88,30 @@ public class ColumnType {
 
         try {
             //first use the setter.
-            if(setter!=null){
-                setter.invoke(entity,val);
-            }else{
+            if (setter != null) {
+                setter.invoke(entity, val);
+            } else {
                 field.set(entity, val);
             }
         } catch (Exception e) {
             throw new SQLException("Assign value exception.");
         }
+    }
+
+
+    //insert data to database.
+    public <T> Object getValue(T entity) throws SQLException {
+        Object val;
+        try {
+            if (getter != null) {
+                val = getter.invoke(entity);
+            } else {
+                val = field.get(entity);
+            }
+        } catch (Exception e) {
+            throw new SQLException("Assign value exception.");
+        }
+        return val;
     }
 
     public boolean isId() {
