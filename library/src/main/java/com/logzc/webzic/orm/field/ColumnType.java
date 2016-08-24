@@ -1,8 +1,10 @@
 package com.logzc.webzic.orm.field;
 
 import com.logzc.webzic.orm.support.ConnectionSource;
+import com.logzc.webzic.orm.util.OrmUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.sql.Types;
 
@@ -17,6 +19,12 @@ public class ColumnType {
     private final Field field;
     private final Class<?> containClass;
     private String name;
+
+    //get and set method.
+    private final Method getter;
+    private final Method setter;
+
+    private boolean isId = false;
 
     public ColumnType(ConnectionSource connectionSource, String tableName, Field field, Class<?> containClass) {
         this.connectionSource = connectionSource;
@@ -37,6 +45,13 @@ public class ColumnType {
             this.name = this.field.getName();
         }
 
+        //check whether it is id.
+        this.isId = column.id();
+
+
+        //find the get and set method.
+        getter = OrmUtils.findGetter(this.field);
+        setter = OrmUtils.findSetter(this.field);
     }
 
     public static ColumnType create(ConnectionSource connectionSource, String tableName, Field field, Class<?> dataClass) {
@@ -70,10 +85,22 @@ public class ColumnType {
 
     //Assign value to the class.
     public <T> void assign(T entity, Object val) throws SQLException {
+
         try {
-            field.set(entity, val);
-        } catch (IllegalAccessException e) {
+            //first use the setter.
+            if(setter!=null){
+                setter.invoke(entity,val);
+            }else{
+                field.set(entity, val);
+            }
+        } catch (Exception e) {
             throw new SQLException("Assign value exception.");
         }
     }
+
+    public boolean isId() {
+        return isId;
+    }
+
+
 }

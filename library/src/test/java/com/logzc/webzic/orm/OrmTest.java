@@ -13,6 +13,8 @@ import java.sql.SQLException;
  */
 public class OrmTest {
 
+
+
     @Test
     public void testOrm() throws SQLException{
         String url="jdbc:mysql://localhost:3306/demo?user=root&password=lishmoshou511&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC";
@@ -25,7 +27,10 @@ public class OrmTest {
         Dao<Account,String> accountDao = DaoManager.createDao(connectionSource,Account.class);
 
 
-        Account account0=accountDao.findOne("im");
+        Account account0=accountDao.findOne("Lucy");
+
+
+        System.out.println(account0);
 
 
     }

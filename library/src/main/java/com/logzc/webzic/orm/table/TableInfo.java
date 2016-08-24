@@ -21,12 +21,24 @@ public class TableInfo<T, ID> {
     protected ColumnType[] columnTypes;
     private ColumnType idColumnType;
 
-    public TableInfo(ConnectionSource connectionSource, BaseDao<T, ID> baseDao, Class<T> tableClass) {
+    public TableInfo(ConnectionSource connectionSource, BaseDao<T, ID> baseDao, Class<T> tableClass) throws SQLException {
 
         this.baseDao = baseDao;
         this.tableClass = tableClass;
         this.tableName = extractTableName(tableClass);
         this.columnTypes = extractColumnTypes(connectionSource, tableClass, tableName);
+
+
+        //find the id column.
+        for (ColumnType columnType:this.columnTypes){
+            if(columnType.isId()){
+                if(idColumnType==null){
+                    idColumnType=columnType;
+                }else{
+                    throw new SQLException("multi id for column defined.");
+                }
+            }
+        }
 
 
     }

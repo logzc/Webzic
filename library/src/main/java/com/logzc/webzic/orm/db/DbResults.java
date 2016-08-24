@@ -224,17 +224,21 @@ public class DbResults implements Closeable {
 
     public Object getVal(ColumnType columnType) throws SQLException {
 
+        String columnName = columnType.getName();
+
+        Object val = null;
 
         //TODO: finish other types.
         if (columnType.getType() == String.class) {
-            return resultSet.getString(columnType.getName());
+            val = resultSet.getString(columnName);
         } else if (columnType.getType() == int.class || columnType.getType() == Integer.class) {
-            return resultSet.getInt(columnType.getName());
+            val = resultSet.getInt(columnName);
         } else if (columnType.getType() == long.class || columnType.getType() == Long.class) {
-            return resultSet.getLong(columnType.getName());
+            val = resultSet.getLong(columnName);
         } else {
             throw new SQLException("not support types.");
         }
 
+        return val;
     }
 }

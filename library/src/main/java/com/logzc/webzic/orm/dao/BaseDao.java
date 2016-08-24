@@ -73,14 +73,21 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
 
         Object[] args = new Object[]{id};
         ColumnType[] columnTypes = new ColumnType[]{tableInfo.getIdColumnType()};
-        
+
         DbResults dbResults = dbConnection.queryOne(this.queryStatement.getStatement(), args, columnTypes);
 
-        try {
-            return mapper.map(dbResults, this.tableInfo.createEntity(), this.tableInfo.getColumnTypes());
-        } finally {
-            dbResults.closeQuietly();
+
+        //this will start the result cursor.
+        if (!dbResults.first()) {
+            // no results at all
+            return null;
         }
+
+        T entity = mapper.map(dbResults, this.tableInfo.createEntity(), this.tableInfo.getColumnTypes());
+
+        dbResults.closeQuietly();
+
+        return entity;
 
     }
 

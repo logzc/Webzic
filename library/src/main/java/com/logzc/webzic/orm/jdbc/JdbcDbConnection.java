@@ -41,16 +41,11 @@ public class JdbcDbConnection implements DbConnection {
 
         PreparedStatement stmt = this.connection.prepareStatement(statement, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
-        try {
-            setStatementArgs(stmt, args, columnTypes);
+        setStatementArgs(stmt, args, columnTypes);
 
-            ResultSet resultSet = stmt.executeQuery();
-            System.out.println(resultSet);
-            return new DbResults(stmt, resultSet);
-
-        } finally {
-            stmt.close();
-        }
+        ResultSet resultSet = stmt.executeQuery();
+        System.out.println(resultSet);
+        return new DbResults(stmt, resultSet);
 
 
     }
