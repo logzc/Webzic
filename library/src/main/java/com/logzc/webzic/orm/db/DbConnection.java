@@ -2,12 +2,13 @@ package com.logzc.webzic.orm.db;
 
 import com.logzc.webzic.orm.field.ColumnType;
 
+import java.io.Closeable;
 import java.sql.SQLException;
 
 /**
  * Created by lishuang on 2016/8/23.
  */
-public interface DbConnection {
+public interface DbConnection extends Closeable {
 
     /**
      * insert.
@@ -24,7 +25,7 @@ public interface DbConnection {
     int update(String statement, Object[] args, ColumnType[] argColumnTypes) throws SQLException;
 
 
-    DbResults queryOne(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException;
+    DbResults query(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException;
 
 
 }

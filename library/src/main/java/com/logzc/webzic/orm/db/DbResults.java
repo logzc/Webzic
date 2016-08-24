@@ -2,12 +2,15 @@ package com.logzc.webzic.orm.db;
 
 
 import com.logzc.webzic.orm.field.ColumnType;
+import com.logzc.webzic.orm.table.TableInfo;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Wrap ResultSet. 0 base rather than 1 base in ResultSet.
@@ -240,5 +243,45 @@ public class DbResults implements Closeable {
         }
 
         return val;
+    }
+
+
+    //get the first result.
+    public <T> T getEntity(TableInfo<T,?> tableInfo) throws SQLException {
+
+        //this will start the result cursor.
+        if (!this.first()) {
+            // no results at all
+            return null;
+        }
+
+        T entity=tableInfo.createEntity();
+        for (ColumnType columnType : tableInfo.getColumnTypes()) {
+
+            Object val = this.getVal(columnType);
+
+            columnType.assign(entity, val);
+        }
+
+        return entity;
+    }
+
+    public <T> List<T> getEntityList(TableInfo<T,?> tableInfo) throws SQLException  {
+
+        List<T> entityList=new ArrayList<>();
+        while (resultSet.next()){
+
+            T entity=tableInfo.createEntity();
+            for (ColumnType columnType : tableInfo.getColumnTypes()) {
+
+                Object val = this.getVal(columnType);
+
+                columnType.assign(entity, val);
+            }
+
+            entityList.add(entity);
+        }
+
+        return entityList;
     }
 }

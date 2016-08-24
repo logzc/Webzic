@@ -2,6 +2,7 @@ package com.logzc.webzic.orm.dao;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by lishuang on 2016/8/22.
@@ -24,4 +25,6 @@ public interface Dao<T,ID> {
     int delete(T entity) throws SQLException;
 
     T findOne(ID id) throws SQLException;
+
+    List<T> findAll() throws SQLException;
 }

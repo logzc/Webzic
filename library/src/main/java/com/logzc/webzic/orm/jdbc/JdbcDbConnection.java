@@ -4,6 +4,7 @@ import com.logzc.webzic.orm.db.DbConnection;
 import com.logzc.webzic.orm.db.DbResults;
 import com.logzc.webzic.orm.field.ColumnType;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
  */
 public class JdbcDbConnection implements DbConnection {
 
-    private final Connection connection;
+    private Connection connection;
 
     public JdbcDbConnection(Connection connection) {
         this.connection = connection;
@@ -37,18 +38,21 @@ public class JdbcDbConnection implements DbConnection {
     }
 
     @Override
-    public DbResults queryOne(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
+    public DbResults query(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
 
         PreparedStatement stmt = this.connection.prepareStatement(statement, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
         setStatementArgs(stmt, args, columnTypes);
 
+        //print the sql.
+        System.out.println(stmt);
+
         ResultSet resultSet = stmt.executeQuery();
         System.out.println(resultSet);
         return new DbResults(stmt, resultSet);
-
-
     }
+
+
 
 
     private void setStatementArgs(PreparedStatement stmt, Object[] args, ColumnType[] columnTypes) throws SQLException {
@@ -68,5 +72,18 @@ public class JdbcDbConnection implements DbConnection {
             }
 
         }
+    }
+
+    @Override
+    public void close() throws IOException {
+        try {
+            if (connection != null) {
+                connection.close();
+                connection = null;
+            }
+        } catch (SQLException e) {
+            throw new IOException("could not close SQL connection.");
+        }
+
     }
 }

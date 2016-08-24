@@ -1,7 +1,5 @@
 package com.logzc.webzic.orm.stmt.crud;
 
-import com.logzc.webzic.orm.db.DbResults;
-import com.logzc.webzic.orm.db.DbType;
 import com.logzc.webzic.orm.field.ColumnType;
 import com.logzc.webzic.orm.table.TableInfo;
 
@@ -18,9 +16,7 @@ public class QueryStatement<T, ID> extends BaseStatement<T, ID> {
         super(tableInfo, statement, argColumnTypes);
     }
 
-
-    //TODO: The query clause needs to be finished.
-    public static <T, ID> QueryStatement<T, ID> build(DbType dbType, TableInfo<T, ID> tableInfo) throws SQLException {
+    public static <T, ID> QueryStatement<T, ID> build(TableInfo<T, ID> tableInfo) throws SQLException {
 
         String statement = "SELECT * FROM `{0}` WHERE `{1}` = ? ;";
         statement = MessageFormat.format(statement, tableInfo.getTableName(), tableInfo.getIdColumnType().getName());
@@ -28,6 +24,12 @@ public class QueryStatement<T, ID> extends BaseStatement<T, ID> {
         return new QueryStatement<>(tableInfo, statement, tableInfo.getColumnTypes());
     }
 
+
+    public String getQueryAllStatement() {
+        String statement = "SELECT * FROM `{0}` ;";
+        statement = MessageFormat.format(statement, this.tableInfo.getTableName());
+        return statement;
+    }
 
 
 }

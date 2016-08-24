@@ -10,7 +10,9 @@ import com.logzc.webzic.orm.stmt.crud.QueryStatement;
 import com.logzc.webzic.orm.support.ConnectionSource;
 import com.logzc.webzic.orm.table.TableInfo;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by lishuang on 2016/8/23.
@@ -22,8 +24,6 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
     protected final Class<T> dataClass;
     protected ConnectionSource connectionSource;
     protected TableInfo<T, ID> tableInfo;
-
-
     protected QueryStatement<T, ID> queryStatement;
 
 
@@ -47,7 +47,7 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
 
         this.tableInfo = new TableInfo<T, ID>(connectionSource, this, dataClass);
 
-        this.queryStatement = QueryStatement.build(this.dbType, this.tableInfo);
+        this.queryStatement = QueryStatement.build(this.tableInfo);
 
         this.mapper = new EntityMapper<>();
     }
@@ -71,27 +71,36 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
 
         DbConnection dbConnection = connectionSource.getDbConnection();
 
+        String statement = this.queryStatement.getStatement();
         Object[] args = new Object[]{id};
         ColumnType[] columnTypes = new ColumnType[]{tableInfo.getIdColumnType()};
 
-        DbResults dbResults = dbConnection.queryOne(this.queryStatement.getStatement(), args, columnTypes);
+        try (DbResults dbResults = dbConnection.query(statement, args, columnTypes)) {
 
+            return dbResults.getEntity(tableInfo);
 
-        //this will start the result cursor.
-        if (!dbResults.first()) {
-            // no results at all
-            return null;
+        } catch (IOException e) {
+            throw new SQLException(e);
         }
-
-        T entity = mapper.map(dbResults, this.tableInfo.createEntity(), this.tableInfo.getColumnTypes());
-
-        dbResults.closeQuietly();
-
-        return entity;
-
     }
 
+    @Override
+    public List<T> findAll() throws SQLException {
+        DbConnection dbConnection = connectionSource.getDbConnection();
+
+        String statement = this.queryStatement.getQueryAllStatement();
+        Object[] args = new Object[]{};
+        ColumnType[] columnTypes = new ColumnType[]{};
+
+        try (DbResults dbResults = dbConnection.query(statement, args, columnTypes)) {
+            return dbResults.getEntityList(tableInfo);
+        } catch (IOException e) {
+            throw new SQLException(e);
+        }
+    }
+
+
     public static <T, ID> Dao<T, ID> createDao(ConnectionSource connectionSource, Class<T> clazz) throws SQLException {
-        return new BaseDao<T, ID>(connectionSource, clazz);
+        return new BaseDao<>(connectionSource, clazz);
     }
 }

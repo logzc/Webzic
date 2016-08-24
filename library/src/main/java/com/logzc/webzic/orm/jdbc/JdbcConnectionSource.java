@@ -20,8 +20,6 @@ public class JdbcConnectionSource implements ConnectionSource {
     private DbConnection dbConnection;
     public JdbcConnectionSource(String url) throws SQLException{
         this.url=url;
-
-
         //initialize.
         this.dbType= DbTypeUtils.forUrl(url);
         this.dbType.setDriver(DriverManager.getDriver(url));
@@ -30,10 +28,7 @@ public class JdbcConnectionSource implements ConnectionSource {
 
 
 
-    @Override
-    public void close() throws IOException {
 
-    }
 
     @Override
     public DbType getDbType() {
@@ -68,4 +63,15 @@ public class JdbcConnectionSource implements ConnectionSource {
         return dbConnection;
 
     }
+
+    @Override
+    public void close() throws IOException {
+
+        if(this.dbConnection!=null){
+            this.dbConnection.close();
+            this.dbConnection=null;
+        }
+
+    }
+
 }
