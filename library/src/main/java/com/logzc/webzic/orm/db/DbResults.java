@@ -20,10 +20,10 @@ public class DbResults implements Closeable {
     private final ResultSetMetaData metaData;
     private boolean first = true;
 
-    public DbResults(PreparedStatement preparedStatement, ResultSet resultSet, ResultSetMetaData metaData) throws SQLException {
+    public DbResults(PreparedStatement preparedStatement, ResultSet resultSet) throws SQLException {
         this.preparedStatement = preparedStatement;
         this.resultSet = resultSet;
-        this.metaData = metaData;
+        this.metaData = resultSet.getMetaData();
     }
 
 
@@ -212,6 +212,16 @@ public class DbResults implements Closeable {
         }
     }
 
+    public void closeQuietly() {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                //ignored.
+            }
+        }
+    }
+
     public Object getVal(ColumnType columnType) throws SQLException {
 
 
@@ -222,7 +232,7 @@ public class DbResults implements Closeable {
             return resultSet.getInt(columnType.getName());
         } else if (columnType.getType() == long.class || columnType.getType() == Long.class) {
             return resultSet.getLong(columnType.getName());
-        }else{
+        } else {
             throw new SQLException("not support types.");
         }
 

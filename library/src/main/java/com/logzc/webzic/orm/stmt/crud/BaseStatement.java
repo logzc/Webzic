@@ -22,4 +22,7 @@ public abstract class BaseStatement<T, ID> {
         this.argColumnTypes = argColumnTypes;
     }
 
+    public String getStatement() {
+        return statement;
+    }
 }

@@ -24,7 +24,7 @@ public interface DbConnection {
     int update(String statement, Object[] args, ColumnType[] argColumnTypes) throws SQLException;
 
 
-    Object queryOne(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException;
+    DbResults queryOne(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException;
 
 
 }

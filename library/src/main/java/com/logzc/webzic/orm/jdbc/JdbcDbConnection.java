@@ -1,6 +1,7 @@
 package com.logzc.webzic.orm.jdbc;
 
 import com.logzc.webzic.orm.db.DbConnection;
+import com.logzc.webzic.orm.db.DbResults;
 import com.logzc.webzic.orm.field.ColumnType;
 
 import java.sql.Connection;
@@ -36,22 +37,20 @@ public class JdbcDbConnection implements DbConnection {
     }
 
     @Override
-    public Object queryOne(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
+    public DbResults queryOne(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
 
         PreparedStatement stmt = this.connection.prepareStatement(statement, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
         try {
-            setStatementArgs(stmt,args,columnTypes);
+            setStatementArgs(stmt, args, columnTypes);
 
-            ResultSet resultSet =  stmt.executeQuery();
-
-
+            ResultSet resultSet = stmt.executeQuery();
             System.out.println(resultSet);
-            return resultSet;
-        }finally {
+            return new DbResults(stmt, resultSet);
+
+        } finally {
             stmt.close();
         }
-
 
 
     }

@@ -6,6 +6,7 @@ import com.logzc.webzic.orm.field.ColumnType;
 import com.logzc.webzic.orm.table.TableInfo;
 
 import java.sql.SQLException;
+import java.text.MessageFormat;
 
 /**
  * query statement.
@@ -19,24 +20,14 @@ public class QueryStatement<T, ID> extends BaseStatement<T, ID> {
 
 
     //TODO: The query clause needs to be finished.
-    public static <T, ID> QueryStatement<T, ID> build(DbType dbType, TableInfo<T, ID> tableInfo, String statement) throws SQLException {
+    public static <T, ID> QueryStatement<T, ID> build(DbType dbType, TableInfo<T, ID> tableInfo) throws SQLException {
+
+        String statement = "SELECT * FROM `{0}` WHERE `{1}` = ? ;";
+        statement = MessageFormat.format(statement, tableInfo.getTableName(), tableInfo.getIdColumnType().getName());
 
         return new QueryStatement<>(tableInfo, statement, tableInfo.getColumnTypes());
     }
 
-    public T mapRow(DbResults results) throws SQLException {
 
-        T entity = tableInfo.createEntity();
-
-        for (ColumnType columnType : tableInfo.getColumnTypes()) {
-
-            Object val = results.getVal(columnType);
-
-            columnType.assign(entity, val);
-        }
-
-        return entity;
-
-    }
 
 }

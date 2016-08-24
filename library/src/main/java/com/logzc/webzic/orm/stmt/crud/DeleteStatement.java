@@ -5,6 +5,7 @@ import com.logzc.webzic.orm.field.ColumnType;
 import com.logzc.webzic.orm.table.TableInfo;
 
 import java.sql.SQLException;
+import java.text.MessageFormat;
 
 /**
  * Use this class to delete one row.
@@ -28,13 +29,10 @@ public class DeleteStatement<T,ID> extends BaseStatement<T,ID> {
             throw new SQLException("Cannot delete from "+tableInfo.getTableClass()+" because it has no primary key.");
         }
 
-        String sql = "DELETE FROM " +
-                '`' + tableInfo.getTableName() + '`' + ' ' +
-                "WHERE " +
-                '`' + idColumnType.getName() + '`' +
-                " = ?";
+        String sql = "DELETE FROM `{0}` WHERE `{1}` = ? ;";
+        sql = MessageFormat.format(sql, tableInfo.getTableName(), tableInfo.getIdColumnType().getName());
 
-        return new DeleteStatement<T, ID>(tableInfo, sql,new ColumnType[]{idColumnType});
+        return new DeleteStatement<>(tableInfo, sql,new ColumnType[]{idColumnType});
     }
 
 }
