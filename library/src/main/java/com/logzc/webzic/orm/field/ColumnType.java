@@ -3,6 +3,7 @@ package com.logzc.webzic.orm.field;
 import com.logzc.webzic.orm.support.ConnectionSource;
 
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 import java.sql.Types;
 
 /**
@@ -51,6 +52,11 @@ public class ColumnType {
     }
 
 
+    public Class<?> getType() {
+        return this.field.getType();
+    }
+
+
     //TODO:Finish the sql type.
     public int getSqlType() {
 
@@ -60,5 +66,14 @@ public class ColumnType {
 
     public String getName() {
         return name;
+    }
+
+    //Assign value to the class.
+    public <T> void assign(T entity, Object val) throws SQLException {
+        try {
+            field.set(entity, val);
+        } catch (IllegalAccessException e) {
+            throw new SQLException("Assign value exception.");
+        }
     }
 }

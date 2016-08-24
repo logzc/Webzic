@@ -1,5 +1,6 @@
 package com.logzc.webzic.orm.stmt.crud;
 
+import com.logzc.webzic.orm.db.DbResults;
 import com.logzc.webzic.orm.db.DbType;
 import com.logzc.webzic.orm.field.ColumnType;
 import com.logzc.webzic.orm.table.TableInfo;
@@ -21,6 +22,21 @@ public class QueryStatement<T, ID> extends BaseStatement<T, ID> {
     public static <T, ID> QueryStatement<T, ID> build(DbType dbType, TableInfo<T, ID> tableInfo, String statement) throws SQLException {
 
         return new QueryStatement<>(tableInfo, statement, tableInfo.getColumnTypes());
+    }
+
+    public T mapRow(DbResults results) throws SQLException {
+
+        T entity = tableInfo.createEntity();
+
+        for (ColumnType columnType : tableInfo.getColumnTypes()) {
+
+            Object val = results.getVal(columnType);
+
+            columnType.assign(entity, val);
+        }
+
+        return entity;
+
     }
 
 }

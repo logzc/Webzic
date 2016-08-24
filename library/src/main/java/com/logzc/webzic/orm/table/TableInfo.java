@@ -5,6 +5,7 @@ import com.logzc.webzic.orm.field.ColumnType;
 import com.logzc.webzic.orm.support.ConnectionSource;
 
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,6 @@ public class TableInfo<T, ID> {
         this.tableClass = tableClass;
         this.tableName = extractTableName(tableClass);
         this.columnTypes = extractColumnTypes(connectionSource, tableClass, tableName);
-
 
 
     }
@@ -90,5 +90,14 @@ public class TableInfo<T, ID> {
 
     public ColumnType[] getColumnTypes() {
         return columnTypes;
+    }
+
+    public T createEntity() throws SQLException {
+        try {
+            return this.tableClass.newInstance();
+        } catch (Exception e) {
+            throw new SQLException("Create entity exception.");
+        }
+
     }
 }
