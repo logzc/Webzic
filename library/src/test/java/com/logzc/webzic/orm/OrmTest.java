@@ -3,6 +3,10 @@ package com.logzc.webzic.orm;
 import com.logzc.webzic.orm.dao.Dao;
 import com.logzc.webzic.orm.dao.DaoManager;
 import com.logzc.webzic.orm.jdbc.JdbcConnectionSource;
+import com.logzc.webzic.orm.stmt.query.Condition;
+import com.logzc.webzic.orm.stmt.query.Criteria;
+import com.logzc.webzic.orm.stmt.query.Linker;
+import com.logzc.webzic.orm.stmt.query.Operator;
 import com.logzc.webzic.orm.support.ConnectionSource;
 import org.junit.After;
 import org.junit.Before;
@@ -37,11 +41,11 @@ public class OrmTest {
     public void testInsert() throws Exception {
         Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
-        Account account = new Account(200,"log",true,18,"zhimakaimen",70.2f,179.5,new Date());
+        Account account = new Account(200, "log", true, 18, "zhimakaimen", 70.2f, 179.5, new Date());
 
-        int result =accountDao.insert(account);
+        int result = accountDao.insert(account);
 
-        assumeTrue(result==1);
+        assumeTrue(result == 1);
 
     }
 
@@ -50,9 +54,9 @@ public class OrmTest {
     public void testDelete() throws Exception {
         Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
-        int result =accountDao.deleteById(200);
+        int result = accountDao.deleteById(200);
 
-        assumeTrue(result==1);
+        assumeTrue(result == 1);
 
     }
 
@@ -67,9 +71,9 @@ public class OrmTest {
 
         account.setAge(100);
 
-        int result =accountDao.update(account);
+        int result = accountDao.update(account);
 
-        assumeTrue(result==1);
+        assumeTrue(result == 1);
 
     }
 
@@ -94,7 +98,6 @@ public class OrmTest {
     @Test
     public void testFindAll() throws Exception {
 
-
         Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
         List<Account> accounts = accountDao.findAll();
@@ -103,6 +106,36 @@ public class OrmTest {
 
     }
 
+    /**
+     * Criteria sql query.
+     */
+    @Test
+    public void testCriteriaQuery() throws Exception {
+        Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
+        Condition condition1 = new Condition("age", Operator.GT, 3);
+        Condition condition2 = new Condition("weight", Operator.LT, 6);
+
+        Criteria criteria = new Criteria(condition1, Linker.AND, condition2);
+
+        List<Account> accounts = accountDao.query(criteria);
+
+        assumeTrue(accounts.size() == 3);
+    }
+
+
+    /**
+     * Raw sql query.
+     */
+    @Test
+    public void testRawQuery() throws Exception {
+        Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
+
+        String statement = "select * from accounts where `age` > ? ;";
+
+        List<Account> accounts = accountDao.queryRaw(statement, 3);
+
+        assumeTrue(accounts.size() == 3);
+    }
 
 }

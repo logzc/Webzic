@@ -3,18 +3,19 @@ package com.logzc.webzic.orm.dao;
 import com.logzc.webzic.orm.db.DbConnection;
 import com.logzc.webzic.orm.db.DbResults;
 import com.logzc.webzic.orm.db.DbType;
-import com.logzc.webzic.orm.field.ColumnType;
 import com.logzc.webzic.orm.result.EntityMapper;
 import com.logzc.webzic.orm.result.Mapper;
 import com.logzc.webzic.orm.stmt.crud.DeleteStatement;
 import com.logzc.webzic.orm.stmt.crud.InsertStatement;
 import com.logzc.webzic.orm.stmt.crud.QueryStatement;
 import com.logzc.webzic.orm.stmt.crud.UpdateStatement;
+import com.logzc.webzic.orm.stmt.query.Criteria;
 import com.logzc.webzic.orm.support.ConnectionSource;
 import com.logzc.webzic.orm.table.TableInfo;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -56,7 +57,6 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
 
 
         this.insertStatement = InsertStatement.build(this.tableInfo);
-
 
 
         this.deleteStatement = DeleteStatement.build(this.tableInfo);
@@ -106,12 +106,11 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
         String statement = this.updateStatement.getStatement();
 
 
-
         Object[] args = tableInfo.getColumnValues(entity);
-        int length=args.length;
-        Object[] allArgs=new Object[length+1];
+        int length = args.length;
+        Object[] allArgs = new Object[length + 1];
         System.arraycopy(args, 0, allArgs, 0, length);
-        allArgs[length]=tableInfo.getIdValue(entity);
+        allArgs[length] = tableInfo.getIdValue(entity);
 
 
         return dbConnection.update(statement, allArgs);
@@ -137,26 +136,28 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
 
     @Override
     public List<T> findAll() throws SQLException {
-        DbConnection dbConnection = connectionSource.getDbConnection();
 
         String statement = this.queryStatement.getQueryAllStatement();
         Object[] args = new Object[]{};
-        ColumnType[] columnTypes = new ColumnType[]{};
 
-        try (DbResults dbResults = dbConnection.query(statement, args, columnTypes)) {
-            return dbResults.getEntityList(tableInfo);
-        } catch (IOException e) {
-            throw new SQLException(e);
-        }
+        return queryRaw(statement, args);
     }
 
-    /**
-     * execute raw sql.
-     *   eg. select * from account where `age` > ? and height < ? ;
-     */
-    /*
+
+
+
     @Override
-    public List<T> query(String statement,Object[] args) throws SQLException{
+    public List<T> query(Criteria criteria) throws SQLException {
+
+        //String statement = "SELECT * FROM `{0}` {1} ;";
+        //statement = MessageFormat.format(statement, tableInfo.getTableName(), tableInfo.getIdColumnType().getName());
+        //String statement="select * from ``";
+
+        return null;
+    }
+
+    @Override
+    public List<T> queryRaw(String statement, Object... args) throws SQLException {
         DbConnection dbConnection = connectionSource.getDbConnection();
 
         try (DbResults dbResults = dbConnection.query(statement, args)) {
@@ -164,8 +165,8 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
         } catch (IOException e) {
             throw new SQLException(e);
         }
+
     }
-    */
 
     public static <T, ID> Dao<T, ID> createDao(ConnectionSource connectionSource, Class<T> clazz) throws SQLException {
         return new BaseDao<>(connectionSource, clazz);
