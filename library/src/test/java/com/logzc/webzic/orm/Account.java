@@ -3,6 +3,8 @@ package com.logzc.webzic.orm;
 import com.logzc.webzic.orm.field.Column;
 import com.logzc.webzic.orm.table.Table;
 
+import java.util.Date;
+
 /**
  * Created by lishuang on 2016/8/22.
  */
@@ -10,34 +12,47 @@ import com.logzc.webzic.orm.table.Table;
 public class Account {
 
     @Column(id = true)
+    private int id;
+
+    @Column
     private String name;
+
+    @Column
+    private boolean deleted;
+
+    @Column
+    private int age;
 
     @Column
     private String password;
 
-    // ORMLite needs a no-arg constructor
-    public Account() {
+    @Column
+    private float weight;
+
+    @Column
+    private double height;
+
+    @Column
+    private Date time;
+
+
+    public Account(){
 
     }
 
-    public Account(String name, String password) {
+    public Account(int id, String name, boolean deleted, int age, String password, float weight, double height, Date time) {
+        this.id = id;
         this.name = name;
+        this.deleted=deleted;
+        this.age = age;
         this.password = password;
+        this.weight = weight;
+        this.height = height;
+        this.time = time;
     }
 
-    public String getName() {
-        return name;
+    public void setAge(int age){
+        this.age=age;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

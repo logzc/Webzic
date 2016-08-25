@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assume.assumeNotNull;
@@ -34,11 +35,9 @@ public class OrmTest {
 
     @Test
     public void testInsert() throws Exception {
-        Dao<Account, String> accountDao = DaoManager.createDao(connectionSource, Account.class);
+        Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
-        Account account = new Account();
-        account.setName("lishuang");
-        account.setPassword("1");
+        Account account = new Account(200,"log",true,18,"zhimakaimen",70.2f,179.5,new Date());
 
         int result =accountDao.insert(account);
 
@@ -46,23 +45,27 @@ public class OrmTest {
 
     }
 
+
     @Test
     public void testDelete() throws Exception {
-        Dao<Account, String> accountDao = DaoManager.createDao(connectionSource, Account.class);
+        Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
-        int result =accountDao.deleteById("lishuang");
+        int result =accountDao.deleteById(200);
 
         assumeTrue(result==1);
 
     }
 
+
     @Test
     public void testUpdate() throws Exception {
-        Dao<Account, String> accountDao = DaoManager.createDao(connectionSource, Account.class);
+        Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
-        Account account = new Account();
-        account.setName("lishuang");
-        account.setPassword("wudi");
+        Account account = accountDao.findOne(200);
+
+        assumeNotNull(account);
+
+        account.setAge(100);
 
         int result =accountDao.update(account);
 
@@ -70,36 +73,36 @@ public class OrmTest {
 
     }
 
+
     @Test
     public void testFindOne() throws Exception {
 
-        Dao<Account, String> accountDao = DaoManager.createDao(connectionSource, Account.class);
+        Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
-        Account account = accountDao.findOne("Lucy");
+        Account account = accountDao.findOne(200);
 
         assumeNotNull(account);
 
-        assumeTrue(account.getPassword().equals("111"));
+        //assumeTrue(account.getPassword().equals("111"));
 
-        System.out.println(account.getName() + "->" + account.getPassword());
+        //System.out.println(account.getName() + "->" + account.getPassword());
 
 
     }
+
 
     @Test
     public void testFindAll() throws Exception {
 
 
-        Dao<Account, String> accountDao = DaoManager.createDao(connectionSource, Account.class);
+        Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
         List<Account> accounts = accountDao.findAll();
 
-        assumeTrue(accounts.size() == 3);
+        assumeTrue(accounts.size() == 6);
 
-        for (Account account : accounts) {
-            System.out.println(account.getName() + "->" + account.getPassword());
-        }
     }
+
 
 
 }

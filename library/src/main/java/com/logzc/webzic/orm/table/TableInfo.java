@@ -121,7 +121,7 @@ public class TableInfo<T, ID> {
         try {
             return this.tableClass.newInstance();
         } catch (Exception e) {
-            throw new SQLException("Create entity exception.");
+            throw new SQLException("You must define constructor without parameters.");
         }
 
     }

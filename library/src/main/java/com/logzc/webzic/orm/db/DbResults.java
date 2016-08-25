@@ -9,8 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Wrap ResultSet. 0 base rather than 1 base in ResultSet.
@@ -231,15 +230,23 @@ public class DbResults implements Closeable {
 
         Object val = null;
 
-        //TODO: finish other types.
-        if (columnType.getType() == String.class) {
-            val = resultSet.getString(columnName);
-        } else if (columnType.getType() == int.class || columnType.getType() == Integer.class) {
+        Class<?> type = columnType.getType();
+        if (type == int.class || type == Integer.class) {
             val = resultSet.getInt(columnName);
-        } else if (columnType.getType() == long.class || columnType.getType() == Long.class) {
+        } else if (type == long.class || type == Long.class) {
             val = resultSet.getLong(columnName);
+        } else if (type == float.class || type == Float.class) {
+            val = resultSet.getFloat(columnName);
+        } else if (type == double.class || type == Double.class) {
+            val = resultSet.getDouble(columnName);
+        } else if (type == boolean.class || type == Boolean.class) {
+            val = resultSet.getBoolean(columnName);
+        } else if (type == java.util.Date.class) {
+            val = resultSet.getDate(columnName);
+        } else if (type == String.class) {
+            val = resultSet.getString(columnName);
         } else {
-            throw new SQLException("not support types.");
+            throw new SQLException("Not supported types.");
         }
 
         return val;
