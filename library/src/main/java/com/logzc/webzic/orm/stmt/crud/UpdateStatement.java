@@ -19,7 +19,7 @@ public class UpdateStatement<T, ID> extends BaseStatement<T, ID> {
     /**
      * UPDATE `accounts` SET `password` = ? WHERE `name` = ?;
      */
-    public static <T, ID> UpdateStatement<T, ID> build(DbType dbType, TableInfo<T, ID> tableInfo) throws SQLException {
+    public static <T, ID> UpdateStatement<T, ID> build(TableInfo<T, ID> tableInfo) throws SQLException {
 
         ColumnType[] columnTypes = tableInfo.getColumnTypes();
         ColumnType idColumnType = tableInfo.getIdColumnType();
@@ -37,6 +37,8 @@ public class UpdateStatement<T, ID> extends BaseStatement<T, ID> {
         boolean first = true;
 
         for (ColumnType columnType : columnTypes) {
+
+
             if (first) {
                 first = false;
             } else {

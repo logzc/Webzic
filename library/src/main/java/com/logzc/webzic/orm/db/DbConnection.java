@@ -15,14 +15,18 @@ public interface DbConnection extends Closeable {
      *
      * @param statement      sql
      * @param args           object arguments for SQL '?'
-     * @param argColumnTypes Field types of the arguments.
+     * @param columnTypes Field types of the arguments.
      * @return num of rows affected.
      */
-    int insert(String statement, Object[] args, ColumnType[] argColumnTypes) throws SQLException;
+    int insert(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException;
 
-    int delete(String statement, Object[] args, ColumnType[] argColumnTypes) throws SQLException;
+    int delete(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException;
 
-    int update(String statement, Object[] args, ColumnType[] argColumnTypes) throws SQLException;
+    int update(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException;
+
+
+    int execute(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException;
+
 
 
     DbResults query(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException;

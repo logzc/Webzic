@@ -32,6 +32,19 @@ public class OrmTest {
         connectionSource.close();
     }
 
+    @Test
+    public void testInsert() throws Exception {
+        Dao<Account, String> accountDao = DaoManager.createDao(connectionSource, Account.class);
+
+        Account account = new Account();
+        account.setName("lishuang");
+        account.setPassword("1");
+
+        int result =accountDao.insert(account);
+
+        assumeTrue(result==1);
+
+    }
 
     @Test
     public void testDelete() throws Exception {
@@ -44,14 +57,14 @@ public class OrmTest {
     }
 
     @Test
-    public void testInsert() throws Exception {
+    public void testUpdate() throws Exception {
         Dao<Account, String> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
         Account account = new Account();
         account.setName("lishuang");
-        account.setPassword("1");
+        account.setPassword("wudi");
 
-        int result =accountDao.insert(account);
+        int result =accountDao.update(account);
 
         assumeTrue(result==1);
 

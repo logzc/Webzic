@@ -26,10 +26,6 @@ public class JdbcConnectionSource implements ConnectionSource {
 
     }
 
-
-
-
-
     @Override
     public DbType getDbType() {
         return dbType;

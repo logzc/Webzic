@@ -9,6 +9,7 @@ import com.logzc.webzic.orm.result.Mapper;
 import com.logzc.webzic.orm.stmt.crud.DeleteStatement;
 import com.logzc.webzic.orm.stmt.crud.InsertStatement;
 import com.logzc.webzic.orm.stmt.crud.QueryStatement;
+import com.logzc.webzic.orm.stmt.crud.UpdateStatement;
 import com.logzc.webzic.orm.support.ConnectionSource;
 import com.logzc.webzic.orm.table.TableInfo;
 
@@ -26,9 +27,11 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
     protected final Class<T> dataClass;
     protected ConnectionSource connectionSource;
     protected TableInfo<T, ID> tableInfo;
-    protected QueryStatement<T, ID> queryStatement;
+
     protected InsertStatement<T, ID> insertStatement;
     protected DeleteStatement<T, ID> deleteStatement;
+    protected UpdateStatement<T, ID> updateStatement;
+    protected QueryStatement<T, ID> queryStatement;
 
 
     //convert DbResults to Entity.
@@ -54,9 +57,13 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
 
         this.insertStatement = InsertStatement.build(this.tableInfo);
 
-        this.queryStatement = QueryStatement.build(this.tableInfo);
+
 
         this.deleteStatement = DeleteStatement.build(this.tableInfo);
+
+        this.updateStatement = UpdateStatement.build(this.tableInfo);
+
+        this.queryStatement = QueryStatement.build(this.tableInfo);
 
         this.mapper = new EntityMapper<>();
     }
@@ -96,7 +103,24 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
 
     @Override
     public int update(T entity) throws SQLException {
-        return 0;
+        DbConnection dbConnection = connectionSource.getDbConnection();
+
+        String statement = this.updateStatement.getStatement();
+
+
+
+        Object[] args = tableInfo.getColumnValues(entity);
+        int length=args.length;
+        Object[] allArgs=new Object[length+1];
+        System.arraycopy(args, 0, allArgs, 0, length);
+        allArgs[length]=tableInfo.getIdValue(entity);
+
+        ColumnType[] columnTypes = tableInfo.getColumnTypes();
+        ColumnType[] allColumnTypes=new ColumnType[length+1];
+        System.arraycopy(columnTypes, 0, allColumnTypes, 0, length);
+        allColumnTypes[length]=tableInfo.getIdColumnType();
+
+        return dbConnection.update(statement, allArgs, allColumnTypes);
     }
 
 

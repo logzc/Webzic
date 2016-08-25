@@ -24,20 +24,22 @@ public class JdbcDbConnection implements DbConnection {
 
     @Override
     public int insert(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
-        try(PreparedStatement stmt = this.connection.prepareStatement(statement, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
-            setStatementArgs(stmt, args, columnTypes);
-
-            //print the sql.
-            System.out.println(stmt);
-
-            return stmt.executeUpdate();
-        }
-
-
+        return execute(statement,args,columnTypes);
     }
 
     @Override
     public int delete(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
+        return execute(statement,args,columnTypes);
+    }
+
+
+    @Override
+    public int update(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
+        return execute(statement,args,columnTypes);
+    }
+
+
+    public int execute(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException{
         try(PreparedStatement stmt = this.connection.prepareStatement(statement, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
             setStatementArgs(stmt, args, columnTypes);
 
@@ -46,14 +48,8 @@ public class JdbcDbConnection implements DbConnection {
 
             return stmt.executeUpdate();
         }
+
     }
-
-
-    @Override
-    public int update(String statement, Object[] args, ColumnType[] argColumnTypes) throws SQLException {
-        return 0;
-    }
-
     @Override
     public DbResults query(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
 

@@ -30,11 +30,11 @@ public class TableInfo<T, ID> {
 
 
         //find the id column.
-        for (ColumnType columnType:this.columnTypes){
-            if(columnType.isId()){
-                if(idColumnType==null){
-                    idColumnType=columnType;
-                }else{
+        for (ColumnType columnType : this.columnTypes) {
+            if (columnType.isId()) {
+                if (idColumnType == null) {
+                    idColumnType = columnType;
+                } else {
                     throw new SQLException("multi id for column defined.");
                 }
             }
@@ -89,14 +89,14 @@ public class TableInfo<T, ID> {
     }
 
 
-    public Object[] getColumnValues(T entity) throws SQLException{
-        int length=this.columnTypes.length;
-        Object[] objects=new Object[length];
-        for (int i = 0; i <length ; i++) {
-            ColumnType columnType=this.columnTypes[i];
+    public Object[] getColumnValues(T entity) throws SQLException {
+        int length = this.columnTypes.length;
+        Object[] objects = new Object[length];
+        for (int i = 0; i < length; i++) {
+            ColumnType columnType = this.columnTypes[i];
 
 
-            objects[i]=columnType.getValue(entity);
+            objects[i] = columnType.getValue(entity);
         }
         return objects;
     }
@@ -124,5 +124,14 @@ public class TableInfo<T, ID> {
             throw new SQLException("Create entity exception.");
         }
 
+    }
+
+    @SuppressWarnings("unchecked")
+    public ID getIdValue(T entity) throws SQLException {
+        if (idColumnType == null) {
+            return null;
+        } else {
+            return (ID) idColumnType.getValue(entity);
+        }
     }
 }
