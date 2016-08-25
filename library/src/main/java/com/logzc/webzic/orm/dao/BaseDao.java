@@ -75,9 +75,8 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
 
         String statement = this.insertStatement.getStatement();
         Object[] args = tableInfo.getColumnValues(entity);
-        ColumnType[] columnTypes = tableInfo.getColumnTypes();
 
-        return dbConnection.insert(statement, args, columnTypes);
+        return dbConnection.insert(statement, args);
     }
 
 
@@ -95,9 +94,8 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
 
         String statement = this.deleteStatement.getStatement();
         Object[] args = new Object[]{id};
-        ColumnType[] columnTypes = new ColumnType[]{tableInfo.getIdColumnType()};
 
-        return dbConnection.delete(statement, args, columnTypes);
+        return dbConnection.delete(statement, args);
 
     }
 
@@ -115,12 +113,8 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
         System.arraycopy(args, 0, allArgs, 0, length);
         allArgs[length]=tableInfo.getIdValue(entity);
 
-        ColumnType[] columnTypes = tableInfo.getColumnTypes();
-        ColumnType[] allColumnTypes=new ColumnType[length+1];
-        System.arraycopy(columnTypes, 0, allColumnTypes, 0, length);
-        allColumnTypes[length]=tableInfo.getIdColumnType();
 
-        return dbConnection.update(statement, allArgs, allColumnTypes);
+        return dbConnection.update(statement, allArgs);
     }
 
 
@@ -131,9 +125,8 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
 
         String statement = this.queryStatement.getStatement();
         Object[] args = new Object[]{id};
-        ColumnType[] columnTypes = new ColumnType[]{tableInfo.getIdColumnType()};
 
-        try (DbResults dbResults = dbConnection.query(statement, args, columnTypes)) {
+        try (DbResults dbResults = dbConnection.query(statement, args)) {
 
             return dbResults.getEntity(tableInfo);
 

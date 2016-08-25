@@ -21,23 +21,23 @@ public class JdbcDbConnection implements DbConnection {
     }
 
     @Override
-    public int insert(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
-        return execute(statement,args,columnTypes);
+    public int insert(String statement, Object... args) throws SQLException {
+        return execute(statement,args);
     }
 
     @Override
-    public int delete(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
-        return execute(statement,args,columnTypes);
+    public int delete(String statement, Object... args) throws SQLException {
+        return execute(statement,args);
     }
 
 
     @Override
-    public int update(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
-        return execute(statement,args,columnTypes);
+    public int update(String statement, Object... args) throws SQLException {
+        return execute(statement,args);
     }
 
 
-    public int execute(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException{
+    public int execute(String statement, Object... args) throws SQLException{
         try(PreparedStatement stmt = this.connection.prepareStatement(statement, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
             setStatementArgs(stmt, args);
 
@@ -50,22 +50,7 @@ public class JdbcDbConnection implements DbConnection {
     }
 
     @Override
-    public DbResults query(String statement, Object[] args, ColumnType[] columnTypes) throws SQLException {
-        PreparedStatement stmt = this.connection.prepareStatement(statement, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-
-        setStatementArgs(stmt, args);
-
-        //print the sql.
-        System.out.println(stmt);
-
-        ResultSet resultSet = stmt.executeQuery();
-        System.out.println(resultSet);
-        return new DbResults(stmt, resultSet);
-    }
-
-
-    //@Override
-    public DbResults query(String statement,Object[] args) throws SQLException{
+    public DbResults query(String statement, Object... args) throws SQLException {
         PreparedStatement stmt = this.connection.prepareStatement(statement, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
         setStatementArgs(stmt, args);
@@ -81,8 +66,7 @@ public class JdbcDbConnection implements DbConnection {
 
 
 
-
-    private void setStatementArgs(PreparedStatement stmt, Object[] args) throws SQLException {
+    private void setStatementArgs(PreparedStatement stmt, Object... args) throws SQLException {
 
         if (args == null) {
             return;
