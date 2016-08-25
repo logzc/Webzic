@@ -157,6 +157,22 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
         }
     }
 
+    /**
+     * execute raw sql.
+     *   eg. select * from account where `age` > ? and height < ? ;
+     */
+    /*
+    @Override
+    public List<T> query(String statement,Object[] args) throws SQLException{
+        DbConnection dbConnection = connectionSource.getDbConnection();
+
+        try (DbResults dbResults = dbConnection.query(statement, args)) {
+            return dbResults.getEntityList(tableInfo);
+        } catch (IOException e) {
+            throw new SQLException(e);
+        }
+    }
+    */
 
     public static <T, ID> Dao<T, ID> createDao(ConnectionSource connectionSource, Class<T> clazz) throws SQLException {
         return new BaseDao<>(connectionSource, clazz);

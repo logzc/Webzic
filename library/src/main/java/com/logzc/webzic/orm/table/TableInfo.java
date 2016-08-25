@@ -52,7 +52,7 @@ public class TableInfo<T, ID> {
 
             for (Field field : classWalk.getDeclaredFields()) {
 
-                ColumnType columnType = ColumnType.create(connectionSource, tableName, field, dataClass);
+                ColumnType columnType = ColumnType.create(field);
 
                 if (columnType != null) {
                     columnTypes.add(columnType);

@@ -1,5 +1,7 @@
 package com.logzc.webzic.orm.dao;
 
+import com.logzc.webzic.orm.field.ColumnType;
+
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
@@ -34,4 +36,7 @@ public interface Dao<T,ID> {
     T findOne(ID id) throws SQLException;
 
     List<T> findAll() throws SQLException;
+
+
+    //List<T> query(String statement,Object[] args,ColumnType[] columnTypes) throws SQLException;
 }
