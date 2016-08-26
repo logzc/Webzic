@@ -57,7 +57,7 @@ public class OrmUtils {
 
     }
 
-    public static int getSqlType(Class<?> type) throws SQLException{
+    public static int getSqlType(Class<?> type) throws SQLException {
 
         int sqlType;
         if (type == int.class || type == Integer.class) {
@@ -70,7 +70,7 @@ public class OrmUtils {
             sqlType = Types.DOUBLE;
         } else if (type == boolean.class || type == Boolean.class) {
             sqlType = Types.BOOLEAN;
-        } else if (type == Date.class) {
+        } else if (type == Date.class || type == java.sql.Date.class) {
             sqlType = Types.TIMESTAMP;
         } else if (type == String.class) {
             sqlType = Types.VARCHAR;
@@ -79,4 +79,50 @@ public class OrmUtils {
         }
         return sqlType;
     }
+
+
+    public static String convertCamelToUnderscore(String camel) {
+        String regex = "([a-z])([A-Z]+)";
+        String replacement = "$1_$2";
+
+        if (camel == null) {
+            return null;
+        } else {
+            return camel.replaceAll(regex, replacement).toLowerCase();
+        }
+    }
+
+
+    /**
+     * By default the first letter of the camel is lowercase.
+     */
+    public static String convertUnderScoreToCamel(String underscore) {
+
+        return convertUnderScoreToCamel(underscore, false);
+    }
+
+    public static String convertUnderScoreToCamel(String underscore, boolean firstLetterUpper) {
+        //String s = "W_ACT_010_LOG_DATE";
+
+        String[] atoms = underscore.split("_");
+
+        StringBuilder camel = new StringBuilder();
+
+        for (int i = 0; i < atoms.length; i++) {
+            String atom = atoms[i];
+            if (atom.length() > 0) {
+                if (i == 0 && !firstLetterUpper) {
+                    camel.append(Character.toLowerCase(atom.charAt(0)));
+                } else {
+                    camel.append(Character.toUpperCase(atom.charAt(0)));
+                }
+            }
+            if (atom.length() > 1) {
+                camel.append(atom.substring(1).toLowerCase());
+            }
+        }
+
+        return camel.toString();
+    }
+
 }

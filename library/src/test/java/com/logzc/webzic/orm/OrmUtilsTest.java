@@ -40,5 +40,16 @@ public class OrmUtilsTest {
 
     }
 
+    @Test
+    public void testConvert() {
+
+        System.out.println(OrmUtils.convertCamelToUnderscore("camelCaseToSomethingElse"));
+
+        System.out.println(OrmUtils.convertUnderScoreToCamel("w_ACT_010_LOG_DATE", true));
+        System.out.println(OrmUtils.convertUnderScoreToCamel("w_ACT_010_LOG_DATE"));
+
+
+    }
+
 
 }

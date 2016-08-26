@@ -1,8 +1,7 @@
 package com.logzc.webzic.orm.table;
 
-import com.logzc.webzic.orm.dao.BaseDao;
+import com.logzc.webzic.orm.field.ColumnStrategy;
 import com.logzc.webzic.orm.field.ColumnType;
-import com.logzc.webzic.orm.support.ConnectionSource;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
@@ -15,18 +14,72 @@ import java.util.List;
 public class TableInfo<T, ID> {
 
 
-    private final BaseDao<T, ID> baseDao;
     private final Class<T> tableClass;
-    private final String tableName;
+    private String tableName;
+    private ColumnStrategy columnStrategy;
     protected ColumnType[] columnTypes;
     private ColumnType idColumnType;
 
-    public TableInfo(ConnectionSource connectionSource, BaseDao<T, ID> baseDao, Class<T> tableClass) throws SQLException {
+    public TableInfo(Class<T> tableClass) throws SQLException {
 
-        this.baseDao = baseDao;
         this.tableClass = tableClass;
-        this.tableName = extractTableName(tableClass);
-        this.columnTypes = extractColumnTypes(tableClass);
+
+        initBasicInfo();
+
+        initColumnInfo();
+
+    }
+
+
+    //get the table name from Class.
+    public void initBasicInfo() {
+
+        Table table = this.tableClass.getAnnotation(Table.class);
+
+        if (table != null) {
+
+            this.columnStrategy = table.columnStrategy();
+
+            if (table.name().length() > 0) {
+                this.tableName = table.name();
+            } else {
+                this.tableName = this.tableClass.getSimpleName().toLowerCase();
+            }
+
+        } else {
+            this.columnStrategy = ColumnStrategy.CAMEL_TO_UNDERSCORE;
+
+            this.tableName = this.tableClass.getSimpleName().toLowerCase();
+        }
+
+    }
+
+
+    private void initColumnInfo() throws SQLException {
+
+        List<ColumnType> columnTypes = new ArrayList<>();
+
+        //not only self but also super father.
+        for (Class<?> classWalk = this.tableClass; classWalk != null; classWalk = classWalk.getSuperclass()) {
+
+            for (Field field : classWalk.getDeclaredFields()) {
+
+                ColumnType columnType = ColumnType.create(field, this.columnStrategy);
+
+                if (columnType != null) {
+                    columnTypes.add(columnType);
+                }
+
+            }
+        }
+
+
+        if (columnTypes.isEmpty()) {
+            throw new IllegalArgumentException("No columns configured.");
+        }
+
+        this.columnTypes = columnTypes.toArray(new ColumnType[columnTypes.size()]);
+
 
         //find the id column.
         for (ColumnType columnType : this.columnTypes) {
@@ -38,52 +91,6 @@ public class TableInfo<T, ID> {
                 }
             }
         }
-
-
-    }
-
-    private ColumnType[] extractColumnTypes(Class<T> dataClass) {
-
-        List<ColumnType> columnTypes = new ArrayList<>();
-
-        //not only self but also super father.
-        for (Class<?> classWalk = dataClass; classWalk != null; classWalk = classWalk.getSuperclass()) {
-
-            for (Field field : classWalk.getDeclaredFields()) {
-
-                ColumnType columnType = ColumnType.create(field);
-
-                if (columnType != null) {
-                    columnTypes.add(columnType);
-                }
-            }
-        }
-
-
-        if (columnTypes.isEmpty()) {
-            throw new IllegalArgumentException("No columns configured.");
-        }
-
-        return columnTypes.toArray(new ColumnType[columnTypes.size()]);
-    }
-
-
-    //get the table name from Class.
-    public String extractTableName(Class<T> clazz) {
-
-        Table table = clazz.getAnnotation(Table.class);
-
-        String name = null;
-
-        if (table != null && table.name().length() > 0) {
-            name = table.name();
-        }
-
-        if (name == null) {
-            name = clazz.getSimpleName().toLowerCase();
-        }
-
-        return name;
 
     }
 

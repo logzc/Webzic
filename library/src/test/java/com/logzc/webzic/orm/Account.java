@@ -1,6 +1,7 @@
 package com.logzc.webzic.orm;
 
 import com.logzc.webzic.orm.field.Column;
+import com.logzc.webzic.orm.field.ColumnStrategy;
 import com.logzc.webzic.orm.table.Table;
 
 import java.util.Date;
@@ -21,6 +22,8 @@ public class Account {
     private int age;
 
     private String password;
+
+    private String foodName;
 
     private float weight;
 
@@ -46,6 +49,9 @@ public class Account {
 
     public void setAge(int age){
         this.age=age;
+    }
+    public void setFoodName(String foodName){
+        this.foodName=foodName;
     }
 
 }

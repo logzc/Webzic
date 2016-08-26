@@ -15,15 +15,18 @@ public class ColumnType {
     private final Field field;
     private String name;
 
+    private ColumnStrategy columnStrategy;
+
     //get and set method.
     private final Method getter;
     private final Method setter;
 
     private boolean isId = false;
 
-    private ColumnType(Field field) {
+    private ColumnType(Field field, ColumnStrategy columnStrategy) {
 
         this.field = field;
+        this.columnStrategy = columnStrategy;
 
         //get name from @Column.
         Column column = field.getAnnotation(Column.class);
@@ -47,9 +50,15 @@ public class ColumnType {
     }
 
 
-    public static ColumnType create(Field field) {
+    public static ColumnType create(Field field, ColumnStrategy columnStrategy) {
 
-        return new ColumnType(field);
+
+        if (field.isAnnotationPresent(Transient.class)) {
+            return null;
+        } else {
+            return new ColumnType(field, columnStrategy);
+        }
+
     }
 
 
@@ -58,17 +67,15 @@ public class ColumnType {
     }
 
 
-    public int getSqlType() throws SQLException {
-
-        Class<?> type = this.getType();
-
-        return OrmUtils.getSqlType(type);
-
-    }
-
     public String getName() {
-        return name;
+
+        if (columnStrategy == ColumnStrategy.CAMEL_TO_UNDERSCORE) {
+            return OrmUtils.convertCamelToUnderscore(name);
+        } else {
+            return name;
+        }
     }
+
 
     //Assign value to the class.
     public <T> void assign(T entity, Object val) throws SQLException {

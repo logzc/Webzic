@@ -1,6 +1,5 @@
 package com.logzc.webzic.orm.kpi;
 
-import com.logzc.webzic.orm.field.Column;
 import com.logzc.webzic.orm.table.Table;
 
 import java.util.Date;
@@ -8,7 +7,7 @@ import java.util.Date;
 /**
  * Created by lishuang on 2016/8/22.
  */
-@Table(name = "accounts")
+@Table(name = "kpi_history_by_feeder")
 public class KpiHistoryByFeeder{
 
     public String utility;

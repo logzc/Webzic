@@ -57,7 +57,7 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
 
         this.dbType = connectionSource.getDbType();
 
-        this.tableInfo = new TableInfo<T, ID>(connectionSource, this, dataClass);
+        this.tableInfo = new TableInfo<T, ID>(dataClass);
 
 
         this.insertStatement = InsertStatement.build(this.tableInfo);

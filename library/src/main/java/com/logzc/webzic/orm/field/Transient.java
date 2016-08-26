@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * indicate this is a transient field.
+ * indicate this is a transient field. will ignore in the database.
  * Created by lishuang on 2016/8/23.
  */
 @Target(ElementType.FIELD)

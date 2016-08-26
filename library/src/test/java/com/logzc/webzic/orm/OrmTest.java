@@ -66,7 +66,8 @@ public class OrmTest {
 
         assumeNotNull(account);
 
-        account.setAge(100);
+        account.setAge(200);
+        account.setFoodName("apple");
 
         int result = accountDao.update(account);
 
