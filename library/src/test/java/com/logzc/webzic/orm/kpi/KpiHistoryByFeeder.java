@@ -28,8 +28,8 @@ public class KpiHistoryByFeeder{
     public long nErrorMeters;
     public long nPhaseError;
     public long nConnectivityError;
-    public float AvgPhaseConfidence;
-    public float AvgConnectivityConfidence;
+    public float avgPhaseConfidence;
+    public float avgConnectivityConfidence;
 
 
 }

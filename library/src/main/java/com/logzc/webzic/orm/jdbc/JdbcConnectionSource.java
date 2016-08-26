@@ -18,13 +18,25 @@ public class JdbcConnectionSource implements ConnectionSource {
     private String url;
     private DbType dbType;
     private DbConnection dbConnection;
-    public JdbcConnectionSource(String url) throws SQLException{
-        this.url=url;
+
+    private String user;
+    private String password;
+
+    public JdbcConnectionSource(String url) throws SQLException {
+        this(url, null, null);
+
+    }
+
+    public JdbcConnectionSource(String url, String user, String password) throws SQLException {
+        this.url = url;
+        this.user = user;
+        this.password = password;
         //initialize.
-        this.dbType= DbTypeUtils.forUrl(url);
+        this.dbType = DbTypeUtils.forUrl(url);
         this.dbType.setDriver(DriverManager.getDriver(url));
 
     }
+
 
     @Override
     public DbType getDbType() {
@@ -34,11 +46,11 @@ public class JdbcConnectionSource implements ConnectionSource {
     @Override
     public DbConnection getDbConnection() throws SQLException {
 
-        if(this.dbConnection!=null){
+        if (this.dbConnection != null) {
 
             return this.dbConnection;
-        }else{
-            this.dbConnection=makeConnection();
+        } else {
+            this.dbConnection = makeConnection();
         }
 
 
@@ -46,13 +58,18 @@ public class JdbcConnectionSource implements ConnectionSource {
     }
 
 
-    protected DbConnection makeConnection() throws SQLException{
+    protected DbConnection makeConnection() throws SQLException {
+        Connection connection;
+        if (user != null && password != null) {
+            connection = DriverManager.getConnection(url, user, password);
+        } else {
+            connection = DriverManager.getConnection(url);
+        }
 
-        Connection connection=DriverManager.getConnection(url);
 
         connection.setAutoCommit(true);
 
-        DbConnection dbConnection=new JdbcDbConnection(connection);
+        DbConnection dbConnection = new JdbcDbConnection(connection);
 
         System.out.println("");
 
@@ -63,9 +80,9 @@ public class JdbcConnectionSource implements ConnectionSource {
     @Override
     public void close() throws IOException {
 
-        if(this.dbConnection!=null){
+        if (this.dbConnection != null) {
             this.dbConnection.close();
-            this.dbConnection=null;
+            this.dbConnection = null;
         }
 
     }
