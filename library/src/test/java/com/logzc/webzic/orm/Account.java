@@ -14,25 +14,18 @@ public class Account {
     @Column(id = true)
     private int id;
 
-    @Column
     private String name;
 
-    @Column
     private boolean deleted;
 
-    @Column
     private int age;
 
-    @Column
     private String password;
 
-    @Column
     private float weight;
 
-    @Column
     private double height;
 
-    @Column
     private Date time;
 
 

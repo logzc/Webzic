@@ -5,8 +5,6 @@ import com.logzc.webzic.orm.util.OrmUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
-import java.sql.Types;
-import java.util.Date;
 
 /**
  * Created by lishuang on 2016/8/23.
@@ -29,17 +27,19 @@ public class ColumnType {
 
         //get name from @Column.
         Column column = field.getAnnotation(Column.class);
-        if (column == null) {
-            throw new IllegalArgumentException("@Column is must.");
-        }
-        if (column.name().length() > 0) {
-            this.name = column.name();
+        if (column != null) {
+            if (column.name().length() > 0) {
+                this.name = column.name();
+            } else {
+                this.name = this.field.getName();
+            }
+            //check whether it is id.
+            this.isId = column.id();
+
         } else {
             this.name = this.field.getName();
+            this.isId = false;
         }
-
-        //check whether it is id.
-        this.isId = column.id();
 
         //find the get and set method.
         getter = OrmUtils.findGetter(this.field);
@@ -47,14 +47,9 @@ public class ColumnType {
     }
 
 
-
     public static ColumnType create(Field field) {
 
-        if (field.isAnnotationPresent(Column.class)) {
-            return new ColumnType(field);
-        } else {
-            return null;
-        }
+        return new ColumnType(field);
     }
 
 
