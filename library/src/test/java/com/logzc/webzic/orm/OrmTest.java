@@ -3,10 +3,7 @@ package com.logzc.webzic.orm;
 import com.logzc.webzic.orm.dao.Dao;
 import com.logzc.webzic.orm.dao.DaoManager;
 import com.logzc.webzic.orm.jdbc.JdbcConnectionSource;
-import com.logzc.webzic.orm.stmt.query.Condition;
-import com.logzc.webzic.orm.stmt.query.Criteria;
-import com.logzc.webzic.orm.stmt.query.Linker;
-import com.logzc.webzic.orm.stmt.query.Operator;
+import com.logzc.webzic.orm.stmt.query.Predicate;
 import com.logzc.webzic.orm.support.ConnectionSource;
 import org.junit.After;
 import org.junit.Before;
@@ -113,14 +110,16 @@ public class OrmTest {
     public void testCriteriaQuery() throws Exception {
         Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
-        Condition condition1 = new Condition("age", Operator.GT, 3);
-        Condition condition2 = new Condition("weight", Operator.LT, 6);
 
-        Criteria criteria = new Criteria(condition1, Linker.AND, condition2);
+        List<Account> accounts = accountDao.query((tableInfo, cb) -> {
 
-        List<Account> accounts = accountDao.query(criteria);
+            Predicate agePredicate = cb.gt(tableInfo.getColumnType("age"), 3);
+            Predicate weightPredicate = cb.lt(tableInfo.getColumnType("weight"), 6);
 
-        assumeTrue(accounts.size() == 3);
+            return cb.or(agePredicate,weightPredicate);
+        });
+
+        assumeTrue(accounts.size() == 6);
     }
 
 

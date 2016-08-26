@@ -1,6 +1,6 @@
 package com.logzc.webzic.orm.dao;
 
-import com.logzc.webzic.orm.stmt.query.Criteria;
+import com.logzc.webzic.orm.stmt.query.Specification;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -35,9 +35,8 @@ public interface Dao<T, ID> {
     T findOne(ID id) throws SQLException;
 
     List<T> findAll() throws SQLException;
-
-
-    List<T> query(Criteria criteria) throws SQLException;
+    ;
+    List<T> query(Specification<T> specification) throws SQLException;
 
 
     List<T> queryRaw(String statement, Object... args) throws SQLException;

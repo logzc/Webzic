@@ -9,7 +9,9 @@ import com.logzc.webzic.orm.stmt.crud.DeleteStatement;
 import com.logzc.webzic.orm.stmt.crud.InsertStatement;
 import com.logzc.webzic.orm.stmt.crud.QueryStatement;
 import com.logzc.webzic.orm.stmt.crud.UpdateStatement;
-import com.logzc.webzic.orm.stmt.query.Criteria;
+import com.logzc.webzic.orm.stmt.query.CriteriaBuilder;
+import com.logzc.webzic.orm.stmt.query.Predicate;
+import com.logzc.webzic.orm.stmt.query.Specification;
 import com.logzc.webzic.orm.support.ConnectionSource;
 import com.logzc.webzic.orm.table.TableInfo;
 
@@ -33,6 +35,8 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
     protected DeleteStatement<T, ID> deleteStatement;
     protected UpdateStatement<T, ID> updateStatement;
     protected QueryStatement<T, ID> queryStatement;
+
+    protected CriteriaBuilder criteriaBuilder;
 
 
     //convert DbResults to Entity.
@@ -64,6 +68,8 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
         this.updateStatement = UpdateStatement.build(this.tableInfo);
 
         this.queryStatement = QueryStatement.build(this.tableInfo);
+
+        this.criteriaBuilder = new CriteriaBuilder();
 
         this.mapper = new EntityMapper<>();
     }
@@ -144,16 +150,40 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
     }
 
 
-
-
     @Override
-    public List<T> query(Criteria criteria) throws SQLException {
+    public List<T> query(Specification<T> specification) throws SQLException {
 
-        //String statement = "SELECT * FROM `{0}` {1} ;";
-        //statement = MessageFormat.format(statement, tableInfo.getTableName(), tableInfo.getIdColumnType().getName());
-        //String statement="select * from ``";
 
-        return null;
+        Predicate predicate = specification.getPredicate(this.tableInfo, this.criteriaBuilder);
+        String statement = null;
+        Object[] args = null;
+        if (predicate == null) {
+            statement = "SELECT * FROM `{0}` ;";
+            statement = MessageFormat.format(statement, tableInfo.getTableName());
+
+            args = new Object[0];
+        } else {
+
+            String whereClause = predicate.getStatement();
+            List<Object> argsList = predicate.getArgs();
+
+            args = new Object[argsList.size()];
+            for (int i = 0; i < args.length; i++) {
+                args[i] = argsList.get(i);
+            }
+
+            statement = "SELECT * FROM `{0}` WHERE {1} ;";
+            statement = MessageFormat.format(statement, tableInfo.getTableName(), whereClause);
+        }
+
+        System.out.println(statement);
+        DbConnection dbConnection = connectionSource.getDbConnection();
+        try (DbResults dbResults = dbConnection.query(statement, args)) {
+            return dbResults.getEntityList(tableInfo);
+        } catch (IOException e) {
+            throw new SQLException(e);
+        }
+
     }
 
     @Override

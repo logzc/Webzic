@@ -26,8 +26,7 @@ public class TableInfo<T, ID> {
         this.baseDao = baseDao;
         this.tableClass = tableClass;
         this.tableName = extractTableName(tableClass);
-        this.columnTypes = extractColumnTypes(connectionSource, tableClass, tableName);
-
+        this.columnTypes = extractColumnTypes(tableClass);
 
         //find the id column.
         for (ColumnType columnType : this.columnTypes) {
@@ -43,7 +42,7 @@ public class TableInfo<T, ID> {
 
     }
 
-    private ColumnType[] extractColumnTypes(ConnectionSource connectionSource, Class<T> dataClass, String tableName) {
+    private ColumnType[] extractColumnTypes(Class<T> dataClass) {
 
         List<ColumnType> columnTypes = new ArrayList<>();
 
@@ -133,5 +132,17 @@ public class TableInfo<T, ID> {
         } else {
             return (ID) idColumnType.getValue(entity);
         }
+    }
+
+
+    public ColumnType getColumnType(String name) throws SQLException {
+
+        for (ColumnType columnType : this.columnTypes) {
+            if (columnType.getName().equals(name)) {
+                return columnType;
+            }
+        }
+
+        throw new SQLException("No such column in the table.");
     }
 }
