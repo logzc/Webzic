@@ -1,8 +1,5 @@
 package com.logzc.webzic.converter;
 
-import com.logzc.webzic.util.Assert;
-import com.logzc.webzic.web.core.MethodParameter;
-
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,8 +21,8 @@ public class TypeDescriptor {
     };
 
     static {
-        for (Class<?> clazz:BASIC_TYPES){
-            commonTypeCache.put(clazz,valueOf(clazz));
+        for (Class<?> clazz : BASIC_TYPES) {
+            commonTypeCache.put(clazz, valueOf(clazz));
         }
     }
 
@@ -46,36 +43,59 @@ public class TypeDescriptor {
     }
     */
 
-    public TypeDescriptor(ResolvableType resolvableType,Class<?> type,Annotation[] annotations){
-        this.resolvableType=resolvableType;
-        if(type==null){
-            this.type=Object.class;
-        }else{
-            this.type=type;
+    public TypeDescriptor(ResolvableType resolvableType, Class<?> type, Annotation[] annotations) {
+        this.resolvableType = resolvableType;
+        if (type == null) {
+            this.type = Object.class;
+        } else {
+            this.type = type;
         }
 
-        this.annotations=nullSafe(annotations);
+        this.annotations = nullSafe(annotations);
     }
 
 
-    public static TypeDescriptor valueOf(Class<?> type){
-        if(type==null){
-            type=Object.class;
+    public static TypeDescriptor valueOf(Class<?> type) {
+        if (type == null) {
+            type = Object.class;
         }
-        TypeDescriptor descriptor=commonTypeCache.get(type);
-        if(descriptor==null){
-            return new TypeDescriptor(ResolvableType.forClass(type),null,null);
-        }else{
+        TypeDescriptor descriptor = commonTypeCache.get(type);
+        if (descriptor == null) {
+            return new TypeDescriptor(ResolvableType.forClass(type), null, null);
+        } else {
             return descriptor;
         }
     }
 
 
-    private Annotation[] nullSafe(Annotation[] annotations){
-        if(annotations==null){
+    private Annotation[] nullSafe(Annotation[] annotations) {
+        if (annotations == null) {
             return new Annotation[0];
-        }else{
+        } else {
             return annotations;
         }
     }
+
+
+    // List<String> -> java.lang.String
+    public TypeDescriptor getElementTypeDescriptor() {
+
+        //TODO: finish the elementTypeDescriptor.
+        //return getRelatedResolvable(this, this.resolvableType.asCollection().getGeneric());
+
+        return null;
+    }
+
+
+    private TypeDescriptor getRelatedResolvable(TypeDescriptor source, ResolvableType type) {
+
+        if (type.resolve() == null) {
+            return null;
+        }
+
+        return new TypeDescriptor(type, null, source.annotations);
+
+    }
+
+
 }

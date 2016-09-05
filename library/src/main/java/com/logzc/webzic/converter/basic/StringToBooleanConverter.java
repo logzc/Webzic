@@ -1,4 +1,4 @@
-package com.logzc.webzic.converter;
+package com.logzc.webzic.converter.basic;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.logzc.webzic.converter;
+package com.logzc.webzic.converter.basic;
 
 /**
  * Created by lishuang on 2016/8/4.

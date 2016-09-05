@@ -30,5 +30,11 @@ public class StringUtil {
         return stringBuilder.toString();
     }
 
+    public static String[] split(String str,String symbol){
+        return null;
+    }
 
+    public static String[] splitByComma(String str) {
+        return new String[0];
+    }
 }

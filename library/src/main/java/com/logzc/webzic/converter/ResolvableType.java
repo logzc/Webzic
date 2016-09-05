@@ -1,9 +1,11 @@
 package com.logzc.webzic.converter;
 
 import com.logzc.webzic.util.Assert;
+import com.logzc.webzic.util.ObjectUtil;
 import com.logzc.webzic.web.core.MethodParameter;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 
 /**
  * encapsulate a Type.
@@ -29,6 +31,7 @@ private HashMap<Integer, List<String>> myMap;
  */
 public class ResolvableType {
 
+    public static final ResolvableType NONE = new ResolvableType(null);
 
     private Type type;
 
@@ -50,13 +53,13 @@ public class ResolvableType {
         }
     }
 
-    public static ResolvableType forType(Type type){
+    public static ResolvableType forType(Type type) {
         //return forType(type,null,null);
 
         return null;
     }
 
-    public static ResolvableType forType(Type type,ResolvableType owner){
+    public static ResolvableType forType(Type type, ResolvableType owner) {
         return null;
     }
 
@@ -65,6 +68,9 @@ public class ResolvableType {
         return new ResolvableType(sourceClass);
     }
 
+    public Class<?> resolve() {
+        return resolve(null);
+    }
 
     //This is the key method. fallback is a backup.
     public Class<?> resolve(Class<?> fallback) {
@@ -72,14 +78,14 @@ public class ResolvableType {
     }
 
     public static ResolvableType forMethodParameter(MethodParameter methodParameter) {
-        return forMethodParameter(methodParameter,null);
+        return forMethodParameter(methodParameter, null);
     }
 
     public static ResolvableType forMethodParameter(MethodParameter methodParameter, ResolvableType implementationsType) {
 
         Assert.notNull(methodParameter);
 
-        if(implementationsType==null){
+        if (implementationsType == null) {
             //implementationsType=forType(methodParameter.getContainningClass());
         }
 
@@ -87,4 +93,59 @@ public class ResolvableType {
     }
 
 
+    public ResolvableType[] getInterfaces() {
+
+        Class<?> resolved = resolve();
+
+        if (resolved == null || ObjectUtil.isEmpty(resolved.getGenericInterfaces())) {
+            return new ResolvableType[0];
+        }
+
+        //lazy load.
+        if (this.interfaces == null) {
+
+
+            //TODO:get interfaces by this type.
+            //this.interfaces=forType();
+
+        }
+        return this.interfaces;
+    }
+
+    public ResolvableType getSuperType() {
+
+        //TODO: get the super Class Type.
+
+        return null;
+    }
+
+
+    public ResolvableType asCollection() {
+        return as(Collection.class);
+    }
+
+    public ResolvableType as(Class<?> type) {
+        if (this == NONE) {
+            return NONE;
+        }
+
+        //No need to convert.
+        if (ObjectUtil.equals(resolve(), type)) {
+            return this;
+        }
+
+        for (ResolvableType interfaceType : getInterfaces()) {
+
+            ResolvableType interfaceAsType = interfaceType.as(type);
+
+            if (interfaceAsType != NONE) {
+                return interfaceAsType;
+            }
+
+        }
+
+        return getSuperType().as(type);
+
+
+    }
 }
