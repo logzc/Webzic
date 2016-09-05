@@ -78,6 +78,16 @@ Bower就相当于Maven,Gradle，只不过Maven和Gradle是用于Java的项目，
         "jquery": "^3.1.0"
       }
     ```
+    
+    
+* 多版本管理
+
+    > bower install jquery-1x=jquery#1.9.1 --save
+    
+    对应在bower.json中会生成
+    "jquery-1x": "juqery#1.9.1"
+    
+    
 * 更新
 
     > bower update
