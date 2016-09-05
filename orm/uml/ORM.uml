@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.ibm.ife.orm.dao.BaseDao</OriginalElement>
+  <nodes>
+    <node x="357.0" y="242.0">com.ibm.ife.orm.stmt.query.Sort</node>
+    <node x="-243.0" y="-141.0">com.ibm.ife.orm.result.Mapper</node>
+    <node x="116.5" y="66.5">com.ibm.ife.orm.field.ColumnStrategy</node>
+    <node x="-53.5" y="-176.5">com.ibm.ife.orm.dialect.mysql.MysqlDialect</node>
+    <node x="-69.0" y="-339.0">com.ibm.ife.orm.support.ConnectionSource</node>
+    <node x="-249.0" y="20.0">com.ibm.ife.orm.util.OrmUtils</node>
+    <node x="374.0" y="146.0">com.ibm.ife.orm.stmt.query.predicate.InPredicate</node>
+    <node x="323.0" y="-190.0">com.ibm.ife.orm.stmt.crud.UpdateStatement</node>
+    <node x="134.5" y="-81.5">com.ibm.ife.orm.field.Column</node>
+    <node x="358.0" y="285.0">com.ibm.ife.orm.stmt.query.ComparisonOperator</node>
+    <node x="-62.5" y="-222.5">com.ibm.ife.orm.dialect.DialectManager</node>
+    <node x="141.0" y="-5.0">com.ibm.ife.orm.table.Table</node>
+    <node x="568.0" y="243.0">com.ibm.ife.orm.stmt.query.CriteriaBuilder</node>
+    <node x="122.5" y="-124.5">com.ibm.ife.orm.dao.DaoManager</node>
+    <node x="612.0" y="146.0">com.ibm.ife.orm.stmt.query.predicate.BetweenPredicate</node>
+    <node x="147.0" y="-339.0">com.ibm.ife.orm.dao.Dao</node>
+    <node x="412.0" y="-127.0">com.ibm.ife.orm.stmt.query.Specification</node>
+    <node x="-270.0" y="-280.0">com.ibm.ife.orm.jdbc.JdbcDbConnection</node>
+    <node x="492.0" y="-188.0">com.ibm.ife.orm.stmt.crud.DeleteStatement</node>
+    <node x="135.0" y="-276.0">com.ibm.ife.orm.dao.BaseDao</node>
+    <node x="506.0" y="7.0">com.ibm.ife.orm.stmt.query.Predicate</node>
+    <node x="327.0" y="-254.0">com.ibm.ife.orm.stmt.crud.InsertStatement</node>
+    <node x="-40.5" y="-119.5">com.ibm.ife.orm.dialect.Dialect</node>
+    <node x="-260.0" y="-83.0">com.ibm.ife.orm.result.EntityMapper</node>
+    <node x="545.0" y="192.0">com.ibm.ife.orm.stmt.query.predicate.ComparisonPredicate</node>
+    <node x="411.0" y="-336.0">com.ibm.ife.orm.stmt.crud.BaseStatement</node>
+    <node x="325.5" y="74.5">com.ibm.ife.orm.dialect.phoenix.function.ToDateFunction</node>
+    <node x="346.0" y="1.0">com.ibm.ife.orm.stmt.function.Function</node>
+    <node x="125.5" y="31.5">com.ibm.ife.orm.field.ColumnType</node>
+    <node x="499.0" y="145.0">com.ibm.ife.orm.stmt.query.predicate.LikePredicate</node>
+    <node x="-255.5" y="-338.5">com.ibm.ife.orm.db.DbConnection</node>
+    <node x="-251.5" y="-26.5">com.ibm.ife.orm.db.DbResults</node>
+    <node x="131.5" y="-44.5">com.ibm.ife.orm.field.Transient</node>
+    <node x="132.0" y="102.0">com.ibm.ife.orm.table.TableInfo</node>
+    <node x="-83.0" y="-275.0">com.ibm.ife.orm.jdbc.JdbcConnectionSource</node>
+    <node x="489.0" y="-253.0">com.ibm.ife.orm.stmt.crud.QueryStatement</node>
+    <node x="425.0" y="-76.0">com.ibm.ife.orm.stmt.function.Express</node>
+    <node x="430.0" y="243.0">com.ibm.ife.orm.stmt.query.BooleanOperator</node>
+    <node x="386.0" y="193.0">com.ibm.ife.orm.stmt.query.predicate.CompoundPredicate</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.ibm.ife.orm.stmt.query.predicate.CompoundPredicate" target="com.ibm.ife.orm.stmt.query.Predicate">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.stmt.function.Function" target="com.ibm.ife.orm.stmt.function.Express">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.jdbc.JdbcDbConnection" target="com.ibm.ife.orm.db.DbConnection">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.stmt.crud.DeleteStatement" target="com.ibm.ife.orm.stmt.crud.BaseStatement">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.stmt.query.predicate.InPredicate" target="com.ibm.ife.orm.stmt.query.Predicate">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.stmt.crud.InsertStatement" target="com.ibm.ife.orm.stmt.crud.BaseStatement">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.stmt.query.predicate.BetweenPredicate" target="com.ibm.ife.orm.stmt.query.Predicate">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.stmt.query.Predicate" target="com.ibm.ife.orm.stmt.function.Express">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.stmt.query.predicate.LikePredicate" target="com.ibm.ife.orm.stmt.query.Predicate">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.stmt.query.predicate.ComparisonPredicate" target="com.ibm.ife.orm.stmt.query.Predicate">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.jdbc.JdbcConnectionSource" target="com.ibm.ife.orm.support.ConnectionSource">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.dao.BaseDao" target="com.ibm.ife.orm.dao.Dao">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.stmt.crud.UpdateStatement" target="com.ibm.ife.orm.stmt.crud.BaseStatement">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.result.EntityMapper" target="com.ibm.ife.orm.result.Mapper">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.stmt.crud.QueryStatement" target="com.ibm.ife.orm.stmt.crud.BaseStatement">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.dialect.phoenix.function.ToDateFunction" target="com.ibm.ife.orm.stmt.function.Function">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ibm.ife.orm.dialect.mysql.MysqlDialect" target="com.ibm.ife.orm.dialect.Dialect">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="45.0" y="-24.5" />
+  <SelectedNodes>
+    <node>com.ibm.ife.orm.dao.BaseDao</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
