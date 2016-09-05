@@ -30,6 +30,9 @@ public class OrmTest {
 
     @Before
     public void init() throws Exception {
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
         String url = "jdbc:mysql://localhost:3306/demo?user=root&password=lishmoshou511&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC";
         connectionSource = new JdbcConnectionSource(url);
     }

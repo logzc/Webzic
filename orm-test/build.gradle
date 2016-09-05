@@ -1,0 +1,42 @@
+group 'com.logzc'
+version '0.1'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile "junit:junit:+";
+
+    compile fileTree(dir: 'libs', include: '*.jar');
+
+    compile project(":orm");
+
+    // https://mvnrepository.com/artifact/org.apache.phoenix/phoenix-core
+    compile  ('org.apache.phoenix:phoenix-core:4.8.0-HBase-1.1'){
+
+        //exclude group: "org.slf4j", module: "slf4j-api"
+        //exclude group: "org.slf4j", module: "slf4j-log4j12"
+
+        exclude group: "ch.qos.logback", module: "logback-classic"
+        exclude group: "ch.qos.logback", module: "logback-core"
+    }
+
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    compile 'mysql:mysql-connector-java:+'
+
+    //logging
+    //compile 'org.slf4j:slf4j-log4j12:+'
+    compile 'org.apache.logging.log4j:log4j:+'
+
+}
+
+//Exclude Logback.
+//configurations.all {
+//    exclude group: "org.slf4j", module: "slf4j-log4j12"
+//    exclude group: "log4j", module: "log4j"
+//}

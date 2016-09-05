@@ -26,7 +26,6 @@ dependencies {
     //在写Main函数的时候有时候需要临时用到
     //compile("javax.servlet:javax.servlet-api:+")
 
-
     //logging
     compile 'org.slf4j:slf4j-log4j12:+'
     compile 'org.apache.logging.log4j:log4j:+'

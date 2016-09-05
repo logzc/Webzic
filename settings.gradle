@@ -3,4 +3,5 @@ include 'library'
 include 'book'
 include 'compass'
 include 'orm'
+include 'orm-test'
 

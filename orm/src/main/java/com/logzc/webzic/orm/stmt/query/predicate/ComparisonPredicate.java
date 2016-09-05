@@ -68,8 +68,10 @@ public class ComparisonPredicate implements Predicate {
     public List<Object> getArgs() {
 
         List<Object> argsList = new ArrayList<>();
-        if (this.value != null || this.number != null) {
+        if (this.value != null) {
             argsList.add(this.value);
+        } else if (this.number != null) {
+            argsList.add(this.number);
         } else if (this.express != null) {
             argsList.addAll(this.express.getArgs());
         }
