@@ -1,5 +1,6 @@
 package com.logzc.webzic.converter;
 
+import com.logzc.webzic.converter.provider.*;
 import com.logzc.webzic.util.Assert;
 import com.logzc.webzic.web.core.MethodParameter;
 
@@ -20,6 +21,7 @@ abstract public class SerializableTypeWrapper {
     };
 
 
+    //Get a Type from a TypeProvider.
     public static Type forTypeProvider(TypeProvider typeProvider) {
         Assert.notNull(typeProvider, "Provider must not null.");
 
@@ -29,6 +31,9 @@ abstract public class SerializableTypeWrapper {
         }
 
         for (Class<?> type : SUPPORTED_SERIALIZABLE_TYPES) {
+
+
+            //typeA.isAssignableFrom(typeB) means typeA is super class of typeB
             if (type.isAssignableFrom(typeProvider.getType().getClass())) {
                 ClassLoader classLoader = typeProvider.getClass().getClassLoader();
                 Class<?>[] interfaces = new Class<?>[]{
@@ -93,123 +98,6 @@ abstract public class SerializableTypeWrapper {
         TypeProvider getTypeProvider();
     }
 
-    interface TypeProvider extends Serializable {
-
-        Type getType();
-
-        Object getSource();
-    }
-
-
-    private static abstract class DefaultTypeProvider implements TypeProvider {
-        @Override
-        public Object getSource() {
-            return null;
-        }
-    }
-
-    static class FieldTypeProvider implements TypeProvider {
-
-        private final String fieldName;
-
-        private final Class<?> declaringClass;
-
-        private transient Field field;
-
-        public FieldTypeProvider(Field field) {
-            this.fieldName = field.getName();
-            this.declaringClass = field.getDeclaringClass();
-            this.field = field;
-
-        }
-
-        @Override
-        public Type getType() {
-            return this.field.getGenericType();
-        }
-
-        @Override
-        public Object getSource() {
-            return this.field;
-        }
-
-    }
-
-
-    static class MethodParameterTypeProvider implements TypeProvider {
-        private final String methodName;
-        private final Class<?>[] parameterTypes;
-        private final Class<?> declaringClass;
-        private final int parameterIndex;
-        private transient MethodParameter methodParameter;
-
-        public MethodParameterTypeProvider(MethodParameter methodParameter) {
-            if (methodParameter.getMethod() != null) {
-                this.methodName = methodParameter.getMethod().getName();
-                this.parameterTypes = methodParameter.getMethod().getParameterTypes();
-            } else {
-                this.methodName = null;
-                this.parameterTypes = methodParameter.getConstructor().getParameterTypes();
-            }
-            this.declaringClass = methodParameter.getDeclaringClass();
-            this.parameterIndex = methodParameter.getParameterIndex();
-            this.methodParameter = methodParameter;
-        }
-
-        @Override
-        public Type getType() {
-            return this.methodParameter.getGenericParameterType();
-        }
-
-        @Override
-        public Object getSource() {
-            return this.methodParameter;
-        }
-    }
-
-    static class MethodInvokeTypeProvider implements TypeProvider {
-
-        private final TypeProvider provider;
-
-        private final String methodName;
-
-        private final int index;
-
-        private transient Method method;
-
-        private transient volatile Object result;
-
-        public MethodInvokeTypeProvider(TypeProvider provider, Method method, int index) {
-            this.provider = provider;
-            this.methodName = method.getName();
-            this.index = index;
-            this.method = method;
-        }
-
-        @Override
-        public Type getType() {
-            Object result = this.result;
-            if (result == null) {
-                // Lazy invocation of the target method on the provided type
-                try {
-                    result = method.invoke(this.provider.getType());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                // Cache the result for further calls to getType()
-                this.result = result;
-            }
-            return (result instanceof Type[] ? ((Type[]) result)[this.index] : (Type) result);
-        }
-
-        @Override
-        public Object getSource() {
-            return null;
-        }
-
-
-    }
-
 
     @SuppressWarnings("unchecked")
     public static <T extends Type> T unwrap(T type) {
@@ -218,49 +106,6 @@ abstract public class SerializableTypeWrapper {
             unwrapped = ((SerializableTypeProxy) type).getTypeProvider().getType();
         }
         return (T) unwrapped;
-    }
-
-    private static class TypeProxyInvocationHandler implements InvocationHandler, Serializable {
-        private final TypeProvider provider;
-
-        public TypeProxyInvocationHandler(TypeProvider typeProvider) {
-            this.provider = typeProvider;
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-            if (method.getName().equals("equals")) {
-                Object other = args[0];
-                if (other instanceof Type) {
-                    other = unwrap((Type) other);
-                }
-                return this.provider.getType().equals(other);
-            } else if (method.getName().equals("hashCode")) {
-                return this.provider.getType().hashCode();
-            } else if (method.getName().equals("getTypeProvider")) {
-                return this.provider;
-            }
-
-
-            //TODO:Could not quite understand.
-            if (Type.class == method.getReturnType() && args == null) {
-                return forTypeProvider(new MethodInvokeTypeProvider(this.provider, method, -1));
-            } else if (Type[].class == method.getReturnType() && args == null) {
-                Type[] result = new Type[((Type[]) method.invoke(this.provider.getType(), args)).length];
-                for (int i = 0; i < result.length; i++) {
-                    result[i] = forTypeProvider(new MethodInvokeTypeProvider(this.provider, method, i));
-                }
-                return result;
-            }
-
-            try {
-                return method.invoke(this.provider.getType(), args);
-            } catch (InvocationTargetException ex) {
-                throw ex.getTargetException();
-            }
-
-        }
     }
 
 

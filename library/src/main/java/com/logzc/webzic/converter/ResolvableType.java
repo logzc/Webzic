@@ -1,9 +1,11 @@
 package com.logzc.webzic.converter;
 
+import com.logzc.webzic.converter.provider.FieldTypeProvider;
 import com.logzc.webzic.util.Assert;
 import com.logzc.webzic.util.ObjectUtil;
 import com.logzc.webzic.web.core.MethodParameter;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
@@ -56,6 +58,14 @@ public class ResolvableType {
     public static ResolvableType forType(Type type) {
         //return forType(type,null,null);
 
+        return null;
+    }
+
+    public static ResolvableType forField(Field field){
+        Assert.notNull(field,"Field must not be null.");
+
+        //STOP AT HERE.
+        //return forType(null,new FieldTypeProvider(field),null);
         return null;
     }
 
@@ -124,6 +134,8 @@ public class ResolvableType {
         return as(Collection.class);
     }
 
+
+    //Convert the type.
     public ResolvableType as(Class<?> type) {
         if (this == NONE) {
             return NONE;
@@ -134,8 +146,11 @@ public class ResolvableType {
             return this;
         }
 
-        for (ResolvableType interfaceType : getInterfaces()) {
+        ResolvableType[] thisInterfaces=getInterfaces();
+        for (ResolvableType interfaceType : thisInterfaces) {
 
+
+            //Recursive here.
             ResolvableType interfaceAsType = interfaceType.as(type);
 
             if (interfaceAsType != NONE) {
