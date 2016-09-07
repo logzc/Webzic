@@ -37,6 +37,7 @@ public class ResolveTypeTest {
     @Test
     public void testMap()  throws Exception {
 
+
         /*
         ResolvableType t = ResolvableType.forField(getClass().getDeclaredField("myMap"));
         ResolvableType superType = t.getSuperType();
@@ -45,9 +46,10 @@ public class ResolveTypeTest {
         Type generic1Type = t.getGeneric(1).resolve(); // List
         ResolvableType generic1 = t.getGeneric(1); // List<String>
         Type generic10 = t.resolveGeneric(1, 0); // String
+        */
 
         System.out.println("Finish.");
-        */
+
     }
 
 }

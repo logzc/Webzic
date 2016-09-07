@@ -30,8 +30,9 @@ abstract public class SerializableTypeWrapper {
             return typeProvider.getType();
         }
 
-        for (Class<?> type : SUPPORTED_SERIALIZABLE_TYPES) {
+        //ready to construct an implement of special Type.
 
+        for (Class<?> type : SUPPORTED_SERIALIZABLE_TYPES) {
 
             //typeA.isAssignableFrom(typeB) means typeA is super class of typeB
             if (type.isAssignableFrom(typeProvider.getType().getClass())) {

@@ -1,6 +1,7 @@
 package com.logzc.webzic.converter;
 
-import com.logzc.webzic.converter.provider.FieldTypeProvider;
+import com.logzc.webzic.converter.provider.TypeProvider;
+import com.logzc.webzic.converter.resolver.VariableResolver;
 import com.logzc.webzic.util.Assert;
 import com.logzc.webzic.util.ObjectUtil;
 import com.logzc.webzic.web.core.MethodParameter;
@@ -40,11 +41,20 @@ public class ResolvableType {
     private Class<?> resolved;
 
     private ResolvableType superType;
+    private TypeProvider typeProvider;
+    private VariableResolver variableResolver;
 
     private ResolvableType[] interfaces;
 
     private ResolvableType[] generics;
 
+
+    public ResolvableType(Type type, TypeProvider typeProvider, VariableResolver variableResolver){
+
+        this.type=type;
+        this.typeProvider=typeProvider;
+        this.variableResolver=variableResolver;
+    }
 
     public ResolvableType(Class<?> sourceClass) {
 
@@ -61,8 +71,29 @@ public class ResolvableType {
         return null;
     }
 
-    public static ResolvableType forField(Field field){
-        Assert.notNull(field,"Field must not be null.");
+
+    public static ResolvableType forType(Type type, TypeProvider typeProvider, VariableResolver variableResolver) {
+
+        if (type == null && typeProvider != null) {
+            type = SerializableTypeWrapper.forTypeProvider(typeProvider);
+        }
+
+        if (type == null) {
+            return NONE;
+        }
+
+        if(type instanceof Class){
+            return new ResolvableType(type,typeProvider,variableResolver);
+        }
+
+
+        //TODO::STUCK HERE.
+        return null;
+
+    }
+
+    public static ResolvableType forField(Field field) {
+        Assert.notNull(field, "Field must not be null.");
 
         //STOP AT HERE.
         //return forType(null,new FieldTypeProvider(field),null);
@@ -146,7 +177,7 @@ public class ResolvableType {
             return this;
         }
 
-        ResolvableType[] thisInterfaces=getInterfaces();
+        ResolvableType[] thisInterfaces = getInterfaces();
         for (ResolvableType interfaceType : thisInterfaces) {
 
 
