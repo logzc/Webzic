@@ -26,8 +26,9 @@ abstract public class SerializableTypeWrapper {
         Assert.notNull(typeProvider, "Provider must not null.");
 
         //"type instanceof Serializable" to check whether type is a Generic.
-        if (typeProvider.getType() instanceof Serializable || typeProvider.getType() == null) {
-            return typeProvider.getType();
+        Type type0=typeProvider.getType();
+        if (type0 instanceof Serializable || type0== null) {
+            return type0;
         }
 
         //ready to construct an implement of special Type.
@@ -35,7 +36,7 @@ abstract public class SerializableTypeWrapper {
         for (Class<?> type : SUPPORTED_SERIALIZABLE_TYPES) {
 
             //typeA.isAssignableFrom(typeB) means typeA is super class of typeB
-            if (type.isAssignableFrom(typeProvider.getType().getClass())) {
+            if (type.isAssignableFrom(type0.getClass())) {
                 ClassLoader classLoader = typeProvider.getClass().getClassLoader();
                 Class<?>[] interfaces = new Class<?>[]{
                         type,

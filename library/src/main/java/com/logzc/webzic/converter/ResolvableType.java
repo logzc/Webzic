@@ -1,13 +1,14 @@
 package com.logzc.webzic.converter;
 
+import com.logzc.webzic.converter.provider.FieldTypeProvider;
 import com.logzc.webzic.converter.provider.TypeProvider;
+import com.logzc.webzic.converter.resolver.DefaultVariableResolver;
 import com.logzc.webzic.converter.resolver.VariableResolver;
 import com.logzc.webzic.util.Assert;
 import com.logzc.webzic.util.ObjectUtil;
 import com.logzc.webzic.web.core.MethodParameter;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.Collection;
 
 /**
@@ -49,11 +50,13 @@ public class ResolvableType {
     private ResolvableType[] generics;
 
 
-    public ResolvableType(Type type, TypeProvider typeProvider, VariableResolver variableResolver){
+    public ResolvableType(Type type, TypeProvider typeProvider, VariableResolver variableResolver) {
 
-        this.type=type;
-        this.typeProvider=typeProvider;
-        this.variableResolver=variableResolver;
+        this.type = type;
+        this.typeProvider = typeProvider;
+        this.variableResolver = variableResolver;
+
+        this.resolved = resolveClass();
     }
 
     public ResolvableType(Class<?> sourceClass) {
@@ -82,22 +85,14 @@ public class ResolvableType {
             return NONE;
         }
 
-        if(type instanceof Class){
-            return new ResolvableType(type,typeProvider,variableResolver);
-        }
-
-
-        //TODO::STUCK HERE.
-        return null;
+        return new ResolvableType(type, typeProvider, variableResolver);
 
     }
 
     public static ResolvableType forField(Field field) {
         Assert.notNull(field, "Field must not be null.");
 
-        //STOP AT HERE.
-        //return forType(null,new FieldTypeProvider(field),null);
-        return null;
+        return forType(null, new FieldTypeProvider(field), null);
     }
 
     public static ResolvableType forType(Type type, ResolvableType owner) {
@@ -107,6 +102,77 @@ public class ResolvableType {
 
     public static ResolvableType forClass(Class<?> sourceClass) {
         return new ResolvableType(sourceClass);
+    }
+
+
+    private Class<?> resolveClass() {
+
+        if (this.type instanceof Class || this.type == null) {
+            return (Class<?>) this.type;
+        }
+
+        //TODO:Don't know how to do this yet.
+        if (this.type instanceof GenericArrayType) {
+            return null;
+        }
+
+        ResolvableType tempType = resolvedType();
+
+        return tempType.resolve();
+    }
+
+    private Type resolveBounds(Type[] bounds) {
+
+        if (ObjectUtil.isEmpty(bounds) || Object.class == bounds[0]) {
+            return null;
+        }
+        return bounds[0];
+    }
+
+
+    //erase the generic. List<String> -> List
+    private ResolvableType resolvedType() {
+
+        //eg.this.type -> Base<Integer,String>
+        if (this.type instanceof ParameterizedType) {
+
+            //eg. tempType -> Base
+            Type tempType = ((ParameterizedType) this.type).getRawType();
+            return forType(tempType, null, this.variableResolver);
+
+        }
+
+        //eg. this.type -> Base<? extend Table>
+        if (this.type instanceof WildcardType) {
+
+            // ? extends T  (T is Upper Bounds, default Object.)
+            Type resolvedBoundType = resolveBounds(((WildcardType) this.type).getUpperBounds());
+            if (resolvedBoundType == null) {
+
+                resolvedBoundType = resolveBounds(((WildcardType) this.type).getLowerBounds());
+            }
+
+            return forType(resolvedBoundType, null, this.variableResolver);
+
+        }
+
+        if (this.type instanceof TypeVariable) {
+            TypeVariable<?> typeVariable = (TypeVariable<?>) this.type;
+
+            if (this.variableResolver != null) {
+                ResolvableType resolved = this.variableResolver.resolveVariable(typeVariable);
+                if (resolved != null) {
+                    return resolved;
+                }
+            }
+
+            //Fallback to Bounds.
+            return forType(resolveBounds(typeVariable.getBounds()), null, this.variableResolver);
+
+        }
+
+        return NONE;
+
     }
 
     public Class<?> resolve() {
@@ -155,11 +221,27 @@ public class ResolvableType {
 
     public ResolvableType getSuperType() {
 
-        //TODO: get the super Class Type.
+        Class<?> resolved = resolve();
 
-        return null;
+        if (resolved == null || resolved.getGenericSuperclass() == null) {
+            return NONE;
+        }
+
+        if (this.superType == null) {
+            this.superType = forType(SerializableTypeWrapper.forGenericSuperclass(resolved), null, asVariableResolver());
+        }
+
+
+        return this.superType;
     }
 
+    public VariableResolver asVariableResolver() {
+        if (this == NONE) {
+            return null;
+        }
+
+        return new DefaultVariableResolver();
+    }
 
     public ResolvableType asCollection() {
         return as(Collection.class);

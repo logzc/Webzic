@@ -11,5 +11,5 @@ public interface VariableResolver {
 
     Object getSource();
 
-    ResolvableType resolve(TypeVariable<?> variable);
+    ResolvableType resolveVariable(TypeVariable<?> variable);
 }

@@ -37,16 +37,17 @@ public class ResolveTypeTest {
     @Test
     public void testMap()  throws Exception {
 
-
-        /*
         ResolvableType t = ResolvableType.forField(getClass().getDeclaredField("myMap"));
+
+        //AbstractMap<K,V>
         ResolvableType superType = t.getSuperType();
-        ResolvableType asMapType = t.asMap(); // Map<Integer,List<String>>
-        Type generic0Type = t.getGeneric(0).resolve(); // Integer
-        Type generic1Type = t.getGeneric(1).resolve(); // List
-        ResolvableType generic1 = t.getGeneric(1); // List<String>
-        Type generic10 = t.resolveGeneric(1, 0); // String
-        */
+        // Map<Integer,List<String>>
+//        ResolvableType asMapType = t.asMap();
+//        Type generic0Type = t.getGeneric(0).resolve(); // Integer
+//        Type generic1Type = t.getGeneric(1).resolve(); // List
+//        ResolvableType generic1 = t.getGeneric(1); // List<String>
+//        Type generic10 = t.resolveGeneric(1, 0); // String
+
 
         System.out.println("Finish.");
 

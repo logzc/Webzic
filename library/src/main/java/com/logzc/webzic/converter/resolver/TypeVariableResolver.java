@@ -16,7 +16,7 @@ public class TypeVariableResolver implements VariableResolver {
     }
 
     @Override
-    public ResolvableType resolve(TypeVariable<?> variable) {
+    public ResolvableType resolveVariable(TypeVariable<?> variable) {
         return null;
     }
 }
