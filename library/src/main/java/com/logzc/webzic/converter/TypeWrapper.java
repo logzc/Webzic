@@ -10,7 +10,7 @@ import java.lang.reflect.*;
 /**
  * Created by lishuang on 2016/8/22.
  */
-abstract public class SerializableTypeWrapper {
+abstract public class TypeWrapper {
 
 
     private static final Class<?>[] SUPPORTED_SERIALIZABLE_TYPES = {

@@ -10,6 +10,7 @@ import com.logzc.webzic.web.core.MethodParameter;
 
 import java.lang.reflect.*;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * encapsulate a Type.
@@ -78,7 +79,7 @@ public class ResolvableType {
     public static ResolvableType forType(Type type, TypeProvider typeProvider, VariableResolver variableResolver) {
 
         if (type == null && typeProvider != null) {
-            type = SerializableTypeWrapper.forTypeProvider(typeProvider);
+            type = TypeWrapper.forTypeProvider(typeProvider);
         }
 
         if (type == null) {
@@ -95,10 +96,14 @@ public class ResolvableType {
         return forType(null, new FieldTypeProvider(field), null);
     }
 
-    public static ResolvableType forType(Type type, ResolvableType owner) {
-        return null;
-    }
 
+    public static ResolvableType[] forTypes(Type[] types, VariableResolver owner) {
+        ResolvableType[] result = new ResolvableType[types.length];
+        for (int i = 0; i < types.length; i++) {
+            result[i] = forType(types[i], null, owner);
+        }
+        return result;
+    }
 
     public static ResolvableType forClass(Class<?> sourceClass) {
         return new ResolvableType(sourceClass);
@@ -116,7 +121,7 @@ public class ResolvableType {
             return null;
         }
 
-        ResolvableType tempType = resolvedType();
+        ResolvableType tempType = resolveType();
 
         return tempType.resolve();
     }
@@ -131,7 +136,8 @@ public class ResolvableType {
 
 
     //erase the generic. List<String> -> List
-    private ResolvableType resolvedType() {
+    //Try temp resolve.
+    private ResolvableType resolveType() {
 
         //eg.this.type -> Base<Integer,String>
         if (this.type instanceof ParameterizedType) {
@@ -212,8 +218,7 @@ public class ResolvableType {
         if (this.interfaces == null) {
 
 
-            //TODO:get interfaces by this type.
-            //this.interfaces=forType();
+            this.interfaces = forTypes(TypeWrapper.forGenericInterfaces(resolved), asVariableResolver());
 
         }
         return this.interfaces;
@@ -228,7 +233,7 @@ public class ResolvableType {
         }
 
         if (this.superType == null) {
-            this.superType = forType(SerializableTypeWrapper.forGenericSuperclass(resolved), null, asVariableResolver());
+            this.superType = forType(TypeWrapper.forGenericSuperclass(resolved), null, asVariableResolver());
         }
 
 
@@ -248,6 +253,10 @@ public class ResolvableType {
     }
 
 
+    public ResolvableType asMap() {
+        return as(Map.class);
+    }
+
     //Convert the type.
     public ResolvableType as(Class<?> type) {
         if (this == NONE) {
@@ -259,6 +268,7 @@ public class ResolvableType {
             return this;
         }
 
+        //try super interfaces.
         ResolvableType[] thisInterfaces = getInterfaces();
         for (ResolvableType interfaceType : thisInterfaces) {
 
@@ -275,5 +285,63 @@ public class ResolvableType {
         return getSuperType().as(type);
 
 
+    }
+
+
+    /**
+     * Map<Integer, List<String>>
+     * getGeneric(0) -> Integer
+     * getGeneric(1,0) -> String
+     *
+     * @param indexes
+     * @return
+     */
+    public ResolvableType getGeneric(int... indexes) {
+
+        try {
+            if (indexes == null || indexes.length == 0) {
+                return getGenerics()[0];
+            }
+
+            ResolvableType generic = this;
+            for (int index : indexes) {
+                generic = generic.getGenerics()[index];
+            }
+            return generic;
+        } catch (IndexOutOfBoundsException e) {
+            return NONE;
+        }
+
+
+    }
+
+    public ResolvableType[] getGenerics() {
+
+        if (this == NONE) {
+            return new ResolvableType[0];
+        }
+
+        if (this.generics == null) {
+            if (this.type instanceof Class) {
+                Class<?> typeClass = (Class<?>) this.type;
+
+                this.generics = forTypes(TypeWrapper.forTypeParameters(typeClass), this.variableResolver);
+            } else if (this.type instanceof ParameterizedType) {
+
+                Type[] actualTypeArguments = ((ParameterizedType) this.type).getActualTypeArguments();
+
+                ResolvableType[] generics = new ResolvableType[actualTypeArguments.length];
+                for (int i = 0; i < actualTypeArguments.length; i++) {
+                    generics[i] = forType(actualTypeArguments[i], null, this.variableResolver);
+                }
+
+                this.generics = generics;
+
+            } else {
+                this.generics = resolveType().getGenerics();
+            }
+        }
+
+        return this.generics;
     }
 }

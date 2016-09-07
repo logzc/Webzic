@@ -10,11 +10,12 @@ import java.util.List;
 /**
  * Created by lishuang on 2016/9/6.
  */
-public class ResolveTypeTest {
+public class ResolveTypeTest<T> {
 
 
 
     private HashMap<Integer, List<String>> myMap;
+    private T[] list;
 
     @Test
     public void test1(){
@@ -42,12 +43,26 @@ public class ResolveTypeTest {
         //AbstractMap<K,V>
         ResolvableType superType = t.getSuperType();
         // Map<Integer,List<String>>
-//        ResolvableType asMapType = t.asMap();
-//        Type generic0Type = t.getGeneric(0).resolve(); // Integer
-//        Type generic1Type = t.getGeneric(1).resolve(); // List
-//        ResolvableType generic1 = t.getGeneric(1); // List<String>
-//        Type generic10 = t.resolveGeneric(1, 0); // String
+        ResolvableType asMapType = t.asMap();
 
+        // Integer
+        Type generic0Type = t.getGeneric(0).resolve();
+
+        // List
+        Type generic1Type = t.getGeneric(1).resolve();
+
+        // List<String>
+        ResolvableType generic1 = t.getGeneric(1);
+
+        // String
+        Type generic10 = t.getGeneric(1, 0).resolve();
+
+
+
+        ResolveTypeTest<String> test=new ResolveTypeTest<>();
+        ResolvableType t1 = ResolvableType.forField(test.getClass().getDeclaredField("list"));
+
+        Type type1=t1.resolve();
 
         System.out.println("Finish.");
 

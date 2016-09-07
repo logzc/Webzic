@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 /**
  * Created by lishuang on 2016/8/22.
  */
-public class SerializableTypeWrapperTest {
+public class TypeWrapperTest {
 
 
     @Before
@@ -27,7 +27,7 @@ public class SerializableTypeWrapperTest {
     public void testForField() throws Exception {
 
         Field addressField=SerializableTypeWrapperBean.class.getField("address");
-        Type addressFieldType = SerializableTypeWrapper.forField(addressField);
+        Type addressFieldType = TypeWrapper.forField(addressField);
 
         Assert.assertTrue(addressFieldType==String.class);
     }
@@ -37,11 +37,11 @@ public class SerializableTypeWrapperTest {
     public void testForMethodParameter() throws Exception{
         Method getAgeMethod=SerializableTypeWrapperBean.class.getMethod("getAge", String.class, Object.class);
         MethodParameter methodParameter=new MethodParameter(getAgeMethod,0);
-        Type getAgeMethodType0=SerializableTypeWrapper.forMethodParameter(methodParameter);
+        Type getAgeMethodType0= TypeWrapper.forMethodParameter(methodParameter);
         Assert.assertTrue(getAgeMethodType0==String.class);
 
         methodParameter=new MethodParameter(getAgeMethod,1);
-        Type getAgeMethodType1=SerializableTypeWrapper.forMethodParameter(methodParameter);
+        Type getAgeMethodType1= TypeWrapper.forMethodParameter(methodParameter);
         System.out.println(getAgeMethodType1);
 
     }

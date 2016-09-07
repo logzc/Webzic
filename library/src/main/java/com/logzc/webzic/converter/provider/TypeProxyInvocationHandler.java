@@ -1,6 +1,6 @@
 package com.logzc.webzic.converter.provider;
 
-import com.logzc.webzic.converter.SerializableTypeWrapper;
+import com.logzc.webzic.converter.TypeWrapper;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
@@ -24,7 +24,7 @@ public class TypeProxyInvocationHandler implements InvocationHandler, Serializab
         if (method.getName().equals("equals")) {
             Object other = args[0];
             if (other instanceof Type) {
-                other = SerializableTypeWrapper.unwrap((Type) other);
+                other = TypeWrapper.unwrap((Type) other);
             }
             return this.provider.getType().equals(other);
         } else if (method.getName().equals("hashCode")) {
@@ -38,11 +38,11 @@ public class TypeProxyInvocationHandler implements InvocationHandler, Serializab
         //WildcardType: Type[] getUpperBounds(); Type[] getLowerBounds();
         //GenericArrayType: Type getGenericComponentType();
         if (Type.class == method.getReturnType() && args == null) {
-            return SerializableTypeWrapper.forTypeProvider(new MethodInvokeTypeProvider(this.provider, method, -1));
+            return TypeWrapper.forTypeProvider(new MethodInvokeTypeProvider(this.provider, method, -1));
         } else if (Type[].class == method.getReturnType() && args == null) {
             Type[] result = new Type[((Type[]) method.invoke(this.provider.getType(), args)).length];
             for (int i = 0; i < result.length; i++) {
-                result[i] = SerializableTypeWrapper.forTypeProvider(new MethodInvokeTypeProvider(this.provider, method, i));
+                result[i] = TypeWrapper.forTypeProvider(new MethodInvokeTypeProvider(this.provider, method, i));
             }
             return result;
         }
