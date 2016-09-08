@@ -13,7 +13,7 @@ public class MethodParameterTypeProvider implements TypeProvider {
     private final Class<?>[] parameterTypes;
     private final Class<?> declaringClass;
     private final int parameterIndex;
-    private transient MethodParameter methodParameter;
+    private MethodParameter methodParameter;
 
     public MethodParameterTypeProvider(MethodParameter methodParameter) {
         if (methodParameter.getMethod() != null) {

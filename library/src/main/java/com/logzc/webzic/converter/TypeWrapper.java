@@ -26,8 +26,8 @@ abstract public class TypeWrapper {
         Assert.notNull(typeProvider, "Provider must not null.");
 
         //"type instanceof Serializable" to check whether type is a Generic.
-        Type type0=typeProvider.getType();
-        if (type0 instanceof Serializable || type0== null) {
+        Type type0 = typeProvider.getType();
+        if (type0 instanceof Serializable || type0 == null) {
             return type0;
         }
 
@@ -44,7 +44,8 @@ abstract public class TypeWrapper {
                         Serializable.class
                 };
                 InvocationHandler handler = new TypeProxyInvocationHandler(typeProvider);
-                return (Type) Proxy.newProxyInstance(classLoader, interfaces, handler);
+                Object newTypeInstance = Proxy.newProxyInstance(classLoader, interfaces, handler);
+                return (Type) newTypeInstance;
             }
         }
         throw new IllegalArgumentException("Unsupported Type class: " + typeProvider.getType().getClass().getName());
@@ -82,22 +83,18 @@ abstract public class TypeWrapper {
         return result;
     }
 
-    public static Type[] forTypeParameters(final Class<?> type) {
-        Type[] result = new Type[type.getTypeParameters().length];
+    public static Type[] forTypeVariables(final TypeVariable[] typeVariables) {
+        Type[] result = new Type[typeVariables.length];
         for (int i = 0; i < result.length; i++) {
             final int index = i;
             result[i] = forTypeProvider(new DefaultTypeProvider() {
                 @Override
                 public Type getType() {
-                    return type.getTypeParameters()[index];
+                    return typeVariables[index];
                 }
             });
         }
         return result;
-    }
-
-    interface SerializableTypeProxy {
-        TypeProvider getTypeProvider();
     }
 
 

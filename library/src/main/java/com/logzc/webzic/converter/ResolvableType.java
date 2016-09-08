@@ -38,17 +38,33 @@ public class ResolvableType {
 
     public static final ResolvableType NONE = new ResolvableType(null);
 
-    private Type type;
+    private final Type type;
 
-    private Class<?> resolved;
+    private final Class<?> resolved;
+
+    private final TypeProvider typeProvider;
+    private final VariableResolver variableResolver;
+
 
     private ResolvableType superType;
-    private TypeProvider typeProvider;
-    private VariableResolver variableResolver;
 
     private ResolvableType[] interfaces;
 
     private ResolvableType[] generics;
+
+    public ResolvableType(Class<?> sourceClass) {
+
+        if (sourceClass == null) {
+            this.resolved = Object.class;
+        } else {
+            this.resolved = sourceClass;
+        }
+
+        this.type = this.resolved;
+        this.typeProvider = null;
+        this.variableResolver = null;
+
+    }
 
 
     public ResolvableType(Type type, TypeProvider typeProvider, VariableResolver variableResolver) {
@@ -60,14 +76,6 @@ public class ResolvableType {
         this.resolved = resolveClass();
     }
 
-    public ResolvableType(Class<?> sourceClass) {
-
-        if (sourceClass == null) {
-            this.resolved = Object.class;
-        } else {
-            this.resolved = sourceClass;
-        }
-    }
 
     public static ResolvableType forType(Type type) {
         //return forType(type,null,null);
@@ -322,10 +330,12 @@ public class ResolvableType {
         }
 
         if (this.generics == null) {
+
+            //Base<M,N>
             if (this.type instanceof Class) {
                 Class<?> typeClass = (Class<?>) this.type;
 
-                this.generics = forTypes(TypeWrapper.forTypeParameters(typeClass), this.variableResolver);
+                this.generics = forTypes(TypeWrapper.forTypeVariables(typeClass.getTypeParameters()), this.variableResolver);
             } else if (this.type instanceof ParameterizedType) {
 
                 Type[] actualTypeArguments = ((ParameterizedType) this.type).getActualTypeArguments();

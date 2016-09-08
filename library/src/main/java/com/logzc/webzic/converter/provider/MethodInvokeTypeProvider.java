@@ -42,7 +42,12 @@ public class MethodInvokeTypeProvider implements TypeProvider {
             // Cache the result for further calls to getType()
             this.result = result;
         }
-        return (result instanceof Type[] ? ((Type[]) result)[this.index] : (Type) result);
+        if(result instanceof Type[]){
+            return ((Type[]) result)[this.index];
+        }else{
+            return (Type) result;
+        }
+
     }
 
     @Override
