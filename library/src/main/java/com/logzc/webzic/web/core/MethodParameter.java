@@ -123,8 +123,6 @@ public class MethodParameter {
                 } else {
                     this.parameterType = this.method.getParameterTypes()[this.parameterIndex];
                 }
-
-
             }
         }
         return this.parameterType;
@@ -151,10 +149,9 @@ public class MethodParameter {
     }
 
 
-    public Class<?> getDeclaringClass(){
+    public Class<?> getDeclaringClass() {
         return getMember().getDeclaringClass();
     }
-
 
 
     public String getParameterName() {
@@ -164,14 +161,37 @@ public class MethodParameter {
     //mainly get parameter name and parameter's require.1
     public void initParameterInfo() {
 
+
+        //return type. No need go on.
+        if(parameterIndex<0){
+            return;
+        }
+
+
+        //for test purpose.
+
+        RequestParameterFinder requestParameterFinder;
+        AsmParameterNameFinder asmParameterNameFinder;
+
         WidgetBeanFactory widgetBeanFactory = AppContext.getBeanFactory(WidgetBeanFactory.class);
+
+
         //get the parameter name from two finders.
-        RequestParameterFinder requestParameterFinder = widgetBeanFactory.getBean(RequestParameterFinder.class);
-        AsmParameterNameFinder asmParameterNameFinder = widgetBeanFactory.getBean(AsmParameterNameFinder.class);
+        requestParameterFinder = widgetBeanFactory.getBean(RequestParameterFinder.class);
+        asmParameterNameFinder = widgetBeanFactory.getBean(AsmParameterNameFinder.class);
+
+        if (requestParameterFinder == null) {
+            requestParameterFinder = new RequestParameterFinder();
+        }
+        if (asmParameterNameFinder == null) {
+            asmParameterNameFinder = new AsmParameterNameFinder();
+        }
+
+
+
 
         List<RequestParam> requestParams = requestParameterFinder.get(this.method);
         RequestParam requestParam = requestParams.get(parameterIndex);
-
 
         if (requestParam != null) {
 

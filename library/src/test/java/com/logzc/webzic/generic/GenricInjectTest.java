@@ -2,6 +2,7 @@ package com.logzc.webzic.generic;
 
 import com.logzc.webzic.converter.ResolvableType;
 import com.logzc.webzic.generic.model.*;
+import com.logzc.webzic.util.ReflectionUtil;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
@@ -76,7 +77,7 @@ public class GenricInjectTest {
         //此处表明泛型已经弱化为了Object.
         Assume.assumeTrue(type == Object.class);
 
-        /*
+
         ///得到字段的
         ResolvableType resolvableType2 =
                 ResolvableType.forField(ReflectionUtil.findField(GenricInjectTest.class, "cdService"));
@@ -97,7 +98,7 @@ public class GenricInjectTest {
         ResolvableType resolvableType5 =
                 ResolvableType.forMethodReturnType(ReflectionUtil.findMethod(GenricInjectTest.class, "method"));
         System.out.println(resolvableType5.getGeneric(1, 0).resolve());
-
+/*
         //构造器参数
         ResolvableType resolvableType6 =
                 ResolvableType.forConstructorParameter(ClassUtils.getConstructorIfAvailable(Const.class, List.class, Map.class), 1);

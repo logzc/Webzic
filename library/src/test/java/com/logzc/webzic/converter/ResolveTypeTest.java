@@ -1,11 +1,11 @@
 package com.logzc.webzic.converter;
 
+import com.logzc.webzic.util.ReflectionUtil;
 import org.junit.Test;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by lishuang on 2016/9/6.
@@ -65,6 +65,50 @@ public class ResolveTypeTest<T> {
         Type type1=t1.resolve();
 
         System.out.println("Finish.");
+
+    }
+
+
+    @Test
+    public void testFindMethod(){
+
+
+        Class<?> clazz=List.class;
+
+        Method[] methods1 = clazz.getDeclaredMethods();
+
+        Set<String> set=new HashSet<>();
+        for (Method method:methods1){
+            set.add(method.toGenericString());
+        }
+        Method[] methods2 = clazz.getMethods();
+        for (Method method:methods2){
+            String str=method.toGenericString();
+            if(!set.contains(str)){
+                System.out.println(str);
+            }
+        }
+
+        clazz=ArrayList.class;
+
+        methods1 = clazz.getDeclaredMethods();
+
+        set=new HashSet<>();
+        for (Method method:methods1){
+            set.add(method.toGenericString());
+        }
+        methods2 = clazz.getMethods();
+        for (Method method:methods2){
+            String str=method.toGenericString();
+            if(!set.contains(str)){
+                System.out.println(str);
+            }
+        }
+
+
+        Method  method = ReflectionUtil.findMethod(clazz,"size");
+
+        System.out.println(method);
 
     }
 

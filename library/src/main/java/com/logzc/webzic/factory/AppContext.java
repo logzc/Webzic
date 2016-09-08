@@ -27,6 +27,8 @@ public class AppContext {
     public static List<BeanFactory> beanFactoryList = new ArrayList<>();
     static Map<Class<? extends BeanFactory>, BeanFactory> beanFactoryMap = new HashMap<>();
 
+    static boolean hasInitialized = false;
+
     static {
 
 
@@ -44,13 +46,16 @@ public class AppContext {
         });
 
 
-
-
-
     }
 
 
     public static void init() {
+
+        if (hasInitialized) {
+            return;
+        } else {
+            hasInitialized = true;
+        }
 
         //init normal beanFactories.
         beanFactoryList.forEach(BeanFactory::init);

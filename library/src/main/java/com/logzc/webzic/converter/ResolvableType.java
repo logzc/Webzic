@@ -1,7 +1,5 @@
 package com.logzc.webzic.converter;
 
-import com.logzc.webzic.converter.provider.FieldTypeProvider;
-import com.logzc.webzic.converter.provider.TypeProvider;
 import com.logzc.webzic.converter.resolver.DefaultVariableResolver;
 import com.logzc.webzic.converter.resolver.VariableResolver;
 import com.logzc.webzic.util.Assert;
@@ -42,7 +40,6 @@ public class ResolvableType {
 
     private final Class<?> resolved;
 
-    private final TypeProvider typeProvider;
     private final VariableResolver variableResolver;
 
 
@@ -61,16 +58,14 @@ public class ResolvableType {
         }
 
         this.type = this.resolved;
-        this.typeProvider = null;
         this.variableResolver = null;
 
     }
 
 
-    public ResolvableType(Type type, TypeProvider typeProvider, VariableResolver variableResolver) {
+    public ResolvableType(Type type, VariableResolver variableResolver) {
 
         this.type = type;
-        this.typeProvider = typeProvider;
         this.variableResolver = variableResolver;
 
         this.resolved = resolveClass();
@@ -79,36 +74,39 @@ public class ResolvableType {
 
     public static ResolvableType forType(Type type) {
         //return forType(type,null,null);
+        if (type == null) {
+            return NONE;
+        }
 
-        return null;
+        return new ResolvableType(type, null);
     }
 
 
-    public static ResolvableType forType(Type type, TypeProvider typeProvider, VariableResolver variableResolver) {
-
-        if (type == null && typeProvider != null) {
-            type = TypeWrapper.forTypeProvider(typeProvider);
-        }
+    public static ResolvableType forType(Type type, VariableResolver variableResolver) {
 
         if (type == null) {
             return NONE;
         }
 
-        return new ResolvableType(type, typeProvider, variableResolver);
+        return new ResolvableType(type, variableResolver);
 
     }
 
     public static ResolvableType forField(Field field) {
         Assert.notNull(field, "Field must not be null.");
 
-        return forType(null, new FieldTypeProvider(field), null);
+        return forType(TypeWrapper.forField(field), null);
     }
 
+    public static ResolvableType forMethodReturnType(Method method) {
+
+        return forMethodParameter(new MethodParameter(method, -1));
+    }
 
     public static ResolvableType[] forTypes(Type[] types, VariableResolver owner) {
         ResolvableType[] result = new ResolvableType[types.length];
         for (int i = 0; i < types.length; i++) {
-            result[i] = forType(types[i], null, owner);
+            result[i] = forType(types[i], owner);
         }
         return result;
     }
@@ -152,7 +150,7 @@ public class ResolvableType {
 
             //eg. tempType -> Base
             Type tempType = ((ParameterizedType) this.type).getRawType();
-            return forType(tempType, null, this.variableResolver);
+            return forType(tempType, this.variableResolver);
 
         }
 
@@ -166,7 +164,7 @@ public class ResolvableType {
                 resolvedBoundType = resolveBounds(((WildcardType) this.type).getLowerBounds());
             }
 
-            return forType(resolvedBoundType, null, this.variableResolver);
+            return forType(resolvedBoundType, this.variableResolver);
 
         }
 
@@ -181,7 +179,7 @@ public class ResolvableType {
             }
 
             //Fallback to Bounds.
-            return forType(resolveBounds(typeVariable.getBounds()), null, this.variableResolver);
+            return forType(resolveBounds(typeVariable.getBounds()), this.variableResolver);
 
         }
 
@@ -199,18 +197,8 @@ public class ResolvableType {
     }
 
     public static ResolvableType forMethodParameter(MethodParameter methodParameter) {
-        return forMethodParameter(methodParameter, null);
-    }
 
-    public static ResolvableType forMethodParameter(MethodParameter methodParameter, ResolvableType implementationsType) {
-
-        Assert.notNull(methodParameter);
-
-        if (implementationsType == null) {
-            //implementationsType=forType(methodParameter.getContainningClass());
-        }
-
-        return null;
+        return forType(methodParameter.getGenericParameterType());
     }
 
 
@@ -241,7 +229,7 @@ public class ResolvableType {
         }
 
         if (this.superType == null) {
-            this.superType = forType(TypeWrapper.forGenericSuperclass(resolved), null, asVariableResolver());
+            this.superType = forType(TypeWrapper.forGenericSuperclass(resolved), asVariableResolver());
         }
 
 
@@ -335,14 +323,14 @@ public class ResolvableType {
             if (this.type instanceof Class) {
                 Class<?> typeClass = (Class<?>) this.type;
 
-                this.generics = forTypes(TypeWrapper.forTypeVariables(typeClass.getTypeParameters()), this.variableResolver);
+                this.generics = forTypes(typeClass.getTypeParameters(), this.variableResolver);
             } else if (this.type instanceof ParameterizedType) {
 
                 Type[] actualTypeArguments = ((ParameterizedType) this.type).getActualTypeArguments();
 
                 ResolvableType[] generics = new ResolvableType[actualTypeArguments.length];
                 for (int i = 0; i < actualTypeArguments.length; i++) {
-                    generics[i] = forType(actualTypeArguments[i], null, this.variableResolver);
+                    generics[i] = forType(actualTypeArguments[i], this.variableResolver);
                 }
 
                 this.generics = generics;

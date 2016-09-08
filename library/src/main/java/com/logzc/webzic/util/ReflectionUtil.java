@@ -1,6 +1,8 @@
 package com.logzc.webzic.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * Created by lishuang on 2016/9/8.
@@ -42,6 +44,40 @@ public class ReflectionUtil {
             searchType = searchType.getSuperclass();
         }
 
+        return null;
+
+    }
+
+
+    public static Method findMethod(Class<?> clazz, String name) {
+        return findMethod(clazz, name, new Class<?>[0]);
+    }
+
+
+    public static Method findMethod(Class<?> clazz, String name, Class<?>... paramTypes) {
+        Assert.notNull(clazz, "Class cannot be null.");
+        Assert.notNull(name, "Method name cannot be null.");
+
+        Class<?> searchType = clazz;
+        while (searchType != null) {
+            Method[] methods;
+            if (searchType.isInterface()) {
+                methods = searchType.getMethods();
+            } else {
+                methods = searchType.getDeclaredMethods();
+            }
+
+            for (Method method : methods) {
+                //name equal.
+                if (name.equals(method.getName())) {
+                    //parameter type equal.
+                    if (paramTypes == null || Arrays.equals(paramTypes, method.getParameterTypes())) {
+                        return method;
+                    }
+                }
+            }
+            searchType = searchType.getSuperclass();
+        }
         return null;
 
     }
