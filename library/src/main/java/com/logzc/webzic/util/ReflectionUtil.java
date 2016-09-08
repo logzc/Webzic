@@ -1,5 +1,6 @@
 package com.logzc.webzic.util;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -80,6 +81,16 @@ public class ReflectionUtil {
         }
         return null;
 
+    }
+
+    public static <T> Constructor<T> findConstructor(Class<T> clazz, Class<?>... paramTypes) {
+        Assert.notNull(clazz, "Class must not be null");
+        try {
+            return clazz.getConstructor(paramTypes);
+        }
+        catch (NoSuchMethodException ex) {
+            return null;
+        }
     }
 
 

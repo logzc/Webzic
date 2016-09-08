@@ -103,6 +103,12 @@ public class ResolvableType {
         return forMethodParameter(new MethodParameter(method, -1));
     }
 
+    public static ResolvableType forConstructorParameter(Constructor constructor, int index) {
+
+        return forMethodParameter(new MethodParameter(constructor, index));
+    }
+
+
     public static ResolvableType[] forTypes(Type[] types, VariableResolver owner) {
         ResolvableType[] result = new ResolvableType[types.length];
         for (int i = 0; i < types.length; i++) {
@@ -342,4 +348,59 @@ public class ResolvableType {
 
         return this.generics;
     }
+
+    public boolean isArray() {
+        if (this == NONE) {
+            return false;
+        }
+
+
+        boolean b1 = (this.type instanceof Class) && ((Class) this.type).isArray();
+
+        if (b1) {
+            return true;
+        } else {
+            boolean b2 = this.type instanceof GenericArrayType;
+
+            if (b2) {
+                return true;
+            } else {
+                boolean b3 = resolveType().isArray();
+
+                return b3;
+            }
+        }
+
+
+    }
+
+    public ResolvableType getComponentType() {
+
+        if (this == NONE) {
+            return NONE;
+        }
+
+        if (!this.isArray()) {
+            return NONE;
+        }
+
+
+        if (this.type instanceof Class) {
+
+            Class<?> componentType = ((Class) this.type).getComponentType();
+
+            return forType(componentType);
+        }
+
+        if (this.type instanceof GenericArrayType) {
+
+            Type genericComponentType = ((GenericArrayType) this.type).getGenericComponentType();
+
+            return forType(genericComponentType);
+        }
+
+        return resolveType().getComponentType();
+
+    }
+
 }

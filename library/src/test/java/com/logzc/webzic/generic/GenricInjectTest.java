@@ -98,22 +98,30 @@ public class GenricInjectTest {
         ResolvableType resolvableType5 =
                 ResolvableType.forMethodReturnType(ReflectionUtil.findMethod(GenricInjectTest.class, "method"));
         System.out.println(resolvableType5.getGeneric(1, 0).resolve());
-/*
+
         //构造器参数
         ResolvableType resolvableType6 =
-                ResolvableType.forConstructorParameter(ClassUtils.getConstructorIfAvailable(Const.class, List.class, Map.class), 1);
+                ResolvableType.forConstructorParameter(ReflectionUtil.findConstructor(Const.class,List.class, Map.class), 1);
         System.out.println(resolvableType6.getGeneric(1, 0).resolve());
 
         //数组
         ResolvableType resolvableType7 =
-                ResolvableType.forField(ReflectionUtils.findField(GenricInjectTest.class, "array"));
+                ResolvableType.forField(ReflectionUtil.findField(GenricInjectTest.class, "array"));
         System.out.println(resolvableType7.isArray());
-        System.out.println(resolvableType7.getComponentType().getGeneric(0).resolve());
 
+        ResolvableType componentType = resolvableType7.getComponentType();
+
+
+        System.out.println(componentType.getGeneric(0).resolve());
+
+
+        /*
         //自定义一个泛型数组 List<String>[]
         ResolvableType resolvableType8 = ResolvableType.forClassWithGenerics(List.class, String.class);
         ResolvableType resolvableType9 = ResolvableType.forArrayComponent(resolvableType8);
         System.out.println(resolvableType9.getComponentType().getGeneric(0).resolve());
+
+
 
         //比较两个泛型是否可以赋值成功
         System.out.println(resolvableType7.isAssignableFrom(resolvableType9));
