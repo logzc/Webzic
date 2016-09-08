@@ -27,6 +27,11 @@ abstract public class TypeWrapper {
 
         //"type instanceof Serializable" to check whether type is a Generic.
         Type type0 = typeProvider.getType();
+
+        if(System.currentTimeMillis()>0){
+            return type0;
+        }
+
         if (type0 instanceof Serializable || type0 == null) {
             return type0;
         }

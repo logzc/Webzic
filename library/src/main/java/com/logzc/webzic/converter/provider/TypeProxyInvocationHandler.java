@@ -21,14 +21,16 @@ public class TypeProxyInvocationHandler implements InvocationHandler, Serializab
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
+        Type providerType=this.provider.getType();
+
         if (method.getName().equals("equals")) {
             Object other = args[0];
             if (other instanceof Type) {
                 other = TypeWrapper.unwrap((Type) other);
             }
-            return this.provider.getType().equals(other);
+            return providerType.equals(other);
         } else if (method.getName().equals("hashCode")) {
-            return this.provider.getType().hashCode();
+            return providerType.hashCode();
         } else if (method.getName().equals("getTypeProvider")) {
             return this.provider;
         }
@@ -37,18 +39,27 @@ public class TypeProxyInvocationHandler implements InvocationHandler, Serializab
         //ParameterizedType: Type getRawType(); Type getOwnerType();
         //WildcardType: Type[] getUpperBounds(); Type[] getLowerBounds();
         //GenericArrayType: Type getGenericComponentType();
+        //TypeVariable: Type[] getBounds();
         if (Type.class == method.getReturnType() && args == null) {
-            return TypeWrapper.forTypeProvider(new MethodInvokeTypeProvider(this.provider, method, -1));
+            MethodInvokeTypeProvider methodProvider=new MethodInvokeTypeProvider(this.provider, method, -1);
+            return TypeWrapper.forTypeProvider(methodProvider);
         } else if (Type[].class == method.getReturnType() && args == null) {
-            Type[] result = new Type[((Type[]) method.invoke(this.provider.getType(), args)).length];
-            for (int i = 0; i < result.length; i++) {
-                result[i] = TypeWrapper.forTypeProvider(new MethodInvokeTypeProvider(this.provider, method, i));
+
+            Type[] typeResults = (Type[]) method.invoke(providerType);
+
+
+            //wrap a coat here.
+            Type[] finalResult = new Type[typeResults.length];
+
+            for (int i = 0; i < finalResult.length; i++) {
+                MethodInvokeTypeProvider methodProvider=new MethodInvokeTypeProvider(this.provider, method, i);
+                finalResult[i] = TypeWrapper.forTypeProvider(methodProvider);
             }
-            return result;
+            return finalResult;
         }
 
         try {
-            return method.invoke(this.provider.getType(), args);
+            return method.invoke(providerType, args);
         } catch (InvocationTargetException ex) {
             throw ex.getTargetException();
         }
