@@ -79,7 +79,7 @@ public class ResolvableType {
     public static ResolvableType forField(Field field) {
         Assert.notNull(field, "Field must not be null.");
 
-        return forType(TypeWrapper.forField(field));
+        return forType(field.getGenericType());
     }
 
     public static ResolvableType forMethodReturnType(Method method) {
@@ -198,7 +198,7 @@ public class ResolvableType {
         if (this.interfaces == null) {
 
 
-            this.interfaces = forTypes(TypeWrapper.forGenericInterfaces(resolved));
+            this.interfaces = forTypes(resolved.getGenericInterfaces());
 
         }
         return this.interfaces;
@@ -213,7 +213,7 @@ public class ResolvableType {
         }
 
         if (this.superType == null) {
-            this.superType = forType(TypeWrapper.forGenericSuperclass(resolved));
+            this.superType = forType(resolved.getGenericSuperclass());
         }
 
 
