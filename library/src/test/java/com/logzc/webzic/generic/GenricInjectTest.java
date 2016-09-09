@@ -35,12 +35,6 @@ public class GenricInjectTest {
 
 
     @Test
-    public void test() {
-        Assert.assertTrue(abService instanceof ABService);
-        Assert.assertTrue(cdService instanceof CDService);
-    }
-
-    @Test
     public void testGenericAPI() {
 
 //        ParameterizedType parameterizedType = (ParameterizedType) ABService.class.getGenericInterfaces()[0];
