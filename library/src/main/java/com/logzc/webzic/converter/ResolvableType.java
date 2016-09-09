@@ -39,7 +39,6 @@ public class ResolvableType {
     private final Class<?> resolved;
 
 
-
     private ResolvableType superType;
 
     private ResolvableType[] interfaces;
@@ -49,16 +48,16 @@ public class ResolvableType {
 
     public ResolvableType(Type type) {
 
-        if(type==null){
+        if (type == null) {
 
-            this.type=Object.class;
+            this.type = Object.class;
             this.resolved = Object.class;
 
-        }else if(type instanceof Class){
+        } else if (type instanceof Class) {
 
             this.resolved = (Class<?>) type;
             this.type = this.resolved;
-        }else{
+        } else {
             this.type = type;
             this.resolved = resolveClass();
         }
@@ -320,6 +319,8 @@ public class ResolvableType {
         return this.generics;
     }
 
+    //String[] T[] -> true.
+    //List<String> -> false.
     public boolean isArray() {
         if (this == NONE) {
             return false;
@@ -329,8 +330,10 @@ public class ResolvableType {
         boolean b1 = (this.type instanceof Class) && ((Class) this.type).isArray();
 
         if (b1) {
+            //String[]
             return true;
         } else {
+            //T[]
             boolean b2 = this.type instanceof GenericArrayType;
 
             if (b2) {

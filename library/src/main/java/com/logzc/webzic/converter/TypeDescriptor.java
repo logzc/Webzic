@@ -77,25 +77,25 @@ public class TypeDescriptor {
     }
 
 
-    // List<String> -> java.lang.String
+    // String[] -> String
     public TypeDescriptor getElementTypeDescriptor() {
 
-        //TODO: finish the elementTypeDescriptor.
-        //return getRelatedResolvable(this, this.resolvableType.asCollection().getGeneric());
 
-        return null;
-    }
-
-
-    private TypeDescriptor getRelatedResolvable(TypeDescriptor source, ResolvableType type) {
-
-        if (type.resolve() == null) {
-            return null;
+        if (this.resolvableType.isArray()) {
+            return new TypeDescriptor(this.resolvableType.getComponentType(), null, this.annotations);
         }
 
-        return new TypeDescriptor(type, null, source.annotations);
 
+        ResolvableType collectionType = this.resolvableType.asCollection().getGeneric();
+        if (collectionType.resolve() == null) {
+            return null;
+        }
+        return new TypeDescriptor(collectionType, null, this.annotations);
     }
 
+
+    public Class<?> getType(){
+        return this.type;
+    }
 
 }
