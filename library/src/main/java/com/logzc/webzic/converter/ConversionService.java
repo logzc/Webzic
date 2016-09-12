@@ -5,10 +5,18 @@ import com.logzc.webzic.converter.basic.ConverterFactory;
 import com.logzc.webzic.converter.generic.GenericConverter;
 import com.logzc.webzic.util.Assert;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 /**
  * Created by lishuang on 2016/8/19.
  */
 public class ConversionService implements ConverterRegistry, Conversion {
+
+    private final Set<GenericConverter> converters = new LinkedHashSet<>();
+
+
+
     @Override
     public void addConverter(Converter<?, ?> converter) {
 
@@ -17,6 +25,14 @@ public class ConversionService implements ConverterRegistry, Conversion {
 
     @Override
     public void addConverter(Class<?> sourceType, Class<?> targetType, Converter<?, ?> converter) {
+
+
+    }
+
+    @Override
+    public void addConverter(GenericConverter converter) {
+
+
 
     }
 

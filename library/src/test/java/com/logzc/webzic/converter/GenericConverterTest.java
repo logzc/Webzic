@@ -1,16 +1,28 @@
 package com.logzc.webzic.converter;
 
-import com.logzc.webzic.converter.basic.*;
-import org.junit.Assume;
+import com.logzc.webzic.converter.basic.StringToBooleanConverter;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by lishuang on 2016/8/4.
  */
 public class GenericConverterTest {
+
+    private ConversionService conversionService;
+
+    @Before
+    public void init() {
+        conversionService=new ConversionService();
+
+        
+    }
+
+    @After
+    public void destroy() {
+
+    }
 
     @Test
     public void testStringToBoolean() {
