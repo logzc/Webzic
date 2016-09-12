@@ -55,6 +55,16 @@ public class TypeDescriptor {
     }
 
 
+    public static TypeDescriptor forObject(Object source) {
+
+        if (source == null) {
+            return null;
+        }
+
+        return valueOf(source.getClass());
+    }
+
+
     public static TypeDescriptor valueOf(Class<?> type) {
         if (type == null) {
             type = Object.class;
@@ -94,7 +104,7 @@ public class TypeDescriptor {
     }
 
 
-    public Class<?> getType(){
+    public Class<?> getType() {
         return this.type;
     }
 

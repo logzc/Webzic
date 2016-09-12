@@ -9,4 +9,6 @@ public interface Conversion {
 
 
     <T> T convert(Object source, Class<T> targetType);
+
+    Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType);
 }

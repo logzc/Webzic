@@ -14,7 +14,11 @@ import java.util.Set;
  */
 public class StringToCollectionConverter implements GenericConverter {
 
-    //private final ConversionService conversionService;
+    private final ConversionService conversionService;
+
+    public StringToCollectionConverter(ConversionService conversionService) {
+        this.conversionService = conversionService;
+    }
 
     @Override
     public Set<ConvertiblePair> getConvertibleTypes() {
@@ -44,13 +48,13 @@ public class StringToCollectionConverter implements GenericConverter {
             for (String field : fields) {
                 target.add(field.trim());
             }
-        }else{
-            for (String field:fields){
+        } else {
+            for (String field : fields) {
 
 
-                //TODO:here a lot things to do.
-//                Object targetElement=this.conversionService.convert(field.trim(),sourceType,elementDescriptor);
-//                target.add(targetElement);
+                Object targetElement=this.conversionService.convert(field.trim(),sourceType,elementDescriptor);
+
+                target.add(targetElement);
 
             }
         }
