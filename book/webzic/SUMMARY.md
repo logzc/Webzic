@@ -7,6 +7,8 @@
  - [1.1 Bower](chapter1/bower.md)
  
  - [1.2 Gitbook](chapter1/gitbook.md)
+ 
+ - [1.3 Java Command](chapter1/java.md)
 
     
 * [2 控件](chapter2/index.md)
