@@ -11,8 +11,6 @@ public interface ConverterRegistry {
 
     void addConverter(Converter<?, ?> converter);
 
-    void addConverter(Class<?> sourceType, Class<?> targetType, Converter<?, ?> converter);
-
 
     void addConverter(GenericConverter converter);
 

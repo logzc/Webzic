@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public interface GenericConverter {
 
-    Set<ConvertiblePair> getConvertibleTypes();
+    Set<ConvertiblePair> getConvertiblePairs();
 
 
     Object convert(Object source, TypeDescriptor sourceType,TypeDescriptor targetType);

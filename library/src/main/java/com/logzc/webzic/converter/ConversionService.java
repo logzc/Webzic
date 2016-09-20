@@ -2,6 +2,7 @@ package com.logzc.webzic.converter;
 
 import com.logzc.webzic.converter.basic.Converter;
 import com.logzc.webzic.converter.basic.ConverterFactory;
+import com.logzc.webzic.converter.generic.ConverterAdapter;
 import com.logzc.webzic.converter.generic.GenericConverter;
 import com.logzc.webzic.util.Assert;
 
@@ -16,22 +17,30 @@ public class ConversionService implements ConverterRegistry, Conversion {
     private final Set<GenericConverter> converters = new LinkedHashSet<>();
 
 
-
     @Override
     public void addConverter(Converter<?, ?> converter) {
 
+        ResolvableType resolvableType = ResolvableType.forClass(converter.getClass()).as(Converter.class);
+        ResolvableType[] generics = resolvableType.getGenerics();
+        if (generics.length < 2) {
+            throw new IllegalArgumentException("converter doesn't have two generics.");
+        }
+        Class<?> sourceType = generics[0].resolve();
+        Class<?> targetType = generics[1].resolve();
+        if (sourceType == null || targetType == null) {
+            throw new IllegalArgumentException("converter doesn't have two generics.");
+        }
 
-    }
+        GenericConverter genericConverter = new ConverterAdapter(converter, generics[0], generics[1]);
 
-    @Override
-    public void addConverter(Class<?> sourceType, Class<?> targetType, Converter<?, ?> converter) {
-
+        addConverter(genericConverter);
 
     }
 
     @Override
     public void addConverter(GenericConverter converter) {
 
+        this.converters.add(converter);
 
 
     }

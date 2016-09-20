@@ -8,9 +8,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -20,6 +18,26 @@ import java.util.jar.JarFile;
  */
 public final class ClassUtil {
     private static final Logger logger = LoggerFactory.getLogger(ClassUtil.class);
+
+
+    private static final Map<Class<?>, Class<?>> primitiveWrapperTypeMap = new HashMap<>(9);
+    private static final Map<Class<?>, Class<?>> primitiveTypeWrapperMap = new HashMap<>(9);
+
+    static {
+        primitiveWrapperTypeMap.put(Boolean.class, boolean.class);
+        primitiveWrapperTypeMap.put(Byte.class, byte.class);
+        primitiveWrapperTypeMap.put(Character.class, char.class);
+        primitiveWrapperTypeMap.put(Double.class, double.class);
+        primitiveWrapperTypeMap.put(Float.class, float.class);
+        primitiveWrapperTypeMap.put(Integer.class, int.class);
+        primitiveWrapperTypeMap.put(Long.class, long.class);
+        primitiveWrapperTypeMap.put(Short.class, short.class);
+
+        for (Map.Entry<Class<?>, Class<?>> entry : primitiveWrapperTypeMap.entrySet()) {
+            primitiveTypeWrapperMap.put(entry.getValue(), entry.getKey());
+        }
+    }
+
 
     public static ClassLoader getClassLoader() {
         return Thread.currentThread().getContextClassLoader();
@@ -129,6 +147,17 @@ public final class ClassUtil {
         logger.debug(className + " ---------- loading");
         Class<?> cls = loadClass(className, false);
         classSet.add(cls);
+
+    }
+
+    public static Class<?> resolvePrimitive(Class<?> clazz) {
+
+        if (clazz.isPrimitive() && clazz != void.class) {
+
+            return primitiveTypeWrapperMap.get(clazz);
+        } else {
+            return clazz;
+        }
 
     }
 }

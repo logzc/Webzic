@@ -21,7 +21,7 @@ public class StringToCollectionConverter implements GenericConverter {
     }
 
     @Override
-    public Set<ConvertiblePair> getConvertibleTypes() {
+    public Set<ConvertiblePair> getConvertiblePairs() {
         return Collections.singleton(new ConvertiblePair(String.class, Collection.class));
     }
 

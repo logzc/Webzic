@@ -75,8 +75,13 @@ public class ConverterTest {
         String[] hah = new String[0];
 
         Assume.assumeTrue(hah.getClass().isArray());
+        System.out.println(hah.getClass().getComponentType());
 
-        List<String> bad = new ArrayList<>();
+        List<String> bad = new ArrayList<>(20);
         Assume.assumeFalse(bad.getClass().isArray());
+        System.out.println(bad.getClass().getComponentType());
+        System.out.println(bad.size());
+
+
     }
 }

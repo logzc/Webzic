@@ -29,7 +29,7 @@ public class ConverterAdapter implements GenericConverter {
     }
 
     @Override
-    public Set<ConvertiblePair> getConvertibleTypes() {
+    public Set<ConvertiblePair> getConvertiblePairs() {
         return Collections.singleton(this.pair);
     }
 
