@@ -1,5 +1,7 @@
 package com.logzc.webzic.converter;
 
+import com.logzc.webzic.util.ClassUtil;
+
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
@@ -108,4 +110,7 @@ public class TypeDescriptor {
         return this.type;
     }
 
+    public Class<?> getObjectType() {
+        return ClassUtil.resolvePrimitive(getType());
+    }
 }

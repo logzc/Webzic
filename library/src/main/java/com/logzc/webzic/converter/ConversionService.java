@@ -3,6 +3,7 @@ package com.logzc.webzic.converter;
 import com.logzc.webzic.converter.basic.Converter;
 import com.logzc.webzic.converter.basic.ConverterFactory;
 import com.logzc.webzic.converter.generic.ConverterAdapter;
+import com.logzc.webzic.converter.generic.ConverterFactoryAdapter;
 import com.logzc.webzic.converter.generic.GenericConverter;
 import com.logzc.webzic.converter.generic.NoOpConverter;
 import com.logzc.webzic.util.Assert;
@@ -19,7 +20,27 @@ public class ConversionService implements ConverterRegistry, Conversion {
     @Override
     public void addConverter(Converter<?, ?> converter) {
 
-        ResolvableType resolvableType = ResolvableType.forClass(converter.getClass()).as(Converter.class);
+        ResolvableType[] generics = getRequiredTypeInfo(converter, Converter.class);
+
+        GenericConverter genericConverter = new ConverterAdapter(converter, generics[0], generics[1]);
+
+        addConverter(genericConverter);
+
+    }
+
+    @Override
+    public void addConverterFactory(ConverterFactory<?, ?> converterFactory) {
+        ResolvableType[] generics = getRequiredTypeInfo(converterFactory, ConverterFactory.class);
+        ConvertiblePair pair = new ConvertiblePair(generics[0].resolve(), generics[1].resolve());
+        GenericConverter genericConverter = new ConverterFactoryAdapter(converterFactory, pair);
+
+        addConverter(genericConverter);
+    }
+
+    //For
+    //addConverter(Converter<?, ?> converter) and addConverterFactory(ConverterFactory<?, ?> converterFactory)
+    private ResolvableType[] getRequiredTypeInfo(Object converter, Class<?> genericClass) {
+        ResolvableType resolvableType = ResolvableType.forClass(converter.getClass()).as(genericClass);
         ResolvableType[] generics = resolvableType.getGenerics();
         if (generics.length < 2) {
             throw new IllegalArgumentException("converter doesn't have two generics.");
@@ -29,11 +50,7 @@ public class ConversionService implements ConverterRegistry, Conversion {
         if (sourceType == null || targetType == null) {
             throw new IllegalArgumentException("converter doesn't have two generics.");
         }
-
-        GenericConverter genericConverter = new ConverterAdapter(converter, generics[0], generics[1]);
-
-        addConverter(genericConverter);
-
+        return generics;
     }
 
     @Override
@@ -41,11 +58,6 @@ public class ConversionService implements ConverterRegistry, Conversion {
 
         this.converterPool.add(converter);
 
-
-    }
-
-    @Override
-    public void addConverterFactory(ConverterFactory<?, ?> converterFactory) {
 
     }
 
