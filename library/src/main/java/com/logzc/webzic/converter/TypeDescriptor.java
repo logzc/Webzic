@@ -46,7 +46,7 @@ public class TypeDescriptor {
     public TypeDescriptor(ResolvableType resolvableType, Class<?> type, Annotation[] annotations) {
         this.resolvableType = resolvableType;
         if (type == null) {
-            this.type = Object.class;
+            this.type = resolvableType.resolve(Object.class);
         } else {
             this.type = type;
         }

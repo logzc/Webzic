@@ -4,18 +4,17 @@ import com.logzc.webzic.converter.basic.Converter;
 import com.logzc.webzic.converter.basic.ConverterFactory;
 import com.logzc.webzic.converter.generic.ConverterAdapter;
 import com.logzc.webzic.converter.generic.GenericConverter;
+import com.logzc.webzic.converter.generic.NoOpConverter;
 import com.logzc.webzic.util.Assert;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  * Created by lishuang on 2016/8/19.
  */
 public class ConversionService implements ConverterRegistry, Conversion {
 
-    private final Set<GenericConverter> converters = new LinkedHashSet<>();
+    private final ConverterPool converterPool = new ConverterPool();
 
+    private static final GenericConverter NO_OP_CONVERTER = new NoOpConverter();
 
     @Override
     public void addConverter(Converter<?, ?> converter) {
@@ -40,7 +39,7 @@ public class ConversionService implements ConverterRegistry, Conversion {
     @Override
     public void addConverter(GenericConverter converter) {
 
-        this.converters.add(converter);
+        this.converterPool.add(converter);
 
 
     }
@@ -50,15 +49,31 @@ public class ConversionService implements ConverterRegistry, Conversion {
 
     }
 
+
+    public GenericConverter getDefaultConverter(TypeDescriptor sourceType, TypeDescriptor targetType) {
+        if (sourceType.getType().isAssignableFrom(targetType.getType())) {
+            return NO_OP_CONVERTER;
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public Converter<?, ?> getConverter(Class<?> sourceType, Class<?> targetType) {
+
+
         return null;
     }
 
     @Override
     public GenericConverter getConverter(TypeDescriptor sourceType, TypeDescriptor targetType) {
+        GenericConverter converter = this.converterPool.getConverter(sourceType, targetType);
 
-        return null;
+        if (converter == null) {
+
+        }
+
+        return converter;
     }
 
     @Override

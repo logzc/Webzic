@@ -1,7 +1,6 @@
 package com.logzc.webzic.converter;
 
 import com.logzc.webzic.util.Assert;
-import com.logzc.webzic.util.builder.HashCodeBuilders;
 
 /**
  * Created by lishuang on 2016/8/5.
@@ -29,15 +28,17 @@ public class ConvertiblePair {
         }
 
         ConvertiblePair otherPair = (ConvertiblePair) other;
-        return this.sourceType == otherPair.sourceType && this.targetType == otherPair.sourceType;
+        return this.sourceType == otherPair.sourceType && this.targetType == otherPair.targetType;
     }
 
     @Override
-    public int hashCode(){
-        return HashCodeBuilders.reflectionHashCode(this);
+    public int hashCode() {
+        return this.sourceType.hashCode() * 31 + this.targetType.hashCode();
     }
+
+
     @Override
-    public String toString(){
-        return this.sourceType.getName()+"->"+this.targetType.getName();
+    public String toString() {
+        return this.sourceType.getName() + "->" + this.targetType.getName();
     }
 }

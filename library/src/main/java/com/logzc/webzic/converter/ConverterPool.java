@@ -28,11 +28,58 @@ public class ConverterPool {
                 if (list == null) {
                     list = new ArrayList<>();
                     this.converters.put(convertiblePair, list);
+
                 }
 
                 list.add(converter);
             }
         }
+
+
+    }
+
+
+    public GenericConverter getConverter(TypeDescriptor sourceType, TypeDescriptor targetType) {
+
+
+        List<Class<?>> sourceCandidates = getClassHierarchy(sourceType.getType());
+        List<Class<?>> targetCandidates = getClassHierarchy(targetType.getType());
+
+        for (Class<?> sourceCandidate : sourceCandidates) {
+            for (Class<?> targetCandidate : targetCandidates) {
+
+                ConvertiblePair convertiblePair = new ConvertiblePair(sourceCandidate, targetCandidate);
+
+
+                GenericConverter converter = getConverter(convertiblePair);
+
+                if (converter != null) {
+                    return converter;
+                }
+            }
+        }
+
+        return null;
+
+    }
+
+
+    public GenericConverter getConverter(ConvertiblePair convertiblePair) {
+
+        List<GenericConverter> pairConverters = this.converters.get(convertiblePair);
+
+        if (pairConverters != null) {
+
+            if (pairConverters.size() > 0) {
+                return pairConverters.get(0);
+            }
+
+        }
+
+        //may be dynamic match.
+
+
+        return null;
 
 
     }
