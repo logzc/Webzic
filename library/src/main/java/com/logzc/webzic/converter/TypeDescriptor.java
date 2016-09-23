@@ -1,8 +1,10 @@
 package com.logzc.webzic.converter;
 
+import com.logzc.webzic.util.Assert;
 import com.logzc.webzic.util.ClassUtil;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +58,17 @@ public class TypeDescriptor {
         this.annotations = nullSafe(annotations);
     }
 
+    public TypeDescriptor(Field field) {
+
+        Assert.notNull(field, "Field must not be null.");
+
+        this.resolvableType = ResolvableType.forField(field);
+
+        this.type = this.resolvableType.resolve(field.getType());
+
+        this.annotations = nullSafe(field.getAnnotations());
+    }
+
 
     public static TypeDescriptor forObject(Object source) {
 
@@ -92,17 +105,18 @@ public class TypeDescriptor {
     // String[] -> String
     public TypeDescriptor getElementTypeDescriptor() {
 
-
         if (this.resolvableType.isArray()) {
             return new TypeDescriptor(this.resolvableType.getComponentType(), null, this.annotations);
         }
 
 
-        ResolvableType collectionType = this.resolvableType.asCollection().getGeneric();
-        if (collectionType.resolve() == null) {
+
+        ResolvableType collectionType = this.resolvableType.asCollection();
+        ResolvableType collectionGenericType=collectionType.getGeneric();
+        if (collectionGenericType.resolve() == null) {
             return null;
         }
-        return new TypeDescriptor(collectionType, null, this.annotations);
+        return new TypeDescriptor(collectionGenericType, null, this.annotations);
     }
 
 

@@ -46,12 +46,13 @@ public class ResolvableType {
     private ResolvableType[] generics;
 
 
+
     public ResolvableType(Type type) {
 
         if (type == null) {
 
-            this.type = Object.class;
-            this.resolved = Object.class;
+            this.type = null;
+            this.resolved = resolveClass();
 
         } else if (type instanceof Class) {
 
@@ -61,6 +62,9 @@ public class ResolvableType {
             this.type = type;
             this.resolved = resolveClass();
         }
+
+
+
 
     }
 
