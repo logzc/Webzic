@@ -2,6 +2,7 @@ package com.logzc.webzic.converter;
 
 import com.logzc.webzic.util.Assert;
 import com.logzc.webzic.util.ObjectUtil;
+import com.logzc.webzic.util.StringUtil;
 import com.logzc.webzic.web.core.MethodParameter;
 
 import java.lang.reflect.*;
@@ -38,6 +39,8 @@ public class ResolvableType {
 
     private final Class<?> resolved;
 
+    //ArrayList<Integer> -> List<E> -> E->Integer.
+    private final VariableResolver variableResolver;
 
     private ResolvableType superType;
 
@@ -46,8 +49,14 @@ public class ResolvableType {
     private ResolvableType[] generics;
 
 
-
     public ResolvableType(Type type) {
+
+        this(type, null);
+    }
+
+    public ResolvableType(Type type, VariableResolver variableResolver) {
+
+        this.variableResolver = variableResolver;
 
         if (type == null) {
 
@@ -63,19 +72,20 @@ public class ResolvableType {
             this.resolved = resolveClass();
         }
 
-
-
-
     }
 
 
     public static ResolvableType forType(Type type) {
+        return forType(type, null);
+    }
+
+    public static ResolvableType forType(Type type, VariableResolver variableResolver) {
         //return forType(type,null,null);
         if (type == null) {
             return NONE;
         }
 
-        return new ResolvableType(type);
+        return new ResolvableType(type, variableResolver);
     }
 
 
@@ -96,10 +106,11 @@ public class ResolvableType {
     }
 
 
-    public static ResolvableType[] forTypes(Type[] types) {
+    //For List<?> , the generic can get from TypeResolver.
+    public static ResolvableType[] forTypes(Type[] types, VariableResolver variableResolver) {
         ResolvableType[] result = new ResolvableType[types.length];
         for (int i = 0; i < types.length; i++) {
-            result[i] = forType(types[i]);
+            result[i] = forType(types[i], variableResolver);
         }
         return result;
     }
@@ -122,6 +133,8 @@ public class ResolvableType {
 
         ResolvableType tempType = resolveType();
 
+        //this.generics=tempType.getGenerics();
+
         return tempType.resolve();
     }
 
@@ -143,7 +156,7 @@ public class ResolvableType {
 
             //eg. tempType -> Base
             Type tempType = ((ParameterizedType) this.type).getRawType();
-            return forType(tempType);
+            return forType(tempType, this.variableResolver);
 
         }
 
@@ -157,16 +170,23 @@ public class ResolvableType {
                 resolvedBoundType = resolveBounds(((WildcardType) this.type).getLowerBounds());
             }
 
-            return forType(resolvedBoundType);
+            return forType(resolvedBoundType, this.variableResolver);
 
         }
 
         if (this.type instanceof TypeVariable) {
             TypeVariable<?> typeVariable = (TypeVariable<?>) this.type;
 
+            //try to resolve TypeVariable
+            if (this.variableResolver != null) {
+                ResolvableType resolvableType = this.variableResolver.resolveVariable(typeVariable);
+                if (resolvableType != null) {
+                    return resolvableType;
+                }
+            }
 
             //Fallback to Bounds.
-            return forType(resolveBounds(typeVariable.getBounds()));
+            return forType(resolveBounds(typeVariable.getBounds()), this.variableResolver);
 
         }
 
@@ -201,7 +221,7 @@ public class ResolvableType {
         if (this.interfaces == null) {
 
 
-            this.interfaces = forTypes(resolved.getGenericInterfaces());
+            this.interfaces = forTypes(resolved.getGenericInterfaces(), asVariableResolver());
 
         }
         return this.interfaces;
@@ -263,6 +283,12 @@ public class ResolvableType {
 
     }
 
+    public VariableResolver asVariableResolver() {
+        if (this == NONE) {
+            return null;
+        }
+        return new DefaultVariableResolver(this);
+    }
 
     /**
      * Map<Integer, List<String>>
@@ -303,7 +329,7 @@ public class ResolvableType {
             if (this.type instanceof Class) {
                 Class<?> typeClass = (Class<?>) this.type;
 
-                this.generics = forTypes(typeClass.getTypeParameters());
+                this.generics = forTypes(typeClass.getTypeParameters(), this.variableResolver);
             } else if (this.type instanceof ParameterizedType) {
 
                 Type[] actualTypeArguments = ((ParameterizedType) this.type).getActualTypeArguments();
@@ -381,4 +407,61 @@ public class ResolvableType {
 
     }
 
+
+    //List<E> -> E -> ArrayList<Integer> -> Integer
+    public ResolvableType resolveVariable(TypeVariable<?> variable) {
+        if (this.type instanceof TypeVariable) {
+            return resolveType().resolveVariable(variable);
+        }
+
+        if (this.type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) this.type;
+
+            TypeVariable<?>[] variables = resolve().getTypeParameters();
+
+            for (int i = 0; i < variables.length; i++) {
+                if (ObjectUtil.equals(variables[i].getName(), variable.getName())) {
+                    Type actualType = parameterizedType.getActualTypeArguments()[i];
+                    return forType(actualType, this.variableResolver);
+                }
+            }
+
+            //try to use owner variable resolver.
+            if (parameterizedType.getOwnerType() != null) {
+                return forType(parameterizedType.getOwnerType(), this.variableResolver).resolveVariable(variable);
+            }
+        }
+
+        if (this.variableResolver != null) {
+            return this.variableResolver.resolveVariable(variable);
+        }
+        return null;
+    }
+
+
+    @Override
+    public String toString() {
+        if (isArray()) {
+            return getComponentType() + "[]";
+        }
+        if (this.resolved == null) {
+            return "?";
+        }
+        if (this.type instanceof TypeVariable) {
+            TypeVariable<?> variable = (TypeVariable<?>) this.type;
+
+            if (this.variableResolver == null || this.variableResolver.resolveVariable(variable) == null) {
+                return "?";
+            }
+        }
+        StringBuilder result = new StringBuilder(this.resolved.getName());
+        ResolvableType[] generics = getGenerics();
+
+        if (generics.length > 0) {
+            result.append('<');
+            result.append(StringUtil.arrayToString(generics, ", "));
+            result.append('>');
+        }
+        return result.toString();
+    }
 }

@@ -1,5 +1,7 @@
 package com.logzc.webzic.util;
 
+import com.logzc.webzic.converter.ResolvableType;
+
 import java.util.Arrays;
 
 /**
@@ -63,4 +65,6 @@ public class ObjectUtil {
     public static boolean isEmpty(Object[] array) {
         return array == null || array.length == 0;
     }
+
+
 }

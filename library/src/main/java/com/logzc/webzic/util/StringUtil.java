@@ -1,5 +1,6 @@
 package com.logzc.webzic.util;
 
+import com.logzc.webzic.converter.ResolvableType;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -30,11 +31,34 @@ public class StringUtil {
         return stringBuilder.toString();
     }
 
-    public static String[] split(String str,String symbol){
+    public static String[] split(String str, String symbol) {
         return null;
     }
 
     public static String[] splitByComma(String str) {
         return new String[0];
+    }
+
+    public static String arrayToString(ResolvableType[] array, String symbol) {
+
+        if (ObjectUtil.isEmpty(array)) {
+            return "";
+
+        }
+
+        if (array.length == 1) {
+            return array[0].toString();
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < array.length; i++) {
+            if (i > 0) {
+                sb.append(symbol);
+            }
+            sb.append(array[i]);
+        }
+        return sb.toString();
+
     }
 }
