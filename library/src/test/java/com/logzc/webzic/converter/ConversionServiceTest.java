@@ -5,13 +5,16 @@ import com.logzc.webzic.converter.basic.StringToEnumConverterFactory;
 import com.logzc.webzic.converter.basic.StringToNumberConverterFactory;
 import com.logzc.webzic.converter.generic.StringToArrayConverter;
 import com.logzc.webzic.converter.generic.StringToCollectionConverter;
+import com.logzc.webzic.web.core.MethodParameter;
 import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lishuang on 2016/8/4.
@@ -117,6 +120,29 @@ public class ConversionServiceTest {
         //String -> Collection
         Assume.assumeTrue(ints.size() == 3);
         Assume.assumeTrue(ints.get(2) == 45);
+
+    }
+
+
+
+    public Map<?,?> fun(String name, List<Integer> ages){
+
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testMethodParameter() throws Exception{
+
+        Method method=getClass().getMethod("fun",String.class,List.class);
+
+        MethodParameter methodParameter0=new MethodParameter(method,0);
+
+
+        MethodParameter methodParameter1=new MethodParameter(method,1);
+        List<Integer> ages = (List<Integer>) conversionService.convert("12,34,45", TypeDescriptor.valueOf(String.class), new TypeDescriptor(methodParameter1));
+        Assume.assumeTrue(ages.size() == 3);
+        Assume.assumeTrue(ages.get(2) == 45);
 
 
     }

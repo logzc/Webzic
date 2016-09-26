@@ -329,6 +329,7 @@ public class ResolvableType {
             if (this.type instanceof Class) {
                 Class<?> typeClass = (Class<?>) this.type;
 
+
                 this.generics = forTypes(typeClass.getTypeParameters(), this.variableResolver);
             } else if (this.type instanceof ParameterizedType) {
 
@@ -336,7 +337,7 @@ public class ResolvableType {
 
                 ResolvableType[] generics = new ResolvableType[actualTypeArguments.length];
                 for (int i = 0; i < actualTypeArguments.length; i++) {
-                    generics[i] = forType(actualTypeArguments[i]);
+                    generics[i] = forType(actualTypeArguments[i], this.variableResolver);
                 }
 
                 this.generics = generics;
@@ -355,7 +356,6 @@ public class ResolvableType {
         if (this == NONE) {
             return false;
         }
-
 
         boolean b1 = (this.type instanceof Class) && ((Class) this.type).isArray();
 

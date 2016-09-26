@@ -2,6 +2,7 @@ package com.logzc.webzic.converter;
 
 import com.logzc.webzic.util.Assert;
 import com.logzc.webzic.util.ClassUtil;
+import com.logzc.webzic.web.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -36,17 +37,6 @@ public class TypeDescriptor {
     private final Annotation[] annotations;
 
 
-    /*
-    public TypeDescriptor(MethodParameter methodParameter){
-        Assert.notNull(methodParameter,"MethodParamter cannot be null.");
-
-        this.resolvableType=ResolvableType.forMethodParameter(methodParameter);
-        this.type=this.resolvableType.resolve(methodParameter.getParameterType());
-        this.annotations=(methodParameter.getParameterIndex()==-1?nullSafe(methodParameter.getMethodAnnotations()):nullSafe(methodParameter.getParameterAnnotations()));
-
-    }
-    */
-
     public TypeDescriptor(ResolvableType resolvableType, Class<?> type, Annotation[] annotations) {
         this.resolvableType = resolvableType;
         if (type == null) {
@@ -67,6 +57,17 @@ public class TypeDescriptor {
         this.type = this.resolvableType.resolve(field.getType());
 
         this.annotations = nullSafe(field.getAnnotations());
+    }
+
+    public TypeDescriptor(MethodParameter methodParameter) {
+        Assert.notNull(methodParameter, "MethodParamter cannot be null.");
+
+        this.resolvableType = ResolvableType.forMethodParameter(methodParameter);
+        this.type = this.resolvableType.resolve(methodParameter.getParameterType());
+        this.annotations = (methodParameter.getParameterIndex() == -1 ?
+                nullSafe(methodParameter.getMethodAnnotations()) :
+                nullSafe(methodParameter.getParameterAnnotations()));
+
     }
 
 
@@ -110,9 +111,8 @@ public class TypeDescriptor {
         }
 
 
-
         ResolvableType collectionType = this.resolvableType.asCollection();
-        ResolvableType collectionGenericType=collectionType.getGeneric();
+        ResolvableType collectionGenericType = collectionType.getGeneric();
         if (collectionGenericType.resolve() == null) {
             return null;
         }

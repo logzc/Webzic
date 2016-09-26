@@ -148,6 +148,32 @@ public class MethodParameter {
         return this.genericParameterType;
     }
 
+    public Annotation[] getParameterAnnotations() {
+
+        if (this.parameterAnnotations == null) {
+            Annotation[][] annotationArray = this.method != null ?
+                    this.method.getParameterAnnotations() :
+                    this.constructor.getParameterAnnotations();
+
+            if (parameterIndex >= 0 && this.parameterIndex < annotationArray.length) {
+                this.parameterAnnotations = annotationArray[parameterIndex];
+            } else {
+                this.parameterAnnotations = new Annotation[0];
+            }
+        }
+
+        return this.parameterAnnotations;
+    }
+
+    public Annotation[] getMethodAnnotations() {
+
+        if (this.method != null) {
+            return this.method.getAnnotations();
+        } else {
+            return this.constructor.getAnnotations();
+        }
+    }
+
 
     public Class<?> getDeclaringClass() {
         return getMember().getDeclaringClass();
@@ -163,7 +189,7 @@ public class MethodParameter {
 
 
         //return type. No need go on.
-        if(parameterIndex<0){
+        if (parameterIndex < 0) {
             return;
         }
 
@@ -186,8 +212,6 @@ public class MethodParameter {
         if (asmParameterNameFinder == null) {
             asmParameterNameFinder = new AsmParameterNameFinder();
         }
-
-
 
 
         List<RequestParam> requestParams = requestParameterFinder.get(this.method);
