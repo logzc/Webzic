@@ -81,6 +81,14 @@ public class TypeDescriptor {
         return valueOf(source.getClass());
     }
 
+    public static TypeDescriptor forMethodParameter(MethodParameter methodParameter) {
+
+        if (methodParameter == null) {
+            return null;
+        }
+
+        return new TypeDescriptor(methodParameter);
+    }
 
     public static TypeDescriptor valueOf(Class<?> type) {
         if (type == null) {

@@ -1,8 +1,7 @@
 package com.logzc.webzic;
 
-import com.logzc.webzic.factory.anno.ControllerAnnotationBeanFactory;
-import com.logzc.webzic.web.core.HandlerMethod;
 import com.logzc.webzic.factory.AppContext;
+import com.logzc.webzic.web.core.HandlerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,23 +33,11 @@ public class DispatcherServlet extends HttpServlet {
 
 
     @Override
-    public void service(HttpServletRequest request, HttpServletResponse response){
-
-
-        String val=request.getParameter("info");
+    public void service(HttpServletRequest request, HttpServletResponse response) {
 
         HandlerMethod handlerMethod = AppContext.getControllerAnnotationBeanFactory().getHandlerMethod(request);
 
-
-        handlerMethod.handle(request,response);
-
-
-
-
-
-
-
-
+        handlerMethod.handle(request, response);
 
     }
 

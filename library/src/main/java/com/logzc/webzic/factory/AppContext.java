@@ -1,5 +1,7 @@
 package com.logzc.webzic.factory;
 
+import com.logzc.webzic.converter.ConversionService;
+import com.logzc.webzic.converter.DefaultConversionService;
 import com.logzc.webzic.factory.anno.AnnotationBeanFactory;
 import com.logzc.webzic.factory.anno.ControllerAnnotationBeanFactory;
 import com.logzc.webzic.reflection.Reflections;
@@ -26,6 +28,9 @@ public class AppContext {
     //for test purpose use the public.
     public static List<BeanFactory> beanFactoryList = new ArrayList<>();
     static Map<Class<? extends BeanFactory>, BeanFactory> beanFactoryMap = new HashMap<>();
+
+    //ConversionService.
+    static ConversionService conversionService = new DefaultConversionService();
 
     static boolean hasInitialized = false;
 
@@ -110,6 +115,10 @@ public class AppContext {
 
 
         return null;
+    }
+
+    public static ConversionService getConversionService() {
+        return conversionService;
     }
 
 

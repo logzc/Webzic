@@ -20,11 +20,11 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(path = "/page", method = {RequestMethod.GET, RequestMethod.POST})
-    public Map<String, ?> page() {
+    public Map<String, ?> page(String name,Integer age) {
 
         Map<String,String> user=new HashMap<>();
-        user.put("name","lishuang");
-        user.put("age","18");
+        user.put("name",name);
+        user.put("age",age+"");
         return user;
     }
 

@@ -1,5 +1,8 @@
 package com.logzc.webzic.web.core;
 
+import com.logzc.webzic.converter.ConversionService;
+import com.logzc.webzic.converter.TypeDescriptor;
+import com.logzc.webzic.factory.AppContext;
 import com.logzc.webzic.util.Assert;
 import com.logzc.webzic.util.JsonUtil;
 import lombok.Getter;
@@ -8,11 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A handler method.
@@ -69,7 +72,6 @@ public class HandlerMethod {
 
         }
 
-
     }
 
 
@@ -97,50 +99,98 @@ public class HandlerMethod {
         return false;
     }
 
+    public Object[] extractArguments(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String[] values = new String[parameters.length];
+        Object[] args = new Object[parameters.length];
+        List<String> errors = new ArrayList<>();
+        for (int i = 0; i < parameters.length; i++) {
+
+            MethodParameter methodParameter = parameters[i];
+
+            String parameterName = methodParameter.getParameterName();
+
+            //if no such parameter, return null.
+            String value = request.getParameter(parameterName);
+
+            //validation.
+            if (methodParameter.isRequired()) {
+                if (value == null) {
+                    errors.add(parameterName + " is required.");
+                }
+            }
+
+            values[i] = value;
+        }
+
+        if (errors.size() != 0) {
+            throw new IllegalArgumentException(errors.toString());
+        }
+
+        //cast type.
+        ConversionService conversionService = AppContext.getConversionService();
+
+        for (int i = 0; i < values.length; i++) {
+
+            MethodParameter methodParameter = parameters[i];
+
+            String value = values[i];
+
+            if (value == null) {
+                args[i] = null;
+            } else {
+                args[i] = conversionService.convert(values[i], TypeDescriptor.valueOf(String.class), TypeDescriptor.forMethodParameter(methodParameter));
+            }
+
+        }
+
+        return args;
+
+    }
 
     //handle the request.
     public void handle(HttpServletRequest request, HttpServletResponse response) {
 
+        Object result=null;
+
         try {
 
+            Object[] args = extractArguments(request, response);
 
-            Object[] args=new Object[parameters.length];
-            List<String> errors=new ArrayList<>();
-            for (MethodParameter methodParameter : parameters) {
+            result = this.method.invoke(this.bean, args);
 
-                String parameterName=methodParameter.getParameterName();
+        } catch (Exception e) {
 
-                //if no such parameter, return null.
-                String value=request.getParameter(parameterName);
+            logger.debug("Webzic Exception intercept.");
+            logger.debug(e.getMessage());
 
+            //handle exceptions.
+            HandlerMethod handlerMethod = AppContext.getControllerAnnotationBeanFactory().getExceptionHandlerMethod();
 
-                //validation.
-                if(methodParameter.isRequired()){
-                    if(value==null){
-                        errors.add(parameterName+" is required.");
-                    }
-                }
-
-                //cast type.
-
-
-
-
+            try {
+                result = handlerMethod.getMethod().invoke(handlerMethod.bean, request, e);
+            } catch (Exception e1) {
+                Map<String,Object> map = new HashMap<>();
+                map.put("error","Exception Controller Error!");
+                result=map;
             }
 
 
-            Object result = this.method.invoke(this.bean);
+        }finally {
 
             //check the type of result.
             String jsonResult = JsonUtil.toJson(result);
 
             response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.println(jsonResult);
+            PrintWriter out = null;
+            try {
+                out = response.getWriter();
+                out.println(jsonResult);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        } catch (Exception e) {
-            logger.debug("Webzic Exception intercept.");
-            logger.debug(e.getMessage());
+
         }
 
 

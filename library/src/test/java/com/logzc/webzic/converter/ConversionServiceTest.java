@@ -38,9 +38,7 @@ public class ConversionServiceTest {
 
         //basic
         conversionService.addConverter(new StringToBooleanConverter());
-
         conversionService.addConverterFactory(new StringToNumberConverterFactory());
-
         conversionService.addConverterFactory(new StringToEnumConverterFactory());
 
         //generic
