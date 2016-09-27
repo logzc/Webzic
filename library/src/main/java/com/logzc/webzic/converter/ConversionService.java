@@ -111,6 +111,10 @@ public class ConversionService implements ConverterRegistry, Conversion {
 
         Assert.notNull(targetType, "Target Type cannot be null.");
 
+        if (source != null && !sourceType.getObjectType().isInstance(source)) {
+            throw new IllegalArgumentException("source to convert from must be an instance of " +
+                    sourceType + "; instead it was a " + source.getClass().getName());
+        }
 
         GenericConverter converter = getConverter(sourceType, targetType);
 
@@ -118,7 +122,13 @@ public class ConversionService implements ConverterRegistry, Conversion {
         if (converter != null) {
             obj = converter.convert(source, sourceType, targetType);
         } else {
-            throw new IllegalArgumentException("Cannot convert from " + sourceType.getType().getName() + " to " + targetType.getType().getName());
+
+            //sourceType extends targetType
+            if (sourceType.isAssignableTo(targetType)) {
+                obj = NO_OP_CONVERTER.convert(source, sourceType, targetType);
+            } else {
+                throw new IllegalArgumentException("Cannot convert from " + sourceType.getType().getName() + " to " + targetType.getType().getName());
+            }
         }
 
         return obj;

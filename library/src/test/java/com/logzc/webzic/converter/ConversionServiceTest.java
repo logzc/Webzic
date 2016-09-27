@@ -3,6 +3,7 @@ package com.logzc.webzic.converter;
 import com.logzc.webzic.converter.basic.StringToBooleanConverter;
 import com.logzc.webzic.converter.basic.StringToEnumConverterFactory;
 import com.logzc.webzic.converter.basic.StringToNumberConverterFactory;
+import com.logzc.webzic.converter.generic.NoOpConverter;
 import com.logzc.webzic.converter.generic.StringToArrayConverter;
 import com.logzc.webzic.converter.generic.StringToCollectionConverter;
 import com.logzc.webzic.web.core.MethodParameter;
@@ -39,7 +40,6 @@ public class ConversionServiceTest {
         conversionService.addConverter(new StringToBooleanConverter());
 
         conversionService.addConverterFactory(new StringToNumberConverterFactory());
-
 
         conversionService.addConverterFactory(new StringToEnumConverterFactory());
 
@@ -124,7 +124,6 @@ public class ConversionServiceTest {
     }
 
 
-
     public Map<?,?> fun(String name, List<Integer> ages){
 
         return null;
@@ -138,6 +137,8 @@ public class ConversionServiceTest {
 
         MethodParameter methodParameter0=new MethodParameter(method,0);
 
+        String var = (String) conversionService.convert("hello", TypeDescriptor.valueOf(String.class), new TypeDescriptor(methodParameter0));
+        Assume.assumeTrue(var.equals("hello"));
 
         MethodParameter methodParameter1=new MethodParameter(method,1);
         List<Integer> ages = (List<Integer>) conversionService.convert("12,34,45", TypeDescriptor.valueOf(String.class), new TypeDescriptor(methodParameter1));

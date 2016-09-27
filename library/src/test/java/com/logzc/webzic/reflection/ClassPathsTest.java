@@ -3,10 +3,14 @@ package com.logzc.webzic.reflection;
 import com.logzc.webzic.reflection.fs.JarInputDir;
 import com.logzc.webzic.reflection.fs.ZicDir;
 import com.logzc.webzic.reflection.fs.ZicFile;
+import org.junit.Assume;
 import org.junit.Test;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by lishuang on 2016/7/18.
@@ -75,5 +79,28 @@ public class ClassPathsTest {
             System.out.println(zicFile.getRelativePath());
         });
     }
+
+
+    @Test
+    public void testAssignable() throws Exception{
+
+
+        ArrayList arrayList=new ArrayList();
+
+        Assume.assumeTrue(List.class.isAssignableFrom(arrayList.getClass()));
+        Assume.assumeTrue(List.class.isAssignableFrom(List.class));
+
+
+        Integer[] a=new Integer[]{1,2,3};
+        Number[] b=(Number[])a;
+
+        System.out.println(b);
+
+        List<Integer> c=new ArrayList<>();
+        c.add(1);
+        List<Number> d=new ArrayList<>();
+
+    }
+
 
 }

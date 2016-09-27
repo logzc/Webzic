@@ -6,6 +6,7 @@ import com.logzc.webzic.web.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,7 +125,54 @@ public class TypeDescriptor {
         return this.type;
     }
 
+    public boolean isArray() {
+        return getType().isArray();
+    }
+
+    public boolean isCollection() {
+        return Collection.class.isAssignableFrom(getType());
+    }
+
+    public boolean isMap() {
+        return Map.class.isAssignableFrom(getType());
+    }
+
     public Class<?> getObjectType() {
         return ClassUtil.resolvePrimitive(getType());
+    }
+
+    /**
+     * valueOf(String.class).isAssignableTo(valueOf(CharSequence.class)) -> true
+     * valueOf(Number.class).isAssignableTo(valueOf(Integer.class)) -> false
+     */
+    public boolean isAssignableTo(TypeDescriptor typeDescriptor) {
+
+        //List.class.isAssignableFrom(ArrayList.class) -> true.
+        //here reverse twice. so typeAssignable has the same boolean with this method.
+        boolean typeAssignable = typeDescriptor.getObjectType().isAssignableFrom(getObjectType());
+
+        if (!typeAssignable) {
+            return false;
+        }
+
+        if (isArray() && typeDescriptor.isArray()) {
+            return getElementTypeDescriptor().isAssignableTo(typeDescriptor.getElementTypeDescriptor());
+        } else if (isCollection() && typeDescriptor.isCollection()) {
+
+
+            TypeDescriptor sourceElementTypeDescriptor = getElementTypeDescriptor();
+            TypeDescriptor targetElementTypeDescriptor = typeDescriptor.getElementTypeDescriptor();
+
+            if (sourceElementTypeDescriptor == null || targetElementTypeDescriptor == null) {
+                return true;
+            }
+
+            return sourceElementTypeDescriptor.isAssignableTo(targetElementTypeDescriptor);
+
+        }
+        //ignore the map type.
+        else {
+            return true;
+        }
     }
 }
