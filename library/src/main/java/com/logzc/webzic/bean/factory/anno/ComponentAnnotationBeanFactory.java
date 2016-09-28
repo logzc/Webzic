@@ -1,0 +1,48 @@
+package com.logzc.webzic.bean.factory.anno;
+
+import com.logzc.webzic.exception.ZicException;
+import com.logzc.webzic.reflection.scanner.Scanner;
+
+import java.util.List;
+
+/**
+ * Created by lishuang on 2016/9/28.
+ */
+public class ComponentAnnotationBeanFactory extends AbstractAnnotationBeanFactory {
+
+    @Override
+    public <T> T getBean(Class<T> clazz) {
+        return null;
+    }
+
+    /**
+     * when finish the necessary things. init the @Value
+     */
+    @Override
+    public void postInit() {
+        List<String> classNames = scanner.getClassNames();
+
+        try {
+            //create the indexes of the canned controller.
+            for (String className : classNames) {
+                Class<?> configurationClass = this.getClassLoader().loadClass(className);
+                classes.add(configurationClass);
+                beanMap.put(configurationClass, configurationClass.newInstance());
+
+
+                //Inject property values.
+
+
+            }
+        } catch (Exception e) {
+            throw new ZicException(e.getMessage());
+        }
+
+
+    }
+
+    @Override
+    public Scanner getScanner() {
+        return null;
+    }
+}

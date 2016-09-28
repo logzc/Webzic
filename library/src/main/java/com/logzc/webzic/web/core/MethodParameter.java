@@ -1,8 +1,8 @@
 package com.logzc.webzic.web.core;
 
 import com.logzc.webzic.annotation.RequestParam;
-import com.logzc.webzic.factory.AppContext;
-import com.logzc.webzic.factory.WidgetBeanFactory;
+import com.logzc.webzic.bean.factory.AppContext;
+import com.logzc.webzic.bean.factory.WidgetBeanFactory;
 import com.logzc.webzic.reflection.parameter.AsmParameterNameFinder;
 import com.logzc.webzic.reflection.parameter.ParameterNameFinder;
 import com.logzc.webzic.util.Assert;

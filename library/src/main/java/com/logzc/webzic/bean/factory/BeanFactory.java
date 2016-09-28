@@ -1,4 +1,4 @@
-package com.logzc.webzic.factory;
+package com.logzc.webzic.bean.factory;
 
 /**
  * Created by lishuang on 2016/7/19.

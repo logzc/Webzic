@@ -2,7 +2,7 @@ package com.logzc.webzic.web.core;
 
 import com.logzc.webzic.converter.ConversionService;
 import com.logzc.webzic.converter.TypeDescriptor;
-import com.logzc.webzic.factory.AppContext;
+import com.logzc.webzic.bean.factory.AppContext;
 import com.logzc.webzic.util.Assert;
 import com.logzc.webzic.util.JsonUtil;
 import lombok.Getter;
@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 

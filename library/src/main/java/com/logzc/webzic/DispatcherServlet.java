@@ -1,6 +1,6 @@
 package com.logzc.webzic;
 
-import com.logzc.webzic.factory.AppContext;
+import com.logzc.webzic.bean.factory.AppContext;
 import com.logzc.webzic.web.core.HandlerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.logzc.webzic.factory;
+package com.logzc.webzic.bean.factory;
 
 import com.logzc.webzic.util.ClassUtil;
 

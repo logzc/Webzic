@@ -1,6 +1,6 @@
-package com.logzc.webzic.factory.anno;
+package com.logzc.webzic.bean.factory.anno;
 
-import com.logzc.webzic.factory.AbstractBeanFactory;
+import com.logzc.webzic.bean.factory.AbstractBeanFactory;
 import com.logzc.webzic.reflection.scanner.Scanner;
 
 /**

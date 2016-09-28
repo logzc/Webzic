@@ -9,9 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This the entrance of dynamic reflection.
@@ -41,6 +39,7 @@ public class Reflections {
         Assert.notEmpty(scanners);
 
         Collection<URL> urls=ClassPaths.forClassLoader();
+        //Collection<URL> urls= ClassPaths.forPackage("com.logzc.webzic.compass");
 
         //These three urls have different results.
         //Collection<URL> urls = ClassPaths.forJavaClassPath();

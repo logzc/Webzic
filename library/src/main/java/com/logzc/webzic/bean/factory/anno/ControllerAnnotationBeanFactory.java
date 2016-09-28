@@ -1,4 +1,4 @@
-package com.logzc.webzic.factory.anno;
+package com.logzc.webzic.bean.factory.anno;
 
 import com.logzc.webzic.annotation.RequestMapping;
 import com.logzc.webzic.annotation.RestController;

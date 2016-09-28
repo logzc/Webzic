@@ -1,4 +1,4 @@
-package com.logzc.webzic.factory;
+package com.logzc.webzic.bean.factory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.logzc.webzic.web.core.RequestParameterFinder;

@@ -1,8 +1,7 @@
-package com.logzc.webzic.factory.anno;
+package com.logzc.webzic.bean.factory.anno;
 
-import com.logzc.webzic.factory.BeanFactory;
+import com.logzc.webzic.bean.factory.BeanFactory;
 import com.logzc.webzic.reflection.scanner.Scanner;
-import com.logzc.webzic.util.ClassUtil;
 
 /**
  * Created by lishuang on 2016/7/19.

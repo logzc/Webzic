@@ -1,9 +1,9 @@
-package com.logzc.webzic.factory;
+package com.logzc.webzic.bean.factory;
 
 import com.logzc.webzic.converter.ConversionService;
 import com.logzc.webzic.converter.DefaultConversionService;
-import com.logzc.webzic.factory.anno.AnnotationBeanFactory;
-import com.logzc.webzic.factory.anno.ControllerAnnotationBeanFactory;
+import com.logzc.webzic.bean.factory.anno.AnnotationBeanFactory;
+import com.logzc.webzic.bean.factory.anno.ControllerAnnotationBeanFactory;
 import com.logzc.webzic.reflection.Reflections;
 import com.logzc.webzic.reflection.scanner.Scanner;
 
@@ -25,8 +25,8 @@ public class AppContext {
     static Map<Class<? extends AnnotationBeanFactory>, AnnotationBeanFactory> annotationBeanFactoryMap = new HashMap<>();
 
 
-    //for test purpose use the public.
-    public static List<BeanFactory> beanFactoryList = new ArrayList<>();
+    //for test purpose make it public.
+    static List<BeanFactory> beanFactoryList = new ArrayList<>();
     static Map<Class<? extends BeanFactory>, BeanFactory> beanFactoryMap = new HashMap<>();
 
     //ConversionService.

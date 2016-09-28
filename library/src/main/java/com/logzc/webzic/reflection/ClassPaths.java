@@ -113,32 +113,6 @@ public class ClassPaths {
     }
 
 
-
-
-    /**
-     * Get the URL which contains the clazz.
-     * @param clazz Class<?>
-     * @param classLoaders may be null.
-     * @return the url contains the clazz.
-     */
-    public static URL forClass(Class<?> clazz,ClassLoader... classLoaders){
-        ClassLoader[] loaders=classLoaders(classLoaders);
-        String resourceName=clazz.getName().replace(".","/")+".class";
-        for (ClassLoader classLoader:loaders){
-            URL url=classLoader.getResource(resourceName);
-            if(url!=null){
-                String normalizedUrl=url.toExternalForm().substring(0,url.toExternalForm().lastIndexOf(clazz.getPackage().getName().replace(".","/")));
-                try {
-                    return new URL(normalizedUrl);
-                } catch (MalformedURLException e) {
-                    logger.debug("Cannot get the URL",e);
-                }
-            }
-        }
-        return null;
-    }
-
-
     /**
      * Get the URLs from classloaders.
      */
@@ -160,7 +134,6 @@ public class ClassPaths {
 
         return distinctUrls(result);
     }
-
 
     /**
      * Get the urls based on the java.class.path system property.
@@ -193,6 +166,31 @@ public class ClassPaths {
         }
         return distinct.values();
     }
+
+    /**
+     * Get the URL which contains the clazz.
+     * @param clazz Class<?>
+     * @param classLoaders may be null.
+     * @return the url contains the clazz.
+     */
+    public static URL forClass(Class<?> clazz,ClassLoader... classLoaders){
+        ClassLoader[] loaders=classLoaders(classLoaders);
+        String resourceName=clazz.getName().replace(".","/")+".class";
+        for (ClassLoader classLoader:loaders){
+            URL url=classLoader.getResource(resourceName);
+            if(url!=null){
+                String normalizedUrl=url.toExternalForm().substring(0,url.toExternalForm().lastIndexOf(clazz.getPackage().getName().replace(".","/")));
+                try {
+                    return new URL(normalizedUrl);
+                } catch (MalformedURLException e) {
+                    logger.debug("Cannot get the URL",e);
+                }
+            }
+        }
+        return null;
+    }
+
+
 
     private static String resourceName(String name){
         if(name!=null){
