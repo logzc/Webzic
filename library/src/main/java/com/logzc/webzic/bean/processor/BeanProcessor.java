@@ -5,7 +5,7 @@ package com.logzc.webzic.bean.processor;
  */
 public interface BeanProcessor {
 
-    Object beforeInit(Object bean, String beanName);
+    Object beforeInit(Object bean, Class<?> clazz);
 
-    Object afterInit(Object bean, String beanName);
+    Object afterInit(Object bean, Class<?> clazz);
 }
