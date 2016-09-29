@@ -18,35 +18,34 @@ public class MethodTest {
 
 
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
 
         Class<MethodTestBean0> testBean0Class = MethodTestBean0.class;
 
 
-        Constructor[] constructors=testBean0Class.getConstructors();
+        Constructor[] constructors = testBean0Class.getConstructors();
 
         System.out.println(constructors);
 
-        Constructor[] declareContstructors=testBean0Class.getDeclaredConstructors();
+        Constructor[] declareContstructors = testBean0Class.getDeclaredConstructors();
 
         System.out.println(declareContstructors);
 
 
-        Method[] methods=testBean0Class.getMethods();
+        Method[] methods = testBean0Class.getMethods();
 
         System.out.println(methods);
 
-        Method[] declareMethods=testBean0Class.getDeclaredMethods();
+        Method[] declareMethods = testBean0Class.getDeclaredMethods();
 
         System.out.println(declareMethods);
 
 
-        for (Method method:declareMethods){
+        for (Method method : declareMethods) {
 
             String descriptor = org.objectweb.asm.Type.getMethodDescriptor(method);
-            System.out.println(method+"->"+descriptor);
+            System.out.println(method + "->" + descriptor);
         }
-
 
 
     }
@@ -58,14 +57,11 @@ public class MethodTest {
         Class<MethodTestBean0> testBean0Class = MethodTestBean0.class;
 
 
-
-
-
-
         Method[] methods = testBean0Class.getDeclaredMethods();
 
 
         for (Method method : methods) {
+            System.out.println();
             System.out.println(method);
 
 
@@ -75,11 +71,11 @@ public class MethodTest {
             System.out.println("Parameter:");
             Class<?>[] parameterTypes = method.getParameterTypes();
             for (int i = 0; i < parameterTypes.length; i++) {
-                Class<?> parameterType=parameterTypes[i];
+                Class<?> parameterType = parameterTypes[i];
 
-                Annotation[] annos=annotations[i];
+                Annotation[] annos = annotations[i];
 
-                for (Annotation annotation:annos){
+                for (Annotation annotation : annos) {
                     System.out.println(annotation);
                 }
 
@@ -91,7 +87,7 @@ public class MethodTest {
             Type[] types = method.getGenericParameterTypes();
 
             System.out.println("Type:");
-            for (Type type:types){
+            for (Type type : types) {
                 System.out.println(type);
             }
 
@@ -102,18 +98,18 @@ public class MethodTest {
 
             System.out.println("parameters:");
             Parameter[] parameters = method.getParameters();
-            for (Parameter parameter:parameters){
-                if(parameter.isNamePresent()){
+            for (Parameter parameter : parameters) {
+                if (parameter.isNamePresent()) {
                     System.out.println(parameter.isNamePresent());
-                }else{
+                } else {
                     System.out.println(parameter.isNamePresent());
                 }
 
             }
 
             System.out.println("asm param:");
-            String params[] = ParameterNameUtils.getMethodParameterNamesByAsm4(testBean0Class,method);
-            for (String str:params){
+            String params[] = ParameterNameUtils.getMethodParameterNamesByAsm4(testBean0Class, method);
+            for (String str : params) {
                 System.out.println(str);
             }
 
@@ -122,33 +118,68 @@ public class MethodTest {
         }
     }
 
+
     @Test
-    public void testMyAsmParameterDiscovery(){
+    public void testOtherGuysParameterDiscovery() {
         Class<MethodTestBean0> testBean0Class = MethodTestBean0.class;
         Method[] methods = testBean0Class.getDeclaredMethods();
-        ParameterNameFinder parameterNameFinder1 =new AsmParameterNameFinder();
 
-        for (Method method:methods){
 
-            System.out.println(method.toString());
+        for (Method method : methods) {
 
-            List<String> xbeanParams1 = parameterNameFinder1.get(method);
-            for (String str:xbeanParams1){
+            String[] xbeanParams1 = ParameterNameUtils.getMethodParameterNamesByAsm4(testBean0Class, method);
+
+
+            System.out.println();
+            System.out.println(method);
+
+            for (String str : xbeanParams1) {
                 System.out.println(str);
             }
 
             System.out.println("-----------------");
         }
-        
+
+    }
+
+
+    @Test
+    public void testMyAsmParameterDiscovery() {
+        Class<MethodTestBean0> testBean0Class = MethodTestBean0.class;
+        Method[] methods = testBean0Class.getDeclaredMethods();
+        ParameterNameFinder parameterNameFinder1 = new AsmParameterNameFinder();
+
+        for (Method method : methods) {
+
+
+            List<String> xbeanParams1 = parameterNameFinder1.get(method);
+
+            System.out.println();
+            System.out.println(method);
+
+            for (String str : xbeanParams1) {
+                System.out.println(str);
+            }
+
+            System.out.println("-----------------");
+        }
+
+
+    }
+
+    @Test
+    public void testMyAsmParameterDiscovery1() {
+        Class<MethodTestBean0> testBean0Class = MethodTestBean0.class;
+
         Constructor[] constructors = testBean0Class.getDeclaredConstructors();
-        ParameterNameFinder parameterNameFinder2 =new AsmParameterNameFinder();
-        for (Constructor constructor:constructors){
+        ParameterNameFinder parameterNameFinder2 = new AsmParameterNameFinder();
+        for (Constructor constructor : constructors) {
 
             System.out.println(constructor.toString());
 
             System.out.print("");
             List<String> xbeanParams1 = parameterNameFinder2.get(constructor);
-            for (String str:xbeanParams1){
+            for (String str : xbeanParams1) {
                 System.out.println(str);
             }
 
@@ -156,6 +187,7 @@ public class MethodTest {
         }
 
 
-
     }
+
+
 }

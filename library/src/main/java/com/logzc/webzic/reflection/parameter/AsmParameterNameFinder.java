@@ -1,5 +1,6 @@
 package com.logzc.webzic.reflection.parameter;
 
+import com.logzc.webzic.exception.ZicException;
 import com.logzc.webzic.util.AsmUtil;
 import lombok.Getter;
 import org.objectweb.asm.*;
@@ -54,7 +55,7 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
 
     }
 
-    public void findAllConstructorParameters(Class clazz) {
+    public void findAllConstructorParameters(Class clazz) throws ZicException {
 
         Constructor[] constructors = clazz.getDeclaredConstructors();
         //constructorCache.clear();
@@ -64,21 +65,16 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
 
 
         //load parameter names using ASM.
-        try {
-            ClassReader reader = AsmUtil.createClassReader(clazz);
-            ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(constructors);
+        ClassReader reader = AsmUtil.createClassReader(clazz);
+        ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(constructors);
 
-            reader.accept(parameterNameClassVisitor, 0);
-
-            constructorCache = parameterNameClassVisitor.getConstructorParameters();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            constructorCache.clear();
-        }
+        System.out.println("ready to accept." + System.currentTimeMillis());
+        reader.accept(parameterNameClassVisitor, 0);
+        System.out.println("finish accept." + System.currentTimeMillis());
+        constructorCache = parameterNameClassVisitor.getConstructorParameters();
     }
 
-    public void findAllMethodParameters(Class clazz) {
+    public void findAllMethodParameters(Class clazz) throws ZicException {
 
         Method[] methods = clazz.getDeclaredMethods();
 
@@ -89,19 +85,16 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
 
 
         //load parameter names using ASM.
-        try {
-            ClassReader reader = AsmUtil.createClassReader(clazz);
-            ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(methods);
-
-            reader.accept(parameterNameClassVisitor, 0);
-
-            methodCache = parameterNameClassVisitor.getMethodParameters();
+        ClassReader reader = AsmUtil.createClassReader(clazz);
+        ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(methods);
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        //TODO: You cannot guarantee  parameterNameClassVisitor finish scan. So you have to use a Future things.
+        System.out.println("ready to accept." + System.currentTimeMillis());
+        reader.accept(parameterNameClassVisitor, 0);
+        System.out.println("finish accept." + System.currentTimeMillis());
 
-        }
+        methodCache = parameterNameClassVisitor.getMethodParameters();
 
 
     }
@@ -160,6 +153,7 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
         public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 
             final List<String> parameterNames;
+            final int[] index = {0};
             final boolean isStaticMethod;
             String key = getKey(name, desc);
 
@@ -201,16 +195,19 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
 
             return new MethodVisitor(ASM5) {
                 @Override
-                public void visitLocalVariable(String name1, String desc1, String signature1, Label start, Label end, int index) {
+                public void visitLocalVariable(String name1, String desc1, String signature1, Label start, Label end, int slot) {
 
+                    System.out.println("VisitLocalVariable." + System.currentTimeMillis());
                     if (isStaticMethod) {
-                        parameterNames.set(index, name1);
+                        parameterNames.set(index[0], name1);
                     }
                     // for non-static the 0th arg is "this" so we need to offset by -1
-                    // rather weird, sometimes index overflow. Another param named map may appear.
-                    else if (index > 0 && index < parameterNames.size()) {
-                        parameterNames.set(index - 1, name1);
+                    //Sometimes slot is 0 1 3 4 5 6 8 9 10 11 NOT continuous.
+                    else if (index[0] > 0) {
+                        parameterNames.set(index[0] - 1, name1);
                     }
+
+                    index[0]++;
                 }
             };
         }

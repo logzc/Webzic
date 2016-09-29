@@ -10,5 +10,5 @@ import java.util.List;
 public interface ParameterNameFinder {
     List<String> get(Method method);
 
-    List<String>  get(Constructor constructor);
+    List<String> get(Constructor constructor);
 }

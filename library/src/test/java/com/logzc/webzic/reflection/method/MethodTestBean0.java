@@ -15,13 +15,16 @@ public class MethodTestBean0 {
     private MethodTestBean0() {
 
     }
-
-    public void hello(String name, int a) {
-        System.out.println("Hello, " + name);
+    public void number(long first,double second,float third,char forth,int fifth,boolean sixth,byte seventh,short eighth,String end){
+        System.out.println("number hi.");
     }
 
-    public void world(@RequestParam(name = "age", required = false, defaultValue = "12") @MethodAnno Integer age, Boolean b) {
-        System.out.println("age," + age + " b," + b);
+    public void hello(String name, int second) {
+        System.out.println("Hello, " + name+" "+second);
+    }
+
+    public void world(@RequestParam(name = "age", required = false, defaultValue = "12") @MethodAnno Integer age, Boolean second) {
+        System.out.println("age," + age + " b," + second);
     }
 
     public <S> void add(S a, S b) {
@@ -47,7 +50,7 @@ public class MethodTestBean0 {
         return null;
     }
 
-    public static void staticMethod(){
+    public static void staticMethod(int first,double second,float third,char forth,long fifth,boolean sixth,byte seventh,short eighth,String end){
 
     }
     private static void staticMethod1(){

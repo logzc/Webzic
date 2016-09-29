@@ -1,5 +1,6 @@
 package com.logzc.webzic.util;
 
+import com.logzc.webzic.exception.ZicException;
 import org.objectweb.asm.ClassReader;
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.io.InputStream;
  */
 public class AsmUtil {
 
-    public static ClassReader createClassReader(Class clazz) throws IOException {
+    public static ClassReader createClassReader(Class clazz) throws ZicException {
 
         InputStream inputStream = null;
 
@@ -21,7 +22,7 @@ public class AsmUtil {
 
         } catch (IOException e) {
             e.printStackTrace();
-            throw e;
+            throw new ZicException(e.getMessage());
         } finally {
             IOUtil.close(inputStream);
         }

@@ -34,6 +34,8 @@ dependencies {
     //add the webzic framework.
     compile project(":library")
 
+    providedCompile("javax.servlet:javax.servlet-api:+")
+
     testCompile "junit:junit:+"
 
 
