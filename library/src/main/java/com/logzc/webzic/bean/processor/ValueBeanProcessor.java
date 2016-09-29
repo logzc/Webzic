@@ -1,10 +1,14 @@
 package com.logzc.webzic.bean.processor;
 
 import com.logzc.webzic.annotation.Value;
+import com.logzc.webzic.bean.AppContext;
+import com.logzc.webzic.converter.TypeDescriptor;
 import com.logzc.webzic.util.PropertyUtil;
 
 import java.lang.reflect.Field;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * process @Value annotation for beans.
@@ -15,33 +19,49 @@ public class ValueBeanProcessor implements BeanProcessor {
     private static Properties properties = null;
 
     @Override
-    public Object beforeInit(Object bean, Class<?> clazz) {
-        return bean;
+    public void beforeInit(Object bean, Class<?> clazz) throws Exception {
+
     }
 
     @Override
-    public Object afterInit(Object bean, Class<?> clazz) {
+    public void afterInit(Object bean, Class<?> clazz) throws Exception {
 
         if (properties == null) {
             properties = PropertyUtil.loadProperties("/config.properties");
         }
 
-
         //find all the fields with @Value.
-        Field[] fields=clazz.getDeclaredFields();
+        Field[] fields = clazz.getDeclaredFields();
 
-        for (Field field:fields){
+        for (Field field : fields) {
 
-            if(field.isAnnotationPresent(Value.class)){
+            if (field.isAnnotationPresent(Value.class)) {
 
+                Value value = field.getAnnotation(Value.class);
 
+                String template = value.value();
+
+                //start with "${" and end with "}"
+                Pattern pattern = Pattern.compile("^\\$\\{(.*?)\\}$");
+                Matcher matcher = pattern.matcher(template);
+
+                String val = null;
+                if (matcher.find()) {
+                    String propertyKey = matcher.group(1);
+
+                    val = properties.getProperty(propertyKey);
+
+                } else {
+                    val = template;
+                }
+                
+                field.setAccessible(true);
+
+                Object result = AppContext.getConversionService().convert(val, TypeDescriptor.valueOf(String.class), TypeDescriptor.forField(field));
+                field.set(bean, result);
 
             }
         }
 
-
-        //TODO: here needs to be finished.
-
-        return null;
     }
 }

@@ -1,15 +1,17 @@
 package com.logzc.webzic.reflection;
 
+import com.logzc.webzic.bean.AppContext;
 import com.logzc.webzic.reflection.fs.ZicDir;
 import com.logzc.webzic.reflection.fs.ZicFile;
 import com.logzc.webzic.reflection.scanner.Scanner;
 import com.logzc.webzic.util.Assert;
+import com.logzc.webzic.web.config.Constants;
+import com.logzc.webzic.web.controller.WebzicPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * This the entrance of dynamic reflection.
@@ -17,11 +19,9 @@ import java.util.List;
  */
 public class Reflections {
 
-
     private static final Logger logger = LoggerFactory.getLogger(Reflections.class);
 
-
-    public static void scan(List<Scanner> scanners){
+    public static void scan(List<Scanner> scanners) {
 
         Assert.notEmpty(scanners);
 
@@ -38,7 +38,21 @@ public class Reflections {
 
         Assert.notEmpty(scanners);
 
-        Collection<URL> urls=ClassPaths.forClassLoader();
+        Collection<URL> urls;
+        String scanPackage= AppContext.getConstants().getScanPackage();
+        if (scanPackage == null) {
+            urls = ClassPaths.forClassLoader();
+        } else {
+            String frameworkPackage = WebzicPath.class.getPackage().getName();
+            Collection<URL> frameworkUrls = ClassPaths.forPackage(frameworkPackage);
+
+            Collection<URL> specifyUrls = ClassPaths.forPackage(scanPackage);
+
+            urls = new HashSet<>();
+            urls.addAll(frameworkUrls);
+            urls.addAll(specifyUrls);
+        }
+
         //Collection<URL> urls= ClassPaths.forPackage("com.logzc.webzic.compass");
 
         //These three urls have different results.
@@ -47,7 +61,7 @@ public class Reflections {
 
         for (URL url : urls) {
             //logger.debug("scan...");
-            logger.debug("scaning..."+url.toString());
+            logger.debug("scaning..." + url.toString());
 
             ZicDir zicDir = ZicDir.fromURL(url);
 
@@ -58,7 +72,6 @@ public class Reflections {
                 for (Scanner scanner : scanners) {
 
                     scanner.accept(file);
-
 
                 }
 

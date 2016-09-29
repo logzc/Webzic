@@ -1,7 +1,9 @@
 package com.logzc.webzic.bean.factory.anno;
 
+import com.logzc.webzic.annotation.Component;
 import com.logzc.webzic.exception.ZicException;
 import com.logzc.webzic.reflection.scanner.Scanner;
+import com.logzc.webzic.reflection.scanner.TypeAnnotationScanner;
 
 import java.util.List;
 
@@ -9,6 +11,7 @@ import java.util.List;
  * Created by lishuang on 2016/9/28.
  */
 public class ComponentAnnotationBeanFactory extends AbstractAnnotationBeanFactory {
+
 
     @Override
     public <T> T getBean(Class<T> clazz) {
@@ -19,7 +22,7 @@ public class ComponentAnnotationBeanFactory extends AbstractAnnotationBeanFactor
      * when finish the necessary things. init the @Value
      */
     @Override
-    public void postInit() {
+    public void postInit() throws Exception {
         List<String> classNames = scanner.getClassNames();
 
         try {
@@ -43,6 +46,10 @@ public class ComponentAnnotationBeanFactory extends AbstractAnnotationBeanFactor
 
     @Override
     public Scanner getScanner() {
-        return null;
+        if (scanner == null) {
+            scanner = new TypeAnnotationScanner(Component.class);
+        }
+
+        return scanner;
     }
 }

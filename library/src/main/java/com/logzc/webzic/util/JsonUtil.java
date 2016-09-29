@@ -3,7 +3,7 @@ package com.logzc.webzic.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.logzc.webzic.exception.ZicException;
-import com.logzc.webzic.bean.factory.AppContext;
+import com.logzc.webzic.bean.AppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

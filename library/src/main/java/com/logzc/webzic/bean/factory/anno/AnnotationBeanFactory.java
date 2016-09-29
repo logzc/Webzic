@@ -7,7 +7,7 @@ import com.logzc.webzic.reflection.scanner.Scanner;
  * Created by lishuang on 2016/7/19.
  */
 public interface AnnotationBeanFactory extends BeanFactory {
-    void postInit();
+    void postInit() throws Exception;
 
     Scanner getScanner();
 

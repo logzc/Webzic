@@ -90,6 +90,17 @@ public class TypeDescriptor {
         return new TypeDescriptor(methodParameter);
     }
 
+    public static TypeDescriptor forField(Field field) {
+
+        if (field == null) {
+            return null;
+        }
+
+        return new TypeDescriptor(field);
+    }
+
+
+
     public static TypeDescriptor valueOf(Class<?> type) {
         if (type == null) {
             type = Object.class;

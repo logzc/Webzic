@@ -2,7 +2,7 @@ package com.logzc.webzic.web.core;
 
 import com.logzc.webzic.converter.ConversionService;
 import com.logzc.webzic.converter.TypeDescriptor;
-import com.logzc.webzic.bean.factory.AppContext;
+import com.logzc.webzic.bean.AppContext;
 import com.logzc.webzic.util.Assert;
 import com.logzc.webzic.util.JsonUtil;
 import lombok.Getter;
@@ -164,7 +164,7 @@ public class HandlerMethod {
             logger.debug(e.getMessage());
 
             //handle exceptions.
-            HandlerMethod handlerMethod = AppContext.getControllerAnnotationBeanFactory().getExceptionHandlerMethod();
+            HandlerMethod handlerMethod = AppContext.getHandlerMethodManager().getExceptionHandlerMethod();
 
             try {
                 result = handlerMethod.getMethod().invoke(handlerMethod.bean, request, e);

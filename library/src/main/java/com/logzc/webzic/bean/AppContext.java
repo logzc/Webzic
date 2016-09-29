@@ -1,11 +1,15 @@
-package com.logzc.webzic.bean.factory;
+package com.logzc.webzic.bean;
 
-import com.logzc.webzic.converter.ConversionService;
-import com.logzc.webzic.converter.DefaultConversionService;
+import com.logzc.webzic.bean.factory.BeanFactory;
+import com.logzc.webzic.bean.factory.WidgetBeanFactory;
 import com.logzc.webzic.bean.factory.anno.AnnotationBeanFactory;
+import com.logzc.webzic.bean.factory.anno.ComponentAnnotationBeanFactory;
 import com.logzc.webzic.bean.factory.anno.ControllerAnnotationBeanFactory;
+import com.logzc.webzic.converter.ConversionService;
 import com.logzc.webzic.reflection.Reflections;
 import com.logzc.webzic.reflection.scanner.Scanner;
+import com.logzc.webzic.web.config.Constants;
+import com.logzc.webzic.web.core.HandlerMethodManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,11 +30,14 @@ public class AppContext {
 
 
     //for test purpose make it public.
-    static List<BeanFactory> beanFactoryList = new ArrayList<>();
-    static Map<Class<? extends BeanFactory>, BeanFactory> beanFactoryMap = new HashMap<>();
+    static List<BeanFactory> normalBeanFactoryList = new ArrayList<>();
+    static Map<Class<? extends BeanFactory>, BeanFactory> normalBeanFactoryMap = new HashMap<>();
 
-    //ConversionService.
-    static ConversionService conversionService = new DefaultConversionService();
+    //Important singletons.
+    static ConversionService conversionService;
+    static HandlerMethodManager handlerMethodManager;
+    static Constants constants;
+
 
     static boolean hasInitialized = false;
 
@@ -38,13 +45,14 @@ public class AppContext {
 
 
         //register all the bean factories here.
-        beanFactoryList.add(new WidgetBeanFactory());
-        beanFactoryList.forEach(beanFactory -> {
-            beanFactoryMap.put(beanFactory.getClass(), beanFactory);
+        normalBeanFactoryList.add(new WidgetBeanFactory());
+        normalBeanFactoryList.forEach(beanFactory -> {
+            normalBeanFactoryMap.put(beanFactory.getClass(), beanFactory);
         });
 
 
         annotationBeanFactoryList.add(new ControllerAnnotationBeanFactory());
+        annotationBeanFactoryList.add(new ComponentAnnotationBeanFactory());
         //create map index.
         annotationBeanFactoryList.forEach(annotationBeanFactory -> {
             annotationBeanFactoryMap.put(annotationBeanFactory.getClass(), annotationBeanFactory);
@@ -54,7 +62,7 @@ public class AppContext {
     }
 
 
-    public static void init() {
+    public static void init() throws Exception {
 
         if (hasInitialized) {
             return;
@@ -63,15 +71,20 @@ public class AppContext {
         }
 
         //init normal beanFactories.
-        beanFactoryList.forEach(BeanFactory::init);
+        normalBeanFactoryList.forEach(BeanFactory::init);
 
+
+        annotationBeanFactoryList.forEach(BeanFactory::init);
 
         List<Scanner> scannerList = annotationBeanFactoryList.stream().map(AnnotationBeanFactory::getScanner).collect(Collectors.toList());
 
         //Guarantee scan once.
         Reflections.scan(scannerList);
 
-        annotationBeanFactoryList.forEach(AnnotationBeanFactory::postInit);
+
+        for (AnnotationBeanFactory annotationBeanFactory : annotationBeanFactoryList) {
+            annotationBeanFactory.postInit();
+        }
 
 
     }
@@ -85,7 +98,7 @@ public class AppContext {
     @SuppressWarnings("unchecked")
     public static <T extends BeanFactory> T getBeanFactory(Class<T> clazz) {
 
-        return (T) beanFactoryMap.get(clazz);
+        return (T) normalBeanFactoryMap.get(clazz);
 
     }
 
@@ -99,7 +112,7 @@ public class AppContext {
 
     public static <T> T getBean(Class<T> clazz) {
 
-        for (BeanFactory beanFactory : beanFactoryList) {
+        for (BeanFactory beanFactory : normalBeanFactoryList) {
             T obj = beanFactory.getBean(clazz);
             if (obj != null) {
                 return obj;
@@ -117,7 +130,26 @@ public class AppContext {
         return null;
     }
 
+
+    public static HandlerMethodManager getHandlerMethodManager() {
+        if (handlerMethodManager == null) {
+            handlerMethodManager = getBean(HandlerMethodManager.class);
+        }
+        return handlerMethodManager;
+    }
+
+
+    public static Constants getConstants() {
+        if (constants == null) {
+            constants = getBean(Constants.class);
+        }
+        return constants;
+    }
+
     public static ConversionService getConversionService() {
+        if (conversionService == null) {
+            conversionService = getBean(ConversionService.class);
+        }
         return conversionService;
     }
 
