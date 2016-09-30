@@ -5,7 +5,6 @@ import com.logzc.webzic.util.AsmUtil;
 import lombok.Getter;
 import org.objectweb.asm.*;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -153,7 +152,7 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
         public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 
             final List<String> parameterNames;
-            final int[] index = {0};
+
             final boolean isStaticMethod;
             String key = getKey(name, desc);
 
@@ -185,31 +184,52 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
 
                 parameterNames = new ArrayList<>(parameterTyps.length);
 
-                parameterNames.addAll(Collections.<String>nCopies(parameterTyps.length, null));
+                //parameterNames.addAll(Collections.<String>nCopies(parameterTyps.length, null));
                 methodParameters.put(method, parameterNames);
                 isStaticMethod = Modifier.isStatic(method.getModifiers());
 
+                System.out.println();
                 System.out.println(method);
 
             }
 
-            return new MethodVisitor(ASM5) {
-                @Override
-                public void visitLocalVariable(String name1, String desc1, String signature1, Label start, Label end, int slot) {
+            return new ParameterNameMethodVisitor(ASM5, isStaticMethod, parameterNames);
+        }
+    }
 
-                    System.out.println("VisitLocalVariable." + System.currentTimeMillis());
-                    if (isStaticMethod) {
-                        parameterNames.set(index[0], name1);
-                    }
-                    // for non-static the 0th arg is "this" so we need to offset by -1
-                    //Sometimes slot is 0 1 3 4 5 6 8 9 10 11 NOT continuous.
-                    else if (index[0] > 0) {
-                        parameterNames.set(index[0] - 1, name1);
-                    }
+    private static class ParameterNameMethodVisitor extends MethodVisitor {
 
-                    index[0]++;
+        int index;
+        boolean isStaticMethod;
+        List<String> parameterNames;
+
+        public ParameterNameMethodVisitor(int api, boolean isStaticMethod, List<String> parameterNames) {
+            super(api);
+
+            this.index=0;
+            this.isStaticMethod = isStaticMethod;
+            this.parameterNames = parameterNames;
+
+        }
+
+        @Override
+        public void visitLocalVariable(String name1, String desc1, String signature1, Label start, Label end, int slot) {
+
+            System.out.println("VisitLocalVariable:" + name1);
+            if (isStaticMethod) {
+                parameterNames.add(name1);
+            }
+            // for non-static the 0th arg is "this" so we need to offset by -1
+            //Sometimes slot is 0 1 3 4 5 6 8 9 10 11 NOT continuous.
+            else {
+
+                if(index>0){
+                    parameterNames.add(name1);
                 }
-            };
+
+            }
+
+            index++;
         }
     }
 }
