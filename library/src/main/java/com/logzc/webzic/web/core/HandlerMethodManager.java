@@ -1,5 +1,7 @@
 package com.logzc.webzic.web.core;
 
+import com.logzc.webzic.exception.NotFoundException;
+import com.logzc.webzic.web.controller.ExceptionController;
 import com.logzc.webzic.web.controller.WebzicPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,20 +21,20 @@ public class HandlerMethodManager {
     private Map<String, HandlerMethod> handlerMethodMap = new HashMap<>();
 
 
+    private ExceptionController defaultExceptionController;
 
 
-    public HandlerMethod getErrorHandlerMethod() {
-
-        return handlerMethodMap.get(WebzicPath.WEBZIC_ERROR);
+    public ExceptionController getDefaultExceptionController() {
+        if (defaultExceptionController == null) {
+            defaultExceptionController = new ExceptionController();
+        }
+        return defaultExceptionController;
     }
 
     public HandlerMethod getExceptionHandlerMethod() {
         return handlerMethodMap.get(WebzicPath.WEBZIC_EXCEPTION);
     }
 
-    public HandlerMethod getMethodNotAllowedHandlerMethod() {
-        return handlerMethodMap.get(WebzicPath.WEBZIC_METHOD_NOT_ALLOWED);
-    }
 
     public HandlerMethod get(String path) {
         return handlerMethodMap.get(path);
@@ -42,29 +44,16 @@ public class HandlerMethodManager {
     //get the HandlerMethod by HttpServletRequest.
     public HandlerMethod get(HttpServletRequest request) {
 
-
         String path = request.getRequestURI();
 
         HandlerMethod handlerMethod = handlerMethodMap.get(path);
 
-
-        //TODO: pass parameters into the controller.
-        if (handlerMethod == null) {
-            return getErrorHandlerMethod();
-        }
-
-
-        //check the request methods
-        boolean b = handlerMethod.matchRequestMethod(request);
-        if (b) {
+        if (handlerMethod != null && handlerMethod.matchRequestMethod(request)) {
             return handlerMethod;
-        } else {
-
-            //Method not allowed.
-            return getMethodNotAllowedHandlerMethod();
 
         }
 
+        throw new NotFoundException("Cannot fount " + request.getRequestURI());
 
     }
 

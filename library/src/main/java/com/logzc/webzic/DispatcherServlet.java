@@ -11,6 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This servlet will intercept all the http request.
@@ -39,9 +41,30 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) {
 
-        HandlerMethod handlerMethod = AppContext.getHandlerMethodManager().get(request);
 
-        handlerMethod.handle(request, response);
+        //Handle all the inner Exceptions.
+
+        try {
+
+            HandlerMethod handlerMethod = AppContext.getHandlerMethodManager().get(request);
+
+            handlerMethod.handle(request, response);
+
+        } catch (Exception e) {
+
+            //All the inner exception will be intercepted here.
+
+            logger.debug("Webzic Exception intercept.");
+            logger.debug(e.getMessage());
+
+            //handle exceptions.
+            HandlerMethod exceptionHandlerMethod = AppContext.getHandlerMethodManager().getExceptionHandlerMethod();
+
+            exceptionHandlerMethod.handle(request,response,e);
+
+
+        }
+
 
     }
 

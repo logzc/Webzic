@@ -5,6 +5,7 @@ import com.logzc.webzic.converter.ConversionService;
 import com.logzc.webzic.converter.DefaultConversionService;
 import com.logzc.webzic.web.config.Constants;
 import com.logzc.webzic.web.core.HandlerMethodManager;
+import com.logzc.webzic.web.core.OutputManager;
 import com.logzc.webzic.web.core.RequestParameterFinder;
 import com.logzc.webzic.reflection.parameter.AsmParameterNameFinder;
 
@@ -38,6 +39,9 @@ public class WidgetBeanFactory extends AbstractBeanFactory {
         beanMap.put(HandlerMethodManager.class,new HandlerMethodManager());
         classes.add(HandlerMethodManager.class);
 
+        //Output manager
+        beanMap.put(OutputManager.class,new OutputManager());
+        classes.add(OutputManager.class);
 
 
         //register ParameterNameFinder.

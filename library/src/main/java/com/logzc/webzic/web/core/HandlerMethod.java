@@ -1,20 +1,20 @@
 package com.logzc.webzic.web.core;
 
+import com.logzc.webzic.bean.AppContext;
 import com.logzc.webzic.converter.ConversionService;
 import com.logzc.webzic.converter.TypeDescriptor;
-import com.logzc.webzic.bean.AppContext;
 import com.logzc.webzic.util.Assert;
-import com.logzc.webzic.util.JsonUtil;
+import com.logzc.webzic.web.controller.ExceptionController;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A handler method.
@@ -148,50 +148,37 @@ public class HandlerMethod {
     }
 
     //handle the request.
-    public void handle(HttpServletRequest request, HttpServletResponse response) {
+    public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        Object result=null;
+        Object result = null;
+
+        Object[] args = extractArguments(request, response);
+
+        result = this.method.invoke(this.bean, args);
+
+        AppContext.getOutputManager().output(request, response, result);
+
+    }
+
+    //handle the exception request
+    public void handle(HttpServletRequest request, HttpServletResponse response, Exception e) {
+
+        Object result = null;
 
         try {
+            result = this.getMethod().invoke(this.bean, request, response, e);
+        } catch (Exception e1) {
 
-            Object[] args = extractArguments(request, response);
+            //if exception again. use the default Exception Handler.
+            ExceptionController exceptionController = AppContext.getHandlerMethodManager().getDefaultExceptionController();
 
-            result = this.method.invoke(this.bean, args);
-
-        } catch (Exception e) {
-
-            logger.debug("Webzic Exception intercept.");
-            logger.debug(e.getMessage());
-
-            //handle exceptions.
-            HandlerMethod handlerMethod = AppContext.getHandlerMethodManager().getExceptionHandlerMethod();
-
-            try {
-                result = handlerMethod.getMethod().invoke(handlerMethod.bean, request, e);
-            } catch (Exception e1) {
-                Map<String,Object> map = new HashMap<>();
-                map.put("error","Exception Controller Error!");
-                result=map;
-            }
-
-
-        }finally {
-
-            //check the type of result.
-            String jsonResult = JsonUtil.toJson(result);
-
-            response.setContentType("text/html");
-            PrintWriter out = null;
-            try {
-                out = response.getWriter();
-                out.println(jsonResult);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            result = exceptionController.exception(request, response, e);
 
         }
 
+        AppContext.getOutputManager().output(request, response, result);
 
     }
+
+
 }

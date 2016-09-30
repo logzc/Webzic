@@ -1,9 +1,10 @@
 package com.logzc.webzic.web.controller;
 
 import com.logzc.webzic.annotation.RequestMapping;
+import com.logzc.webzic.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import java.util.Map;
 public class ExceptionController {
 
     @RequestMapping(path = WebzicPath.EXCEPTION)
-    public Map<String, ?> exception(HttpServletRequest request, Exception e) {
+    public Map<String, ?> exception(HttpServletRequest request, HttpServletResponse response, Exception e) {
 
         /*
         {
@@ -28,13 +29,22 @@ public class ExceptionController {
         }
         */
 
-        Map<String,Object> map=new LinkedHashMap<>();
-        map.put("timestamp",System.currentTimeMillis());
-        map.put("status",400);
-        map.put("error","Exception");
-        map.put("exception",e.getClass().getName());
-        map.put("message",e.getMessage());
-        map.put("path",request.getRequestURI());
+        int status = 500;
+        String error = "Internal Error";
+        if (e instanceof NotFoundException) {
+            status = 404;
+            error = "404 Not Found";
+        }
+        response.setStatus(status);
+
+
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("timestamp", System.currentTimeMillis());
+        map.put("status", status);
+        map.put("error", error);
+        map.put("exception", e.getClass().getName());
+        map.put("message", e.getMessage());
+        map.put("path", request.getRequestURI());
 
         return map;
     }

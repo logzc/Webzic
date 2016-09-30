@@ -10,6 +10,7 @@ import com.logzc.webzic.reflection.Reflections;
 import com.logzc.webzic.reflection.scanner.Scanner;
 import com.logzc.webzic.web.config.Constants;
 import com.logzc.webzic.web.core.HandlerMethodManager;
+import com.logzc.webzic.web.core.OutputManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ public class AppContext {
     //Important singletons.
     static ConversionService conversionService;
     static HandlerMethodManager handlerMethodManager;
+    static OutputManager outputManager;
     static Constants constants;
 
 
@@ -136,6 +138,13 @@ public class AppContext {
             handlerMethodManager = getBean(HandlerMethodManager.class);
         }
         return handlerMethodManager;
+    }
+
+    public static OutputManager getOutputManager() {
+        if (outputManager == null) {
+            outputManager = getBean(OutputManager.class);
+        }
+        return outputManager;
     }
 
 

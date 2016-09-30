@@ -5,8 +5,6 @@ import com.logzc.webzic.bean.AppContext;
 import com.logzc.webzic.bean.processor.BeanProcessor;
 import com.logzc.webzic.reflection.scanner.Scanner;
 import com.logzc.webzic.reflection.scanner.TypeAnnotationScanner;
-import com.logzc.webzic.web.controller.AccessController;
-import com.logzc.webzic.web.controller.ErrorController;
 import com.logzc.webzic.web.controller.ExceptionController;
 import com.logzc.webzic.web.controller.WebzicPath;
 import com.logzc.webzic.web.core.HandlerMethod;
@@ -46,33 +44,12 @@ public class ControllerAnnotationBeanFactory extends AbstractAnnotationBeanFacto
         }
 
 
-        //query error handler override
-        HandlerMethod errorHandlerMethod = handlerMethodManager.get(WebzicPath.WEBZIC_ERROR);
-        if (errorHandlerMethod == null) {
-
-            //Default Controller without @Controller Annotation.
-            Class<?> controllerClass = ErrorController.class;
-            classes.add(controllerClass);
-            beanMap.put(controllerClass, controllerClass.newInstance());
-
-        }
-
         //query exception handler override.
         HandlerMethod exceptionHandlerMethod = handlerMethodManager.get(WebzicPath.WEBZIC_EXCEPTION);
         if (exceptionHandlerMethod == null) {
             Class<?> controllerClass = ExceptionController.class;
             classes.add(controllerClass);
-            beanMap.put(controllerClass, controllerClass.newInstance());
-        }
-
-        //query access handler override.
-        HandlerMethod methodNotAllowedHandlerMethod = handlerMethodManager.get(WebzicPath.WEBZIC_METHOD_NOT_ALLOWED);
-        if (methodNotAllowedHandlerMethod == null) {
-            Class<?> controllerClass = AccessController.class;
-            
-            classes.add(controllerClass);
-            beanMap.put(controllerClass, controllerClass.newInstance());
-
+            beanMap.put(controllerClass, handlerMethodManager.getDefaultExceptionController());
         }
 
         //process the bean processors.
