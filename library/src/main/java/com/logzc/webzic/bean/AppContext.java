@@ -5,6 +5,7 @@ import com.logzc.webzic.bean.factory.WidgetBeanFactory;
 import com.logzc.webzic.bean.factory.anno.AnnotationBeanFactory;
 import com.logzc.webzic.bean.factory.anno.ComponentAnnotationBeanFactory;
 import com.logzc.webzic.bean.factory.anno.ControllerAnnotationBeanFactory;
+import com.logzc.webzic.bean.factory.anno.RepositoryAnnotationBeanFactory;
 import com.logzc.webzic.converter.ConversionService;
 import com.logzc.webzic.reflection.Reflections;
 import com.logzc.webzic.reflection.scanner.Scanner;
@@ -52,8 +53,8 @@ public class AppContext {
             normalBeanFactoryMap.put(beanFactory.getClass(), beanFactory);
         });
 
-
         annotationBeanFactoryList.add(new ControllerAnnotationBeanFactory());
+        annotationBeanFactoryList.add(new RepositoryAnnotationBeanFactory());
         annotationBeanFactoryList.add(new ComponentAnnotationBeanFactory());
         //create map index.
         annotationBeanFactoryList.forEach(annotationBeanFactory -> {

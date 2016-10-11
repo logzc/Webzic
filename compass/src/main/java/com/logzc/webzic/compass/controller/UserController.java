@@ -3,10 +3,13 @@ package com.logzc.webzic.compass.controller;
 import com.logzc.webzic.annotation.Autowired;
 import com.logzc.webzic.annotation.RequestMapping;
 import com.logzc.webzic.annotation.RestController;
+import com.logzc.webzic.compass.dao.UserDao;
+import com.logzc.webzic.compass.model.User;
 import com.logzc.webzic.compass.service.UserService;
 import com.logzc.webzic.web.core.RequestMethod;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,12 +22,18 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(path = "/page", method = {RequestMethod.GET, RequestMethod.POST})
-    public Map<String, ?> page(String name,Integer age) {
+    @Autowired
+    private UserDao userDao;
 
-        Map<String,String> user=new HashMap<>();
-        user.put("name",name);
-        user.put("age",age+"");
+    @RequestMapping(path = "/page", method = {RequestMethod.GET, RequestMethod.POST})
+    public Map<String, ?> page(String name,Integer age) throws Exception{
+
+        System.out.println("Query condition: name-> "+name+" age -> " +age);
+
+        Map<String,List<User>> user=new HashMap<>();
+        List<User> users=userDao.queryAll();
+        user.put("users",users);
+
         return user;
     }
 

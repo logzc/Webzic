@@ -16,11 +16,16 @@ repositories {
 dependencies {
 
 
+    //Import Orm project.
+    compile project(":orm")
+
     testCompile "junit:junit:+"
     compile fileTree(dir: 'libs', include: '*.jar')
 
 
     providedCompile("javax.servlet:javax.servlet-api:+")
+
+
 
     //在写Main函数的时候有时候需要临时用到
     //compile("javax.servlet:javax.servlet-api:+")
@@ -48,7 +53,6 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-annotations:+'
     compile 'com.fasterxml.jackson.core:jackson-databind:+'
 
-
     //asm
     //compile 'asm:asm:3.3.1'
     compile 'org.ow2.asm:asm:+'
@@ -62,7 +66,5 @@ dependencies {
     //compile 'com.j256.ormlite:ormlite-jdbc:+'
     //jdbc for mysql
     compile 'mysql:mysql-connector-java:+'
-
-
 
 }

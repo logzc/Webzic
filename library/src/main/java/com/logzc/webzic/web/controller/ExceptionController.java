@@ -42,7 +42,7 @@ public class ExceptionController {
         map.put("timestamp", System.currentTimeMillis());
         map.put("status", status);
         map.put("error", error);
-        map.put("exception", e.getClass().getName());
+        map.put("exception", e.getClass().getSimpleName());
         map.put("message", e.getMessage());
         map.put("path", request.getRequestURI());
 

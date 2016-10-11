@@ -33,8 +33,13 @@ public class OrmTest {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
 
+        /*
         String url = "jdbc:mysql://localhost:3306/demo?user=root&password=lishmoshou511&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC";
         connectionSource = new JdbcConnectionSource(url);
+        */
+
+        String url = "jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC";
+        connectionSource = new JdbcConnectionSource(url,"root","lishmoshou511");
     }
 
     @After
@@ -122,7 +127,7 @@ public class OrmTest {
 
         List<Account> accounts = accountDao.queryAll();
 
-        assumeTrue(accounts.size() == 6);
+        assumeTrue(accounts.size() == 5);
 
     }
 
