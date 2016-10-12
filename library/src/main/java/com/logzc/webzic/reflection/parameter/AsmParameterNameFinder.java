@@ -67,9 +67,9 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
         ClassReader reader = AsmUtil.createClassReader(clazz);
         ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(constructors);
 
-        System.out.println("ready to accept." + System.currentTimeMillis());
+        //System.out.println("ready to accept." + System.currentTimeMillis());
         reader.accept(parameterNameClassVisitor, 0);
-        System.out.println("finish accept." + System.currentTimeMillis());
+        //System.out.println("finish accept." + System.currentTimeMillis());
         constructorCache = parameterNameClassVisitor.getConstructorParameters();
     }
 
@@ -88,10 +88,9 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
         ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(methods);
 
 
-        //TODO: You cannot guarantee  parameterNameClassVisitor finish scan. So you have to use a Future things.
-        System.out.println("ready to accept." + System.currentTimeMillis());
+        //System.out.println("ready to accept." + System.currentTimeMillis());
         reader.accept(parameterNameClassVisitor, 0);
-        System.out.println("finish accept." + System.currentTimeMillis());
+        //System.out.println("finish accept." + System.currentTimeMillis());
 
         methodCache = parameterNameClassVisitor.getMethodParameters();
 
@@ -188,8 +187,8 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
                 methodParameters.put(method, parameterNames);
                 isStaticMethod = Modifier.isStatic(method.getModifiers());
 
-                System.out.println();
-                System.out.println(method);
+                //System.out.println();
+                //System.out.println(method);
 
             }
 
@@ -215,7 +214,7 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
         @Override
         public void visitLocalVariable(String name1, String desc1, String signature1, Label start, Label end, int slot) {
 
-            System.out.println("VisitLocalVariable:" + name1);
+            //System.out.println("VisitLocalVariable:" + name1);
             if (isStaticMethod) {
                 parameterNames.add(name1);
             }

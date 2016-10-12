@@ -1,6 +1,7 @@
 package com.logzc.webzic.bean.factory.anno;
 
 import com.logzc.webzic.bean.factory.AbstractBeanFactory;
+import com.logzc.webzic.bean.processor.AutowiredBeanProcessor;
 import com.logzc.webzic.bean.processor.BeanProcessor;
 import com.logzc.webzic.bean.processor.RequestMappingBeanProcessor;
 import com.logzc.webzic.bean.processor.ValueBeanProcessor;
@@ -24,5 +25,7 @@ public abstract class AbstractAnnotationBeanFactory extends AbstractBeanFactory 
         beanProcessors.add(new ValueBeanProcessor());
 
         beanProcessors.add(new RequestMappingBeanProcessor());
+
+        beanProcessors.add(new AutowiredBeanProcessor());
     }
 }

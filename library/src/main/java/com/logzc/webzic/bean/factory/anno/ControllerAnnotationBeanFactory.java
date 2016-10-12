@@ -57,7 +57,7 @@ public class ControllerAnnotationBeanFactory extends AbstractAnnotationBeanFacto
 
             for (Map.Entry<Class<?>, Object> entry : beanMap.entrySet()) {
 
-                beanProcessor.afterInit(entry.getValue(), entry.getKey());
+                beanProcessor.beforeInit(entry.getValue(), entry.getKey());
 
             }
         }

@@ -4,6 +4,7 @@ import com.logzc.webzic.annotation.Repository;
 import com.logzc.webzic.annotation.RestController;
 import com.logzc.webzic.bean.AppContext;
 import com.logzc.webzic.bean.processor.BeanProcessor;
+import com.logzc.webzic.orm.dao.DaoManager;
 import com.logzc.webzic.reflection.scanner.Scanner;
 import com.logzc.webzic.reflection.scanner.TypeAnnotationScanner;
 import com.logzc.webzic.web.controller.ExceptionController;
@@ -35,18 +36,17 @@ public class RepositoryAnnotationBeanFactory extends AbstractAnnotationBeanFacto
         //find all the methods with @RequestMapping annotation.
         List<String> classNames = scanner.getClassNames();
 
-
         //create the indexes of the scanned repository.
         //@Repository are all interfaces, we have to instance it.
         for (String className : classNames) {
             Class<?> repositoryClass = this.getClassLoader().loadClass(className);
 
-            //TODO:How to instance the interface?
             classes.add(repositoryClass);
 
+            //Instance the interfaces
+            Object repository= DaoManager.newInstance(repositoryClass);
 
-
-            beanMap.put(repositoryClass, repositoryClass.newInstance());
+            beanMap.put(repositoryClass, repository);
         }
 
 
@@ -55,7 +55,7 @@ public class RepositoryAnnotationBeanFactory extends AbstractAnnotationBeanFacto
 
             for (Map.Entry<Class<?>, Object> entry : beanMap.entrySet()) {
 
-                beanProcessor.afterInit(entry.getValue(), entry.getKey());
+                beanProcessor.beforeInit(entry.getValue(), entry.getKey());
 
             }
         }

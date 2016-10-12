@@ -19,18 +19,11 @@ public class RequestMappingBeanProcessor implements BeanProcessor {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private static Properties properties = null;
 
-    @Override
-    public void beforeInit(Object bean, Class<?> clazz) throws Exception {
-
-    }
-
     /**
      * Read the annotations of the controller class and create the map index.
      */
     @Override
-    public void afterInit(Object bean, Class<?> controllerClass) throws Exception {
-
-
+    public void beforeInit(Object bean, Class<?> controllerClass) throws Exception {
         HandlerMethodManager handlerMethodManager = AppContext.getHandlerMethodManager();
 
         RequestMapping controllerRequestMapping = controllerClass.getAnnotation(RequestMapping.class);
@@ -66,23 +59,28 @@ public class RequestMappingBeanProcessor implements BeanProcessor {
                 Set<String> finalPaths = new HashSet<>();
                 Set<RequestMethod> finalRequestMethods = new HashSet<>();
 
-                //combine the paths.
-                for (String path2 : methodRequestPaths) {
+                if(controllerRequestPaths.size()==0){
 
-                    for (String path1 : controllerRequestPaths) {
+                    finalPaths.addAll(methodRequestPaths);
 
-                        finalPaths.add(path1 + path2);
+                }else{
+                    //combine the paths.
+                    for (String path2 : methodRequestPaths) {
 
+                        for (String path1 : controllerRequestPaths) {
+
+                            finalPaths.add(path1 + path2);
+
+                        }
                     }
                 }
+
 
                 //combine the request methods.
                 finalRequestMethods.addAll(controllerRequestMethods);
                 finalRequestMethods.addAll(methodRequestMethods);
 
                 HandlerMethod handlerMethod = new HandlerMethod(bean, method, finalPaths, finalRequestMethods);
-
-
 
                 for (String path : finalPaths) {
 
@@ -92,6 +90,14 @@ public class RequestMappingBeanProcessor implements BeanProcessor {
 
             }
         }
+
+    }
+
+
+    @Override
+    public void afterInit(Object bean, Class<?> controllerClass) throws Exception {
+
+
 
 
     }

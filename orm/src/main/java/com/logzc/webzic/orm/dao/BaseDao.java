@@ -36,7 +36,6 @@ public class BaseDao<T, ID> implements Dao<T, ID> {
     protected UpdateStatement<T, ID> updateStatement;
     protected QueryStatement<T, ID> queryStatement;
 
-
     //convert DbResults to Entity.
     protected Mapper<T> mapper;
 

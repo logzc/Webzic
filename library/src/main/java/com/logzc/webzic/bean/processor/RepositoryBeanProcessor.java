@@ -21,12 +21,6 @@ public class RepositoryBeanProcessor implements BeanProcessor {
 
     @Override
     public void beforeInit(Object bean, Class<?> clazz) throws Exception {
-
-    }
-
-    @Override
-    public void afterInit(Object bean, Class<?> clazz) throws Exception {
-
         if (properties == null) {
             properties = PropertyUtil.loadProperties("/config.properties");
         }
@@ -38,6 +32,12 @@ public class RepositoryBeanProcessor implements BeanProcessor {
         }
 
         //instance the clazz.
+    }
+
+    @Override
+    public void afterInit(Object bean, Class<?> clazz) throws Exception {
+
+
 
     }
 }

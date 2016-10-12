@@ -3,6 +3,8 @@ package com.logzc.webzic.orm.dao;
 import com.logzc.webzic.orm.support.ConnectionSource;
 import com.logzc.webzic.orm.table.Table;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +42,20 @@ public class DaoManager {
 
         return (D) dao;
 
+    }
+
+
+    //Create a instance by Interface.
+    @SuppressWarnings("unchecked")
+    public static <R> R newInstance(Class<R> repositoryClass) throws SQLException{
+        ClassLoader classLoader = DaoManager.class.getClassLoader();
+        Class<?>[] interfaces = new Class<?>[]{
+                repositoryClass
+        };
+        InvocationHandler handler = new DaoHandler();
+        Object object = Proxy.newProxyInstance(classLoader, interfaces, handler);
+
+        return (R) object;
     }
 
 

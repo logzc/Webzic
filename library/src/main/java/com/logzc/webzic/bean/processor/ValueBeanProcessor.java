@@ -20,12 +20,6 @@ public class ValueBeanProcessor implements BeanProcessor {
 
     @Override
     public void beforeInit(Object bean, Class<?> clazz) throws Exception {
-
-    }
-
-    @Override
-    public void afterInit(Object bean, Class<?> clazz) throws Exception {
-
         if (properties == null) {
             properties = PropertyUtil.loadProperties("/config.properties");
         }
@@ -54,7 +48,7 @@ public class ValueBeanProcessor implements BeanProcessor {
                 } else {
                     val = template;
                 }
-                
+
                 field.setAccessible(true);
 
                 Object result = AppContext.getConversionService().convert(val, TypeDescriptor.valueOf(String.class), TypeDescriptor.forField(field));
@@ -62,6 +56,12 @@ public class ValueBeanProcessor implements BeanProcessor {
 
             }
         }
+    }
+
+    @Override
+    public void afterInit(Object bean, Class<?> clazz) throws Exception {
+
+
 
     }
 }
