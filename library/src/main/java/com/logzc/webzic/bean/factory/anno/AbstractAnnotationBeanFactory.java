@@ -9,6 +9,7 @@ import com.logzc.webzic.reflection.scanner.Scanner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lishuang on 2016/7/26.
@@ -17,15 +18,18 @@ public abstract class AbstractAnnotationBeanFactory extends AbstractBeanFactory 
 
     protected Scanner scanner;
 
-    //BeanProcessors.
-    protected List<BeanProcessor> beanProcessors = new ArrayList<>();
 
     @Override
     public void init() {
-        beanProcessors.add(new ValueBeanProcessor());
 
-        beanProcessors.add(new RequestMappingBeanProcessor());
-
-        beanProcessors.add(new AutowiredBeanProcessor());
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getBean(Class<T> clazz) {
+
+        return (T) beanMap.get(clazz);
+    }
+
+
 }

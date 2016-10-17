@@ -13,11 +13,6 @@ import java.util.List;
 public class ComponentAnnotationBeanFactory extends AbstractAnnotationBeanFactory {
 
 
-    @Override
-    public <T> T getBean(Class<T> clazz) {
-        return null;
-    }
-
     /**
      * when finish the necessary things. init the @Value
      */
@@ -32,11 +27,10 @@ public class ComponentAnnotationBeanFactory extends AbstractAnnotationBeanFactor
                 classes.add(configurationClass);
                 beanMap.put(configurationClass, configurationClass.newInstance());
 
-
-                //Inject property values.
-
-
             }
+
+
+
         } catch (Exception e) {
             throw new ZicException(e.getMessage());
         }

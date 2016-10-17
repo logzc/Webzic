@@ -19,7 +19,7 @@ public class ValueBeanProcessor implements BeanProcessor {
     private static Properties properties = null;
 
     @Override
-    public void beforeInit(Object bean, Class<?> clazz) throws Exception {
+    public void process(Object bean, Class<?> clazz) throws Exception {
         if (properties == null) {
             properties = PropertyUtil.loadProperties("/config.properties");
         }
@@ -58,6 +58,12 @@ public class ValueBeanProcessor implements BeanProcessor {
         }
     }
 
+    @Override
+    public void beforeInit(Object bean, Class<?> clazz) throws Exception {
+
+
+
+    }
     @Override
     public void afterInit(Object bean, Class<?> clazz) throws Exception {
 

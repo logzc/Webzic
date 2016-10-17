@@ -5,6 +5,9 @@ package com.logzc.webzic.bean.processor;
  */
 public interface BeanProcessor {
 
+
+    void process(Object bean, Class<?> clazz) throws Exception;
+
     //before all beans loaded.
     void beforeInit(Object bean, Class<?> clazz) throws Exception;
 

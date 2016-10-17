@@ -6,6 +6,7 @@ import com.logzc.webzic.bean.factory.anno.AnnotationBeanFactory;
 import com.logzc.webzic.bean.factory.anno.ComponentAnnotationBeanFactory;
 import com.logzc.webzic.bean.factory.anno.ControllerAnnotationBeanFactory;
 import com.logzc.webzic.bean.factory.anno.RepositoryAnnotationBeanFactory;
+import com.logzc.webzic.bean.processor.BeanProcessorManager;
 import com.logzc.webzic.converter.ConversionService;
 import com.logzc.webzic.reflection.Reflections;
 import com.logzc.webzic.reflection.scanner.Scanner;
@@ -41,6 +42,7 @@ public class AppContext {
     static OutputManager outputManager;
     static Constants constants;
 
+    static BeanProcessorManager beanProcessorManager=new BeanProcessorManager();
 
     static boolean hasInitialized = false;
 
@@ -56,10 +58,17 @@ public class AppContext {
         annotationBeanFactoryList.add(new ControllerAnnotationBeanFactory());
         annotationBeanFactoryList.add(new RepositoryAnnotationBeanFactory());
         annotationBeanFactoryList.add(new ComponentAnnotationBeanFactory());
-        //create map index.
+
         annotationBeanFactoryList.forEach(annotationBeanFactory -> {
+
+            //create map index.
             annotationBeanFactoryMap.put(annotationBeanFactory.getClass(), annotationBeanFactory);
+
         });
+
+
+
+
 
 
     }
@@ -89,6 +98,11 @@ public class AppContext {
             annotationBeanFactory.postInit();
         }
 
+
+        for (AnnotationBeanFactory annotationBeanFactory : annotationBeanFactoryList) {
+            //execute the processors.
+            beanProcessorManager.process(annotationBeanFactory.getBeanMap());
+        }
 
     }
 

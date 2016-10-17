@@ -52,15 +52,6 @@ public class ControllerAnnotationBeanFactory extends AbstractAnnotationBeanFacto
             beanMap.put(controllerClass, handlerMethodManager.getDefaultExceptionController());
         }
 
-        //process the bean processors.
-        for (BeanProcessor beanProcessor : beanProcessors) {
-
-            for (Map.Entry<Class<?>, Object> entry : beanMap.entrySet()) {
-
-                beanProcessor.beforeInit(entry.getValue(), entry.getKey());
-
-            }
-        }
     }
 
 
@@ -74,12 +65,6 @@ public class ControllerAnnotationBeanFactory extends AbstractAnnotationBeanFacto
         return scanner;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T getBean(Class<T> clazz) {
-
-        return (T) beanMap.get(clazz);
-    }
 
 
 }

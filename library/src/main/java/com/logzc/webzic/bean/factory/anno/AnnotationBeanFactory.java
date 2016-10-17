@@ -11,4 +11,6 @@ public interface AnnotationBeanFactory extends BeanFactory {
 
     Scanner getScanner();
 
+
+
 }

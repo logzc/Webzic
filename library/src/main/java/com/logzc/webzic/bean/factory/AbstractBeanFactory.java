@@ -1,6 +1,5 @@
 package com.logzc.webzic.bean.factory;
 
-import com.logzc.webzic.bean.processor.BeanProcessor;
 import com.logzc.webzic.util.ClassUtil;
 
 import java.util.ArrayList;
@@ -20,11 +19,13 @@ public abstract class AbstractBeanFactory implements BeanFactory {
     protected Map<Class<?>, Object> beanMap = new HashMap<>();
 
 
-
     //set a default classloader.
     public ClassLoader getClassLoader() {
         return ClassUtil.getClassLoader();
     }
 
+    public Map<Class<?>, Object> getBeanMap() {
+        return beanMap;
+    }
 
 }

@@ -24,6 +24,12 @@ public class AutowiredBeanProcessor implements BeanProcessor {
     @Override
     public void afterInit(Object bean, Class<?> clazz) throws Exception {
 
+
+    }
+
+    @Override
+    public void process(Object bean, Class<?> clazz) throws Exception {
+
         if (properties == null) {
             properties = PropertyUtil.loadProperties("/config.properties");
         }

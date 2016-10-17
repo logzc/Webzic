@@ -18,13 +18,11 @@ import java.util.regex.Pattern;
 public class RepositoryBeanProcessor implements BeanProcessor {
 
     private static Properties properties = null;
-
     @Override
-    public void beforeInit(Object bean, Class<?> clazz) throws Exception {
+    public void process(Object bean, Class<?> clazz) throws Exception {
         if (properties == null) {
             properties = PropertyUtil.loadProperties("/config.properties");
         }
-
 
         //Only handle class with @Repository.
         if(!clazz.isAnnotationPresent(Repository.class)){
@@ -32,6 +30,10 @@ public class RepositoryBeanProcessor implements BeanProcessor {
         }
 
         //instance the clazz.
+    }
+    @Override
+    public void beforeInit(Object bean, Class<?> clazz) throws Exception {
+
     }
 
     @Override

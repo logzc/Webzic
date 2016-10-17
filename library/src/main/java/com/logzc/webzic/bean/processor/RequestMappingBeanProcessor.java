@@ -23,7 +23,7 @@ public class RequestMappingBeanProcessor implements BeanProcessor {
      * Read the annotations of the controller class and create the map index.
      */
     @Override
-    public void beforeInit(Object bean, Class<?> controllerClass) throws Exception {
+    public void process(Object bean, Class<?> controllerClass) throws Exception {
         HandlerMethodManager handlerMethodManager = AppContext.getHandlerMethodManager();
 
         RequestMapping controllerRequestMapping = controllerClass.getAnnotation(RequestMapping.class);
@@ -95,10 +95,12 @@ public class RequestMappingBeanProcessor implements BeanProcessor {
 
 
     @Override
+    public void beforeInit(Object bean, Class<?> controllerClass) throws Exception {
+
+    }
+
+    @Override
     public void afterInit(Object bean, Class<?> controllerClass) throws Exception {
-
-
-
 
     }
 }
