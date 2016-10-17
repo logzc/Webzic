@@ -19,7 +19,7 @@ dependencies {
     //Import Orm project.
     compile project(":orm")
 
-    testCompile "junit:junit:+"
+    compile "junit:junit:+"
     compile fileTree(dir: 'libs', include: '*.jar')
 
 
