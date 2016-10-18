@@ -2,6 +2,7 @@ package com.logzc.webzic.reflection.method;
 
 import com.logzc.webzic.reflection.parameter.AsmParameterNameFinder;
 import com.logzc.webzic.reflection.parameter.ParameterNameFinder;
+import org.junit.Assume;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
@@ -187,6 +188,23 @@ public class MethodTest {
         }
 
 
+    }
+
+    @Test
+    public void testMethodEqual() throws NoSuchMethodException {
+        Class<MethodTestBean1> clazz1=MethodTestBean1.class;
+        Class<MethodTestBean2> clazz2=MethodTestBean2.class;
+
+        Method[] methods=clazz1.getDeclaredMethods();
+
+
+
+//        Method method1=clazz1.getMethod("methodToEqual",int.class,boolean.class);
+//        Method method2=clazz2.getMethod("methodToEqual",int.class,boolean.class);
+
+
+
+        System.out.println("Finish!");
     }
 
 

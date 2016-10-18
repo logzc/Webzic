@@ -20,7 +20,7 @@ public abstract class AbstractAnnotationBeanFactory extends AbstractBeanFactory 
 
 
     @Override
-    public void init() {
+    public void init() throws Exception{
 
     }
 

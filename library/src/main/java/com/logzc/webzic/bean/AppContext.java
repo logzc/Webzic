@@ -8,6 +8,7 @@ import com.logzc.webzic.bean.factory.anno.ControllerAnnotationBeanFactory;
 import com.logzc.webzic.bean.factory.anno.RepositoryAnnotationBeanFactory;
 import com.logzc.webzic.bean.processor.BeanProcessorManager;
 import com.logzc.webzic.converter.ConversionService;
+import com.logzc.webzic.orm.support.ConnectionSource;
 import com.logzc.webzic.reflection.Reflections;
 import com.logzc.webzic.reflection.scanner.Scanner;
 import com.logzc.webzic.web.config.Constants;
@@ -41,6 +42,7 @@ public class AppContext {
     static HandlerMethodManager handlerMethodManager;
     static OutputManager outputManager;
     static Constants constants;
+    static ConnectionSource connectionSource;
 
     static BeanProcessorManager beanProcessorManager=new BeanProcessorManager();
 
@@ -83,10 +85,13 @@ public class AppContext {
         }
 
         //init normal beanFactories.
-        normalBeanFactoryList.forEach(BeanFactory::init);
+        for (BeanFactory beanFactory:normalBeanFactoryList){
+            beanFactory.init();
+        }
 
-
-        annotationBeanFactoryList.forEach(BeanFactory::init);
+        for (BeanFactory beanFactory:annotationBeanFactoryList){
+            beanFactory.init();
+        }
 
         List<Scanner> scannerList = annotationBeanFactoryList.stream().map(AnnotationBeanFactory::getScanner).collect(Collectors.toList());
 
@@ -176,6 +181,14 @@ public class AppContext {
         }
         return conversionService;
     }
+
+    public static ConnectionSource getConnectionSource() {
+        if (connectionSource == null) {
+            connectionSource = getBean(ConnectionSource.class);
+        }
+        return connectionSource;
+    }
+
 
 
 }

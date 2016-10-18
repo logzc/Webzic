@@ -2,6 +2,7 @@ package com.logzc.webzic.orm.dao;
 
 import com.logzc.webzic.orm.support.ConnectionSource;
 import com.logzc.webzic.orm.table.Table;
+import com.sun.deploy.appcontext.AppContext;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -47,12 +48,15 @@ public class DaoManager {
 
     //Create a instance by Interface.
     @SuppressWarnings("unchecked")
-    public static <R> R newInstance(Class<R> repositoryClass) throws SQLException{
+    public static <R> R newInstance(ConnectionSource connectionSource,Class<R> repositoryClass,Class<?> tableClass) throws SQLException{
         ClassLoader classLoader = DaoManager.class.getClassLoader();
         Class<?>[] interfaces = new Class<?>[]{
                 repositoryClass
         };
-        InvocationHandler handler = new DaoHandler();
+
+        InvocationHandler handler = new DaoHandler(connectionSource,tableClass);
+
+
         Object object = Proxy.newProxyInstance(classLoader, interfaces, handler);
 
         return (R) object;

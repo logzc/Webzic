@@ -10,7 +10,9 @@ import java.util.Properties;
  * Properties file name: /config.properties
  *
  * Scan package key: webzic.scan.package
- * JDBC keys: webzic.jdbc.url
+ * JDBC keys:
+ *            webzic.jdbc.driver
+ *            webzic.jdbc.url
  *            webzic.jdbc.user
  *            webzic.jdbc.password
  *
@@ -21,6 +23,7 @@ public class Constants {
     private Properties properties;
     private String scanPackage;
 
+    private String jdbcDriver;
     private String jdbcUrl;
     private String jdbcUser;
     private String jdbcPassword;
@@ -42,7 +45,12 @@ public class Constants {
         }
         return scanPackage;
     }
-
+    public String getJdbcDriver(){
+        if(jdbcDriver==null){
+            jdbcDriver=getProperty("webzic.jdbc.driver");
+        }
+        return jdbcDriver;
+    }
     public String getJdbcUrl(){
         if(jdbcUrl==null){
             jdbcUrl=getProperty("webzic.jdbc.url");

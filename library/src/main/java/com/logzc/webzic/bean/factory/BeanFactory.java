@@ -1,5 +1,6 @@
 package com.logzc.webzic.bean.factory;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Map;
 public interface BeanFactory {
 
 
-    void init();
+    void init() throws Exception;
 
     <T> T getBean(Class<T> clazz);
 
