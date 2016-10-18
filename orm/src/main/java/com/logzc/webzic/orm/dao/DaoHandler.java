@@ -19,11 +19,21 @@ public class DaoHandler<T, ID> extends BaseDao<T, ID> implements InvocationHandl
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-        Object result = method.invoke(this, args);
 
-        System.out.println("DaoHandler:");
-        System.out.println("Method->" + method);
+        try {
 
-        return result;
+            Object result = method.invoke(this, args);
+
+            return result;
+        } catch (Exception e) {
+
+            //Try to match queryByXXXAndXXX queryByXXXOrXXX
+
+            return null;
+
+        }
+
+
+
     }
 }

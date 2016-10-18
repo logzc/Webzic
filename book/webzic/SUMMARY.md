@@ -15,6 +15,8 @@
 
 * [3 Orm](chapter3/index.md)
 
+ - [3.1 Repository](chapter3/repository.md)
+
 * [4 AOP]()
 
 * [5 DB]()
