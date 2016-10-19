@@ -25,10 +25,21 @@ public class CriteriaBuilder {
         return new ComparisonPredicate(this, ComparisonOperator.NEQ, columnType, i);
     }
 
+    public Predicate neq(ColumnType columnType, String i) {
+
+        return new ComparisonPredicate(this, ComparisonOperator.NEQ, columnType, i);
+    }
+
+
     public Predicate gt(ColumnType columnType, Number i) {
 
         return new ComparisonPredicate(this, ComparisonOperator.GT, columnType, i);
     }
+    public Predicate gt(ColumnType columnType, String i) {
+
+        return new ComparisonPredicate(this, ComparisonOperator.GT, columnType, i);
+    }
+
 
     public Predicate gt(ColumnType columnType, Express i) {
 
@@ -39,11 +50,21 @@ public class CriteriaBuilder {
 
         return new ComparisonPredicate(this, ComparisonOperator.GTE, columnType, i);
     }
+    public Predicate gte(ColumnType columnType, String i) {
+
+        return new ComparisonPredicate(this, ComparisonOperator.GTE, columnType, i);
+    }
+
 
     public Predicate lt(ColumnType columnType, Number i) {
 
         return new ComparisonPredicate(this, ComparisonOperator.LT, columnType, i);
     }
+    public Predicate lt(ColumnType columnType, String i) {
+
+        return new ComparisonPredicate(this, ComparisonOperator.LT, columnType, i);
+    }
+
 
     public Predicate lt(ColumnType columnType, Express i) {
 
@@ -55,14 +76,20 @@ public class CriteriaBuilder {
 
         return new ComparisonPredicate(this, ComparisonOperator.LTE, columnType, i);
     }
+    public Predicate lte(ColumnType columnType, String i) {
 
-
-    public Predicate and(Predicate agePredicate, Predicate weightPredicate) {
-        return new CompoundPredicate(this, BooleanOperator.AND, agePredicate, weightPredicate);
+        return new ComparisonPredicate(this, ComparisonOperator.LTE, columnType, i);
     }
 
-    public Predicate or(Predicate agePredicate, Predicate weightPredicate) {
-        return new CompoundPredicate(this, BooleanOperator.OR, agePredicate, weightPredicate);
+
+
+    public Predicate and(Predicate predicate0, Predicate predicate1) {
+        return new CompoundPredicate(this, BooleanOperator.AND, predicate0, predicate1);
+    }
+
+
+    public Predicate or(Predicate predicate0, Predicate predicate1) {
+        return new CompoundPredicate(this, BooleanOperator.OR, predicate0, predicate1);
     }
 
 }

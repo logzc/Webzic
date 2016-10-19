@@ -9,6 +9,8 @@ Repository使用
 
 [参考Spring](http://docs.spring.io/spring-data/jpa/docs/current/reference/html/)
 
+[文章](https://dzone.com/articles/how-get-jpsqlsql-string)
+
 | Keyword | Sample | JPQL snippet |
 | :-------------- | :------------ | :------------ |
 | And | findByLastnameAndFirstname | ... where x.lastname = ?1 and x.firstname = ?2 |

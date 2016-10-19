@@ -31,7 +31,6 @@ public class DaoTest {
         for (UserTest u : userTestList) {
             System.out.println(u.username);
         }
-
     }
 
     @Test

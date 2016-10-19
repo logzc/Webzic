@@ -94,7 +94,7 @@ public class OrmTest {
 
         Dao<Account, Integer> accountDao = DaoManager.createDao(connectionSource, Account.class);
 
-        Account account = accountDao.queryOne(200);
+        Account account = accountDao.queryOne(1);
 
         assumeNotNull(account);
 
@@ -106,7 +106,7 @@ public class OrmTest {
             @Override
             public Predicate getPredicate(TableInfo<Account, ?> tableInfo, CriteriaBuilder cb) throws SQLException {
                 Predicate agePredicate = cb.gt(tableInfo.getColumnType("age"), 3);
-                Predicate weightPredicate = cb.lt(tableInfo.getColumnType("weight"), 6);
+                Predicate weightPredicate = cb.lt(tableInfo.getColumnType("name"), 6);
 
                 return cb.and(agePredicate,weightPredicate);
             }
@@ -143,13 +143,14 @@ public class OrmTest {
             @Override
             public Predicate getPredicate(TableInfo<Account, ?> tableInfo, CriteriaBuilder cb) throws SQLException {
                 Predicate agePredicate = cb.gt(tableInfo.getColumnType("age"), 3);
-                Predicate weightPredicate = cb.lt(tableInfo.getColumnType("weight"), 6);
-
+                Predicate weightPredicate = cb.gt(tableInfo.getColumnType("name"), "L");
                 return cb.and(agePredicate,weightPredicate);
             }
         });
 
-        assumeTrue(accounts.size() == 2);
+        for (Account account:accounts){
+            System.out.println(account.getName());
+        }
     }
 
 

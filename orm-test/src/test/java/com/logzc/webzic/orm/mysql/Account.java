@@ -53,4 +53,8 @@ public class Account {
         this.foodName=foodName;
     }
 
+    public String getName(){
+        return name;
+    }
+
 }
