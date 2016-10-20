@@ -153,11 +153,15 @@ public class TableInfo<T, ID> {
 
     public ColumnType getColumnType(String name) throws SQLException {
 
-        for (ColumnType columnType : this.columnTypes) {
-            if (columnType.getName().equals(name)) {
-                return columnType;
+        if(name!=null){
+            name=name.toLowerCase();
+            for (ColumnType columnType : this.columnTypes) {
+                if (columnType.getName().equals(name)) {
+                    return columnType;
+                }
             }
         }
+
 
         throw new SQLException("No such column in the table.");
     }

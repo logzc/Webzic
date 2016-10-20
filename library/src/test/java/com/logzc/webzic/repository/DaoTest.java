@@ -36,13 +36,21 @@ public class DaoTest {
     @Test
     public void testCustom() throws SQLException {
 
-        //TODO:Still struggling here.
+
         List<UserTest> userTestList = userDaoTest.queryByGender(0);
 
 
         for (UserTest u : userTestList) {
-            System.out.println(u.username);
+            System.out.println(u.username + "  " + u.gender);
         }
+
+        List<UserTest> userTestList1 = userDaoTest.queryByUsernameAndGender("pengye", 1);
+
+
+        for (UserTest u : userTestList1) {
+            System.out.println(u.username + "  " + u.gender);
+        }
+
 
     }
 

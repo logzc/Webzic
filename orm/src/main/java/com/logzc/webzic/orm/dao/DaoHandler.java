@@ -1,5 +1,6 @@
 package com.logzc.webzic.orm.dao;
 
+import com.logzc.webzic.orm.field.ColumnType;
 import com.logzc.webzic.orm.stmt.query.CriteriaBuilder;
 import com.logzc.webzic.orm.stmt.query.Predicate;
 import com.logzc.webzic.orm.stmt.query.Specification;
@@ -9,6 +10,7 @@ import com.logzc.webzic.orm.table.TableInfo;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,12 +20,15 @@ import java.util.regex.Pattern;
 public class DaoHandler<T, ID> extends BaseDao<T, ID> implements InvocationHandler {
 
 
-
     public DaoHandler(ConnectionSource connectionSource, Class<T> dataClass) throws SQLException {
         super(connectionSource, dataClass);
     }
 
-    public Object objectByAnd(Method method, Object[] args) {
+    public Specification<T> specificationByOr(Method method, Object[] args) {
+        return null;
+    }
+
+    public Specification<T> specificationByAnd(Method method, Object[] args) throws SQLException {
 
         String methodName = method.getName();
         String pattern = "^queryBy(.+)$";
@@ -35,37 +40,54 @@ public class DaoHandler<T, ID> extends BaseDao<T, ID> implements InvocationHandl
         if (m.find()) {
 
             String clause = m.group(1);
-            String[] columns=clause.split(glue);
+            String[] columns = clause.split(glue);
 
-            if(columns.length!=args.length){
-                return null;
+            if (columns.length != args.length || columns.length == 0) {
+                throw new SQLException("Args not match");
             }
 
-
-            //TODO: write the specification here.
-            /*
-            Specification<T> specification=new Specification<T>() {
+            Specification<T> specification = new Specification<T>() {
                 @Override
                 public Predicate getPredicate(TableInfo<T, ?> tableInfo, CriteriaBuilder cb) throws SQLException {
 
-                    Class<?>[] clas
-                    Class<?> clazz = method.getParameterTypes()[0];
+                    Class<?>[] classes = method.getParameterTypes();
 
-                    Predicate predicate=cb.eq(tableInfo.getColumnType(columns[0]),args[0]);
-                    Predicate agePredicate = cb.gt(tableInfo.getColumnType("age"), 3);
-                    Predicate weightPredicate = cb.lt(tableInfo.getColumnType("weight"), 6);
+                    Predicate predicate = null;
 
-                    return cb.and(agePredicate,weightPredicate);
+                    for (int i = 0; i < columns.length; i++) {
+                        Object arg = args[i];
+                        ColumnType columnType = tableInfo.getColumnType(columns[i]);
+                        Class<?> columnClass = columnType.getType();
+                        if (predicate == null) {
+                            if (columnClass == String.class) {
+                                predicate = cb.eq(columnType, (String) arg);
+                            } else if (Number.class.isAssignableFrom(columnClass)) {
+                                predicate = cb.eq(columnType, (Number) arg);
+                            }
+                        } else {
+                            if (columnClass == String.class) {
+                                predicate = cb.and(predicate, cb.eq(columnType, (String) arg));
+                            } else if (Number.class.isAssignableFrom(columnClass)) {
+                                predicate = cb.and(predicate, cb.eq(columnType, (Number) arg));
+                            }
+                        }
+                    }
+
+                    if (predicate == null) {
+                        throw new SQLException("Args not match");
+                    }
+
+                    return predicate;
                 }
-            }
-            */
+            };
 
-            return null;
+
+            return specification;
 
 
         } else {
 
-            return null;
+            throw new SQLException("Format of the method is not correct!");
         }
 
 
@@ -83,9 +105,23 @@ public class DaoHandler<T, ID> extends BaseDao<T, ID> implements InvocationHandl
         } catch (Exception e) {
 
             //Try to match queryByXXXAndXXX queryByXXXOrXXX
+            Specification<T> specification = specificationByAnd(method, args);
 
+            if (specification == null) {
+                specification = specificationByOr(method, args);
+            }
 
-            return null;
+            if (specification == null) {
+                throw new Exception("Query error in " + method.getName());
+            }
+
+            Class<?> returnType = method.getReturnType();
+
+            if (returnType == List.class) {
+                return query(specification);
+            } else {
+                return queryOne(specification);
+            }
 
         }
 

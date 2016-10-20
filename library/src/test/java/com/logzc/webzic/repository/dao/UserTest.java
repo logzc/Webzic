@@ -19,7 +19,7 @@ public class UserTest {
     public Long id;
     public String username;
     public String password;
-    public String gender;
+    public int gender;
 
 
     @Test
