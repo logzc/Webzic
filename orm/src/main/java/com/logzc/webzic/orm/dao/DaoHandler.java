@@ -34,7 +34,6 @@ public class DaoHandler<T, ID> extends BaseDao<T, ID> implements InvocationHandl
         String pattern = "^queryBy(.+)$";
         String glue = "And";
 
-
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(methodName);
         if (m.find()) {
@@ -50,26 +49,15 @@ public class DaoHandler<T, ID> extends BaseDao<T, ID> implements InvocationHandl
                 @Override
                 public Predicate getPredicate(TableInfo<T, ?> tableInfo, CriteriaBuilder cb) throws SQLException {
 
-                    Class<?>[] classes = method.getParameterTypes();
-
                     Predicate predicate = null;
 
                     for (int i = 0; i < columns.length; i++) {
                         Object arg = args[i];
                         ColumnType columnType = tableInfo.getColumnType(columns[i]);
-                        Class<?> columnClass = columnType.getType();
                         if (predicate == null) {
-                            if (columnClass == String.class) {
-                                predicate = cb.eq(columnType, (String) arg);
-                            } else if (Number.class.isAssignableFrom(columnClass)) {
-                                predicate = cb.eq(columnType, (Number) arg);
-                            }
+                            predicate = cb.eq(columnType, arg);
                         } else {
-                            if (columnClass == String.class) {
-                                predicate = cb.and(predicate, cb.eq(columnType, (String) arg));
-                            } else if (Number.class.isAssignableFrom(columnClass)) {
-                                predicate = cb.and(predicate, cb.eq(columnType, (Number) arg));
-                            }
+                            predicate = cb.and(predicate, cb.eq(columnType, arg));
                         }
                     }
 

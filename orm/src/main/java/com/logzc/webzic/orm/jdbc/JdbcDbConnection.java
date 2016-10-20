@@ -44,7 +44,7 @@ public class JdbcDbConnection implements DbConnection {
             setStatementArgs(stmt, args);
 
             //print the sql.
-            System.out.println(statement);
+            printSql(stmt,statement,args);
 
             return stmt.executeUpdate();
         }
@@ -61,13 +61,7 @@ public class JdbcDbConnection implements DbConnection {
 
         setStatementArgs(stmt, args);
 
-        //print the sql.
-        System.out.println(stmt);
-        System.out.print("Args:");
-        for (Object obj:args){
-            System.out.print(" "+obj);
-        }
-        System.out.println();
+        printSql(stmt,statement,args);
 
 
         ResultSet resultSet = stmt.executeQuery();
@@ -75,6 +69,16 @@ public class JdbcDbConnection implements DbConnection {
     }
 
 
+    private void printSql(PreparedStatement stmt,String statement,Object[] args){
+        //print the sql.
+        System.out.println(stmt);
+        System.out.println(statement);
+        System.out.print("Args:");
+        for (Object obj:args){
+            System.out.print(" "+obj);
+        }
+        System.out.println();
+    }
 
 
     private void setStatementArgs(PreparedStatement stmt, Object... args) throws SQLException {

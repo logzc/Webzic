@@ -20,32 +20,23 @@ public class ComparisonPredicate implements Predicate {
     ColumnType columnType;
 
     Express express;
-    Number number;
-    String value;
+
+    Object value;
 
     String statement;
 
-    public ComparisonPredicate(CriteriaBuilder criteriaBuilder, ComparisonOperator comparisonOperator, ColumnType columnType, Express express) {
+    public ComparisonPredicate(CriteriaBuilder criteriaBuilder, ComparisonOperator comparisonOperator, ColumnType columnType, Object obj) {
         this.criteriaBuilder = criteriaBuilder;
         this.comparisonOperator = comparisonOperator;
         this.columnType = columnType;
-        this.express = express;
-    }
 
-    public ComparisonPredicate(CriteriaBuilder criteriaBuilder, ComparisonOperator comparisonOperator, ColumnType columnType, Number number) {
-        this.criteriaBuilder = criteriaBuilder;
-        this.comparisonOperator = comparisonOperator;
-        this.columnType = columnType;
-        this.number = number;
-    }
+        if (obj != null && (obj instanceof Express)) {
+            this.express = (Express) obj;
+        } else {
+            this.value = obj;
+        }
 
-    public ComparisonPredicate(CriteriaBuilder criteriaBuilder, ComparisonOperator comparisonOperator, ColumnType columnType, String value) {
-        this.criteriaBuilder = criteriaBuilder;
-        this.comparisonOperator = comparisonOperator;
-        this.columnType = columnType;
-        this.value = value;
     }
-
 
     // eg. `age` < 5
     @Override
@@ -54,7 +45,7 @@ public class ComparisonPredicate implements Predicate {
 
         if (statement == null) {
             statement = " " + dialect.getSqlColumn(columnType.getName()) + " " + comparisonOperator.getValue();
-            if (this.value != null || this.number != null) {
+            if (this.value != null) {
                 statement += " ? ";
             } else if (this.express != null) {
                 statement += " " + this.express.getStatement(dialect);
@@ -70,8 +61,6 @@ public class ComparisonPredicate implements Predicate {
         List<Object> argsList = new ArrayList<>();
         if (this.value != null) {
             argsList.add(this.value);
-        } else if (this.number != null) {
-            argsList.add(this.number);
         } else if (this.express != null) {
             argsList.addAll(this.express.getArgs());
         }
