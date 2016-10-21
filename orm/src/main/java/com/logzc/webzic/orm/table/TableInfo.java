@@ -163,7 +163,7 @@ public class TableInfo<T, ID> {
         }
 
 
-        throw new SQLException("No such column in the table.");
+        throw new SQLException("No such column named \""+name+"\" in table \""+tableName+"\".");
     }
 
     public String[] getColumnNames() {

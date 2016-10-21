@@ -13,11 +13,15 @@ public interface UserDaoTest extends Dao<UserTest, Long> {
 
     List<UserTest> queryByGender(int gender);
 
-    List<UserTest> queryByUsernameAndGender(String username,int gender);
+    List<UserTest> queryByUsernameAndGender(String username, int gender);
 
-    List<UserTest> queryByUsernameOrGender(String username,int gender);
+    List<UserTest> queryByUsernameOrGender(String username, int gender);
 
 
-    List<UserTest> queryByNothing(String nothing);
+    List<UserTest> queryByUsername(String nothing);
+
+    //For False test case.
+    //List<UserTest> queryByNothing(String nothing);
+    //List<UserTest> queryByUsername(int nothing);
 
 }
