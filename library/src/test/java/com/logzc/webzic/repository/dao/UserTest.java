@@ -1,8 +1,6 @@
 package com.logzc.webzic.repository.dao;
 
-import com.logzc.webzic.converter.ResolvableType;
-import com.logzc.webzic.generic.model.ABService;
-import com.logzc.webzic.generic.model.B;
+import com.logzc.common.converter.ResolvableType;
 import com.logzc.webzic.orm.field.Column;
 import com.logzc.webzic.orm.table.Table;
 import org.junit.Assume;

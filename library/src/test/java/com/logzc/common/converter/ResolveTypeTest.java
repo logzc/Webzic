@@ -1,6 +1,6 @@
-package com.logzc.webzic.converter;
+package com.logzc.common.converter;
 
-import com.logzc.webzic.util.ReflectionUtil;
+import com.logzc.common.util.ReflectionUtil;
 import org.junit.Test;
 
 import java.lang.reflect.Method;

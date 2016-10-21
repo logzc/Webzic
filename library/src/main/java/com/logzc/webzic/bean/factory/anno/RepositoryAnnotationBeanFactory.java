@@ -1,24 +1,16 @@
 package com.logzc.webzic.bean.factory.anno;
 
 import com.logzc.webzic.annotation.Repository;
-import com.logzc.webzic.annotation.RestController;
 import com.logzc.webzic.bean.AppContext;
-import com.logzc.webzic.bean.processor.BeanProcessor;
-import com.logzc.webzic.converter.ResolvableType;
+import com.logzc.common.converter.ResolvableType;
 import com.logzc.webzic.orm.dao.DaoManager;
 import com.logzc.webzic.orm.support.ConnectionSource;
 import com.logzc.webzic.reflection.scanner.Scanner;
 import com.logzc.webzic.reflection.scanner.TypeAnnotationScanner;
-import com.logzc.webzic.web.controller.ExceptionController;
-import com.logzc.webzic.web.controller.WebzicPath;
-import com.logzc.webzic.web.core.HandlerMethod;
-import com.logzc.webzic.web.core.HandlerMethodManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This is a pool containers all the @Controller.

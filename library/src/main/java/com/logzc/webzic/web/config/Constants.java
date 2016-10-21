@@ -1,6 +1,6 @@
 package com.logzc.webzic.web.config;
 
-import com.logzc.webzic.util.PropertyUtil;
+import com.logzc.common.util.PropertyUtil;
 
 import java.util.Properties;
 

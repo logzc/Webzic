@@ -16,8 +16,12 @@ repositories {
 dependencies {
 
 
+    //Import Common project
+    compile project(":common")
+
     //Import Orm project.
     compile project(":orm")
+
 
     compile "junit:junit:+"
     compile fileTree(dir: 'libs', include: '*.jar')
@@ -30,16 +34,11 @@ dependencies {
     //在写Main函数的时候有时候需要临时用到
     //compile("javax.servlet:javax.servlet-api:+")
 
-    //logging
-    compile 'org.slf4j:slf4j-log4j12:+'
-    compile 'org.apache.logging.log4j:log4j:+'
 
-    //apache common utils.
-    compile 'org.apache.commons:commons-io:+'
-    compile 'commons-dbutils:commons-dbutils:+'
-    compile 'org.apache.commons:commons-dbcp2:+'
-    compile 'org.apache.commons:commons-collections4:+'
-    compile 'org.apache.commons:commons-lang3:+'
+    //json
+    compile 'com.fasterxml.jackson.core:jackson-core:+'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:+'
+    compile 'com.fasterxml.jackson.core:jackson-databind:+'
 
 
     //scanner
@@ -48,14 +47,11 @@ dependencies {
     //lombok，后面准备去掉
     compile 'org.projectlombok:lombok:+'
 
-    //json
-    compile 'com.fasterxml.jackson.core:jackson-core:+'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:+'
-    compile 'com.fasterxml.jackson.core:jackson-databind:+'
-
     //asm
     //compile 'asm:asm:3.3.1'
     compile 'org.ow2.asm:asm:+'
+
+
 
     //xbean. 依赖asm
     //compile 'org.apache.xbean:xbean-reflect:+'

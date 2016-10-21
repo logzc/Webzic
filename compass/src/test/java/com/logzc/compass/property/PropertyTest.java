@@ -1,7 +1,7 @@
 package com.logzc.compass.property;
 
 import com.logzc.webzic.reflection.ClassPaths;
-import com.logzc.webzic.util.PropertyUtil;
+import com.logzc.common.util.PropertyUtil;
 import com.logzc.webzic.web.controller.WebzicPath;
 import org.junit.Assume;
 import org.junit.Test;

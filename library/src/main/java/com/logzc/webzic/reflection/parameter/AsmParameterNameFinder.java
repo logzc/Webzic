@@ -1,7 +1,7 @@
 package com.logzc.webzic.reflection.parameter;
 
 import com.logzc.webzic.exception.ZicException;
-import com.logzc.webzic.util.AsmUtil;
+import com.logzc.webzic.reflection.AsmHelper;
 import lombok.Getter;
 import org.objectweb.asm.*;
 
@@ -64,7 +64,7 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
 
 
         //load parameter names using ASM.
-        ClassReader reader = AsmUtil.createClassReader(clazz);
+        ClassReader reader = AsmHelper.createClassReader(clazz);
         ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(constructors);
 
         //System.out.println("ready to accept." + System.currentTimeMillis());
@@ -84,7 +84,7 @@ public class AsmParameterNameFinder implements ParameterNameFinder {
 
 
         //load parameter names using ASM.
-        ClassReader reader = AsmUtil.createClassReader(clazz);
+        ClassReader reader = AsmHelper.createClassReader(clazz);
         ParameterNameClassVisitor parameterNameClassVisitor = new ParameterNameClassVisitor(methods);
 
 

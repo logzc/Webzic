@@ -2,8 +2,8 @@ package com.logzc.webzic.bean.processor;
 
 import com.logzc.webzic.annotation.Value;
 import com.logzc.webzic.bean.AppContext;
-import com.logzc.webzic.converter.TypeDescriptor;
-import com.logzc.webzic.util.PropertyUtil;
+import com.logzc.common.converter.TypeDescriptor;
+import com.logzc.common.util.PropertyUtil;
 
 import java.lang.reflect.Field;
 import java.util.Properties;

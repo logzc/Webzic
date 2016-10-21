@@ -54,7 +54,7 @@ public class DaoManager {
                 repositoryClass
         };
 
-        InvocationHandler handler = new DaoHandler(connectionSource,tableClass);
+        InvocationHandler handler = new DaoHandler(connectionSource,tableClass,repositoryClass);
 
 
         Object object = Proxy.newProxyInstance(classLoader, interfaces, handler);

@@ -1,9 +1,9 @@
 package com.logzc.webzic.web.core;
 
 import com.logzc.webzic.bean.AppContext;
-import com.logzc.webzic.converter.ConversionService;
-import com.logzc.webzic.converter.TypeDescriptor;
-import com.logzc.webzic.util.Assert;
+import com.logzc.common.converter.ConversionService;
+import com.logzc.common.converter.TypeDescriptor;
+import com.logzc.common.util.Assert;
 import com.logzc.webzic.web.controller.ExceptionController;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -138,7 +138,10 @@ public class HandlerMethod {
             if (value == null) {
                 args[i] = null;
             } else {
-                args[i] = conversionService.convert(values[i], TypeDescriptor.valueOf(String.class), TypeDescriptor.forMethodParameter(methodParameter));
+
+
+
+                args[i] = conversionService.convert(values[i], TypeDescriptor.valueOf(String.class), TypeDescriptor.forMethodParameter(methodParameter.getGenericParameterType(),methodParameter.getParameterType(),methodParameter.getMethodAnnotations()));
             }
 
         }

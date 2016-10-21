@@ -1,0 +1,33 @@
+
+group 'com.logzc'
+version '0.1'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile "junit:junit:+"
+    compile fileTree(dir: 'libs', include: '*.jar')
+
+
+    //apache common utils.
+    compile 'org.apache.commons:commons-io:+'
+    compile 'commons-dbutils:commons-dbutils:+'
+    compile 'org.apache.commons:commons-dbcp2:+'
+    compile 'org.apache.commons:commons-collections4:+'
+    compile 'org.apache.commons:commons-lang3:+'
+
+
+    //logging
+    compile 'org.slf4j:slf4j-log4j12:+'
+    compile 'org.apache.logging.log4j:log4j:+'
+
+
+
+
+}

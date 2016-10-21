@@ -7,7 +7,7 @@ import com.logzc.webzic.bean.factory.anno.ComponentAnnotationBeanFactory;
 import com.logzc.webzic.bean.factory.anno.ControllerAnnotationBeanFactory;
 import com.logzc.webzic.bean.factory.anno.RepositoryAnnotationBeanFactory;
 import com.logzc.webzic.bean.processor.BeanProcessorManager;
-import com.logzc.webzic.converter.ConversionService;
+import com.logzc.common.converter.ConversionService;
 import com.logzc.webzic.orm.support.ConnectionSource;
 import com.logzc.webzic.reflection.Reflections;
 import com.logzc.webzic.reflection.scanner.Scanner;

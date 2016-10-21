@@ -1,9 +1,8 @@
 package com.logzc.webzic.generic;
 
-import com.logzc.webzic.converter.ResolvableType;
+import com.logzc.common.converter.ResolvableType;
 import com.logzc.webzic.generic.model.*;
-import com.logzc.webzic.util.ReflectionUtil;
-import org.junit.Assert;
+import com.logzc.common.util.ReflectionUtil;
 import org.junit.Assume;
 import org.junit.Test;
 
@@ -89,14 +88,14 @@ public class GenricInjectTest {
         System.out.println(resolvableType4.getGeneric(1, 1).resolve());
 
         //方法返回值
-        ResolvableType resolvableType5 =
-                ResolvableType.forMethodReturnType(ReflectionUtil.findMethod(GenricInjectTest.class, "method"));
-        System.out.println(resolvableType5.getGeneric(1, 0).resolve());
+//        ResolvableType resolvableType5 =
+//                ResolvableType.forMethodReturnType(ReflectionUtil.findMethod(GenricInjectTest.class, "method"));
+//        System.out.println(resolvableType5.getGeneric(1, 0).resolve());
 
         //构造器参数
-        ResolvableType resolvableType6 =
-                ResolvableType.forConstructorParameter(ReflectionUtil.findConstructor(Const.class,List.class, Map.class), 1);
-        System.out.println(resolvableType6.getGeneric(1, 0).resolve());
+//        ResolvableType resolvableType6 =
+//                ResolvableType.forConstructorParameter(ReflectionUtil.findConstructor(Const.class,List.class, Map.class), 1);
+//        System.out.println(resolvableType6.getGeneric(1, 0).resolve());
 
         //数组
         ResolvableType resolvableType7 =

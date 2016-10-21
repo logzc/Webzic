@@ -1,7 +1,7 @@
 package com.logzc.webzic.reflection.scanner;
 
 import com.logzc.webzic.reflection.fs.ZicFile;
-import com.logzc.webzic.util.IOUtil;
+import com.logzc.common.util.IOUtil;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 import org.slf4j.Logger;

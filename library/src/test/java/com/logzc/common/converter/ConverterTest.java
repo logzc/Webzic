@@ -1,6 +1,6 @@
-package com.logzc.webzic.converter;
+package com.logzc.common.converter;
 
-import com.logzc.webzic.converter.basic.*;
+import com.logzc.common.converter.basic.*;
 import org.junit.Assume;
 import org.junit.Test;
 

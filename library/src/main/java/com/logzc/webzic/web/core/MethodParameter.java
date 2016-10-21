@@ -5,7 +5,7 @@ import com.logzc.webzic.bean.AppContext;
 import com.logzc.webzic.bean.factory.WidgetBeanFactory;
 import com.logzc.webzic.reflection.parameter.AsmParameterNameFinder;
 import com.logzc.webzic.reflection.parameter.ParameterNameFinder;
-import com.logzc.webzic.util.Assert;
+import com.logzc.common.util.Assert;
 import lombok.Getter;
 
 import java.lang.annotation.Annotation;
@@ -146,6 +146,15 @@ public class MethodParameter {
             }
         }
         return this.genericParameterType;
+    }
+
+    public Annotation[] getAnnotations(){
+        if(parameterIndex==-1){
+            return getMethodAnnotations();
+        }else{
+            return getParameterAnnotations();
+        }
+
     }
 
     public Annotation[] getParameterAnnotations() {

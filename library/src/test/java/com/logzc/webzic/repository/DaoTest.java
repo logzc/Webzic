@@ -52,6 +52,15 @@ public class DaoTest {
         }
 
 
+        List<UserTest> userTestList2 = userDaoTest.queryByUsernameOrGender("Johnson", 1);
+
+
+        for (UserTest u : userTestList2) {
+            System.out.println(u.username + "  " + u.gender);
+        }
+
+
+
     }
 
 

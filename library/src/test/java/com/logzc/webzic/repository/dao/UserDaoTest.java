@@ -15,4 +15,9 @@ public interface UserDaoTest extends Dao<UserTest, Long> {
 
     List<UserTest> queryByUsernameAndGender(String username,int gender);
 
+    List<UserTest> queryByUsernameOrGender(String username,int gender);
+
+
+    List<UserTest> queryByNothing(String nothing);
+
 }

@@ -1,4 +1,4 @@
-package com.logzc.webzic.util;
+package com.logzc.common.util;
 
 import org.junit.Assume;
 import org.junit.Test;

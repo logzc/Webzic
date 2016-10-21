@@ -1,8 +1,8 @@
 package com.logzc.webzic.bean.factory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.logzc.webzic.converter.ConversionService;
-import com.logzc.webzic.converter.DefaultConversionService;
+import com.logzc.common.converter.ConversionService;
+import com.logzc.common.converter.DefaultConversionService;
 import com.logzc.webzic.orm.jdbc.JdbcConnectionSource;
 import com.logzc.webzic.orm.support.ConnectionSource;
 import com.logzc.webzic.web.config.Constants;
@@ -10,8 +10,6 @@ import com.logzc.webzic.web.core.HandlerMethodManager;
 import com.logzc.webzic.web.core.OutputManager;
 import com.logzc.webzic.web.core.RequestParameterFinder;
 import com.logzc.webzic.reflection.parameter.AsmParameterNameFinder;
-
-import java.sql.SQLException;
 
 /**
  * this bean factory contains all the normal bean needed by the framework.

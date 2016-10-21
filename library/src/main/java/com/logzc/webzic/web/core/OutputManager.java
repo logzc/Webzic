@@ -1,6 +1,6 @@
 package com.logzc.webzic.web.core;
 
-import com.logzc.webzic.util.JsonUtil;
+import com.logzc.webzic.json.JsonUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

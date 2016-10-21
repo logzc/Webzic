@@ -1,6 +1,6 @@
 package com.logzc.webzic.bean.factory;
 
-import com.logzc.webzic.util.ClassUtil;
+import com.logzc.common.util.ClassUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

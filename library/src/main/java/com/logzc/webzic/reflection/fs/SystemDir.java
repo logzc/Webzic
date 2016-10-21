@@ -1,6 +1,6 @@
 package com.logzc.webzic.reflection.fs;
 
-import com.logzc.webzic.util.FileUtil;
+import com.logzc.common.util.FileUtil;
 
 import java.io.File;
 import java.net.URL;
