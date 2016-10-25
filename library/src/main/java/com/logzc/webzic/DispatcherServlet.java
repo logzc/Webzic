@@ -32,6 +32,8 @@ public class DispatcherServlet extends HttpServlet {
         try {
             AppContext.init();
         } catch (Exception e) {
+
+            e.printStackTrace();
             throw new ServletException(e);
         }
 

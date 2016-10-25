@@ -5,4 +5,5 @@ include 'compass'
 include 'orm'
 include 'orm-test'
 include 'common'
+include 'tagzic'
 

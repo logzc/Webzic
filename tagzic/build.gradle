@@ -1,0 +1,16 @@
+group 'com.logzc'
+version '0.1'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    //Import Common project
+    compile project(":common")
+}

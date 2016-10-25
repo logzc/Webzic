@@ -17,7 +17,7 @@ public class OutputManager {
         //check the type of result.
         String jsonResult = JsonUtil.toJson(result);
 
-        response.setContentType("text/html");
+        response.setContentType("text/json;charset=UTF-8");
         PrintWriter out = null;
         try {
             out = response.getWriter();

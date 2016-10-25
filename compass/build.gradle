@@ -38,6 +38,9 @@ dependencies {
 
     testCompile "junit:junit:+"
 
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    compile 'mysql:mysql-connector-java:+'
+
 
 }
 

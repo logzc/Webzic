@@ -37,6 +37,8 @@ public class ExceptionController {
         }
         response.setStatus(status);
 
+        e.printStackTrace();
+
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("timestamp", System.currentTimeMillis());
