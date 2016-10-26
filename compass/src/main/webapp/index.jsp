@@ -11,6 +11,6 @@
     <title>Webzic</title>
 </head>
 <body>
-<h1>Welcome to webzic.</h1>
+<h1>Welcome to webzic. This is index.jsp</h1>
 </body>
 </html>

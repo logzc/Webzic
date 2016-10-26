@@ -40,8 +40,6 @@ public class OutputManager {
 
                 content = writer.toString();
 
-                System.out.println(content);
-
                 response.setContentType("text/html");
 
             }catch (Exception e){

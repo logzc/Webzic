@@ -7,18 +7,15 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This servlet will intercept all the http request.
  * Created by lishuang on 2016/7/19.
  */
-@WebServlet(urlPatterns = "/*", loadOnStartup = 0)
+//@WebServlet(urlPatterns = "/*", loadOnStartup = 0)
 public class DispatcherServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
@@ -26,7 +23,8 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
-        logger.debug("----------init(ServletConfig servletConfig)------------");
+        logger.debug("----------DispatcherServlet init(ServletConfig servletConfig)------------");
+
 
         //init all the annotation beans.
         try {
@@ -43,6 +41,7 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) {
 
+        logger.debug("----------DispatcherServlet: " + request.getRequestURI() + "------------");
 
         //Handle all the inner Exceptions.
 
@@ -62,7 +61,7 @@ public class DispatcherServlet extends HttpServlet {
             //handle exceptions.
             HandlerMethod exceptionHandlerMethod = AppContext.getHandlerMethodManager().getExceptionHandlerMethod();
 
-            exceptionHandlerMethod.handle(request,response,e);
+            exceptionHandlerMethod.handle(request, response, e);
 
 
         }
@@ -72,7 +71,7 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void destroy() {
-        logger.debug("----------destroy()------------");
+        logger.debug("----------DispatcherServlet destroy()------------");
     }
 
 
