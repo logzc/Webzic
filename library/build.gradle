@@ -60,4 +60,7 @@ dependencies {
     //jdbc for mysql
     testCompile 'mysql:mysql-connector-java:+'
 
+    //Tempalte engine
+    compile 'com.mitchellbosecke:pebble:+';
+
 }

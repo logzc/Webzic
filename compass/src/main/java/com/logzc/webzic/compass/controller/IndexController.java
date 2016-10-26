@@ -1,16 +1,8 @@
 package com.logzc.webzic.compass.controller;
 
-import com.logzc.webzic.annotation.Autowired;
 import com.logzc.webzic.annotation.RequestMapping;
 import com.logzc.webzic.annotation.RestController;
-import com.logzc.webzic.compass.dao.UserDao;
-import com.logzc.webzic.compass.model.User;
-import com.logzc.webzic.compass.service.UserService;
-import com.logzc.webzic.web.core.RequestMethod;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.logzc.webzic.web.view.ViewModel;
 
 /**
  * Created by lishuang on 2016/7/19.
@@ -19,12 +11,13 @@ import java.util.Map;
 public class IndexController {
 
     @RequestMapping(path = "/")
-    public Map<String, ?> index() throws Exception{
+    public ViewModel index() throws Exception{
 
-        Map<String,String> map=new HashMap<>();
-        map.put("info","Welcome to webzic");
+        ViewModel viewModel=new ViewModel();
+        viewModel.setView("index.html");
 
-        return map;
+        return viewModel;
+
     }
 
 

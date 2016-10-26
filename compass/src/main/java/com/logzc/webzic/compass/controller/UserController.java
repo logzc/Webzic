@@ -7,6 +7,7 @@ import com.logzc.webzic.compass.dao.UserDao;
 import com.logzc.webzic.compass.model.User;
 import com.logzc.webzic.compass.service.UserService;
 import com.logzc.webzic.web.core.RequestMethod;
+import com.logzc.webzic.web.view.ViewModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,17 @@ public class UserController {
 
     @Autowired
     private UserDao userDao;
+
+
+    @RequestMapping(path = "/index")
+    public ViewModel index() {
+
+        ViewModel viewModel=new ViewModel();
+        viewModel.setView("home.html");
+        viewModel.getModel().put("name","Lishuang Haha");
+
+        return viewModel;
+    }
 
     @RequestMapping(path = "/page", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<String, ?> page(String name,Integer age) throws Exception{
