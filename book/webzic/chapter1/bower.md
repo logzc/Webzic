@@ -15,6 +15,22 @@ Bower就相当于Maven,Gradle，只不过Maven和Gradle是用于Java的项目，
 
     官网：[https://nodejs.org](https://nodejs.org)，下载安装即可
 
+    npm安装有时候汇报sha error，这时候使用国内镜像。
+    
+    镜像使用方法（三种办法任意一种都能解决问题，建议使用第三种，将配置写死，下次用的时候配置还在）:
+    
+    1.通过config命令
+    
+    npm config set registry http://registry.cnpmjs.org 
+    npm info underscore （如果上面配置正确这个命令会有字符串response）
+    2.命令行指定
+    
+    npm --registry http://registry.cnpmjs.org info underscore 
+    3.编辑 ~/.npmrc 加入下面内容
+    
+    registry = http://registry.cnpmjs.org
+    搜索镜像: http://cnpmjs.org
+
 * 安装Git
 
     官网：[https://git-scm.com/downloads](https://git-scm.com/downloads)，下载安装即可
